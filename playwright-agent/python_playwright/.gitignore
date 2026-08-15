@@ -1,0 +1,21 @@
+# Python and pytest caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Reports and screenshots
+reports/
+!reports/.gitkeep
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store

@@ -1,0 +1,17 @@
+{
+  "stage": {
+    "url": "https://stage.momentecbrands.com/",
+    "username": "SURIYAAAUTOMATION",
+    "password": "Augusta@2022!!!"
+  },
+  "prod": {
+    "url": "https://www.momentecbrands.com/",
+    "username": "SURIYAA",
+    "password": "Augusta@2022!!!"
+  },
+  "dev": {
+    "url": "https://dev.momentecbrands.com/",
+    "username": "SURIYAA",
+    "password": "Augusta@2022!!!"
+  }
+}

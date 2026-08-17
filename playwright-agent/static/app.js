@@ -1,364 +1,441 @@
+// AI Playwright Automation Studio Frontend Controller
+
 document.addEventListener('DOMContentLoaded', () => {
     // Navigation
     const navItems = document.querySelectorAll('.nav-item');
     const views = document.querySelectorAll('.view');
     const pageTitle = document.getElementById('page-title');
+    const pageSubtitle = document.getElementById('page-subtitle');
+
+    const subtitles = {
+        'generator-view': 'Convert user stories into framework-compliant Python Playwright tests',
+        'workspace-view': 'Inspect, edit, validate, and conversationally modify generated tests',
+        'runner-view': 'Execute tests in isolated workspaces with real-time logs',
+        'reports-view': 'Comprehensive Extent Report execution telemetry and metrics'
+    };
 
     navItems.forEach(item => {
         item.addEventListener('click', () => {
-            // Update active state
-            navItems.forEach(nav => nav.classList.remove('active'));
+            navItems.forEach(i => i.classList.remove('active'));
+            views.forEach(v => v.style.display = 'none');
+
             item.classList.add('active');
-
-            // Show target view
             const targetId = item.getAttribute('data-target');
-            views.forEach(view => {
-                view.style.display = view.id === targetId ? 'block' : 'none';
-            });
+            const targetView = document.getElementById(targetId);
+            if (targetView) {
+                targetView.style.display = 'block';
+                pageTitle.textContent = item.querySelector('span').textContent;
+                pageSubtitle.textContent = subtitles[targetId] || '';
 
-            // Update title
-            pageTitle.textContent = item.querySelector('span').textContent;
-
-            // Load data if switching to reports
-            if (targetId === 'reports-view') {
-                loadReports();
+                if (targetId === 'runner-view') loadAvailableTests();
+                if (targetId === 'reports-view') loadReportsSummary();
             }
         });
     });
 
-    // Test Runner Logic
-    const testsTableBody = document.getElementById('tests-table-body');
-    const selectAllCb = document.getElementById('select-all');
-    const runSelectedBtn = document.getElementById('run-selected-btn');
-    const runAllBtn = document.getElementById('run-all-btn');
+    // Elements
+    const generateBtn = document.getElementById('generate-btn');
+    const userStoryInput = document.getElementById('user-story-input');
+    const acInput = document.getElementById('ac-input');
+    const envSelect = document.getElementById('env-select');
+    const scriptCodeEditor = document.getElementById('script-code-editor');
+    const validationBadge = document.getElementById('validation-badge');
+    const validationSummary = document.getElementById('validation-summary');
+    const validateBtn = document.getElementById('validate-btn');
+    const runScriptBtn = document.getElementById('run-script-btn');
+    const copyScriptBtn = document.getElementById('copy-script-btn');
+
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const sendChatBtn = document.getElementById('send-chat-btn');
+
+    // Runner Elements
+    const selectAllCheckbox = document.getElementById('select-all-tests');
+    const runSelectedBtn = document.getElementById('run-selected-tests-btn');
     const refreshTestsBtn = document.getElementById('refresh-tests-btn');
-    
-    let activeTests = [];
-    const executionMap = new Map();
-    let pollingInterval = null;
+    const runnerEnvSelect = document.getElementById('runner-env-select');
+    const refreshReportsBtn = document.getElementById('refresh-reports-btn');
 
-    async function loadTests() {
-        try {
-            const res = await fetch('/api/v1/agent/tests');
-            const data = await res.json();
-            
-            testsTableBody.innerHTML = '';
-            
-            if (data.tests.length === 0) {
-                testsTableBody.innerHTML = '<tr><td colspan="4" class="empty-state">No tests found.</td></tr>';
-                return;
-            }
+    // 1. Generate Test Action
+    generateBtn.addEventListener('click', async () => {
+        const userStory = userStoryInput.value.trim();
+        const rawAc = acInput.value.trim();
+        const acceptanceCriteria = rawAc.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        const environment = envSelect.value;
 
-            data.tests.forEach(test => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><input type="checkbox" class="test-cb" value="${test.testId}"></td>
-                    <td style="font-family: monospace;">${test.testId}</td>
-                    <td>${test.name}</td>
-                    <td>
-                        <button class="icon-btn run-single-btn" data-id="${test.testId}" title="Run Test">
-                            <i class="fa-solid fa-play" style="color: var(--success)"></i>
-                        </button>
-                    </td>
-                `;
-                testsTableBody.appendChild(tr);
-            });
-
-            attachTestListeners();
-        } catch (e) {
-            console.error("Failed to load tests", e);
-        }
-    }
-
-    function attachTestListeners() {
-        const checkboxes = document.querySelectorAll('.test-cb');
-        
-        selectAllCb.addEventListener('change', (e) => {
-            checkboxes.forEach(cb => cb.checked = e.target.checked);
-            updateRunSelectedBtn();
-        });
-
-        checkboxes.forEach(cb => {
-            cb.addEventListener('change', updateRunSelectedBtn);
-        });
-
-        document.querySelectorAll('.run-single-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const testId = e.currentTarget.getAttribute('data-id');
-                runTestsBatch([testId]);
-            });
-        });
-    }
-
-    function updateRunSelectedBtn() {
-        const anyChecked = document.querySelectorAll('.test-cb:checked').length > 0;
-        runSelectedBtn.disabled = !anyChecked;
-    }
-
-    async function runTestsBatch(testIds) {
-        if (!testIds || testIds.length === 0) return;
-        
-        try {
-            const selectedEnv = document.getElementById('env-selector').value || 'stage';
-            const res = await fetch('/api/v1/agent/tasks', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: "run_test", testIds: testIds, environment: selectedEnv })
-            });
-            const data = await res.json();
-            
-            const displayId = testIds.length === 1 ? testIds[0] : `BATCH_OF_${testIds.length}_TESTS`;
-            addExecutionCard(data.executionId, displayId);
-            
-            // Start polling if not already
-            if (!pollingInterval) {
-                pollingInterval = setInterval(pollExecutions, 2000);
-            }
-        } catch (e) {
-            console.error("Failed to run test batch", e);
-            alert("Failed to trigger tests.");
-        }
-    }
-
-    runSelectedBtn.addEventListener('click', () => {
-        const selected = Array.from(document.querySelectorAll('.test-cb:checked')).map(cb => cb.value);
-        if (selected.length > 0) {
-            runTestsBatch(selected);
-        }
-    });
-
-    runAllBtn.addEventListener('click', () => {
-        const all = Array.from(document.querySelectorAll('.test-cb')).map(cb => cb.value);
-        if (all.length > 0) {
-            runTestsBatch(all);
-        }
-    });
-
-    refreshTestsBtn.addEventListener('click', loadTests);
-
-    // Executions Logic
-    const executionsContainer = document.getElementById('executions-container');
-    const modal = document.getElementById('execution-modal');
-    const closeModalBtn = document.querySelector('.close-btn');
-    let currentModalExecutionId = null;
-
-    function addExecutionCard(execId, testId) {
-        // Remove empty state if present
-        const empty = executionsContainer.querySelector('.empty-state');
-        if (empty) empty.remove();
-
-        const div = document.createElement('div');
-        div.className = 'execution-item';
-        div.id = `exec-card-${execId}`;
-        div.innerHTML = `
-            <div class="exec-header">
-                <strong>${testId}</strong>
-                <span class="badge queued" id="badge-${execId}">QUEUED</span>
-            </div>
-            <div class="exec-id">${execId}</div>
-            <div class="progress-container">
-                <div class="progress-bar" id="prog-${execId}"></div>
-            </div>
-        `;
-        
-        div.addEventListener('click', () => openModal(execId, testId));
-        executionsContainer.prepend(div);
-        
-        executionMap.set(execId, testId);
-
-        if (!activeTests.includes(execId)) {
-            activeTests.push(execId);
-        }
-    }
-
-    async function pollExecutions() {
-        if (activeTests.length === 0) {
-            clearInterval(pollingInterval);
-            pollingInterval = null;
+        if (!userStory) {
+            alert('Please enter a user story.');
             return;
         }
 
-        for (let i = activeTests.length - 1; i >= 0; i--) {
-            const execId = activeTests[i];
-            try {
-                const res = await fetch(`/api/v1/executions/${execId}`);
-                if (!res.ok) continue;
-                const data = await res.json();
-                
-                updateExecutionCard(execId, data.status);
-                
-                if (currentModalExecutionId === execId) {
-                    updateModalContent(data);
-                }
+        generateBtn.disabled = true;
+        generateBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating with LangChain & Groq...';
 
-                if (['COMPLETED', 'FAILED'].includes(data.status)) {
-                    activeTests.splice(i, 1);
-                }
-            } catch (e) {
-                console.error("Poll failed for", execId);
-            }
-        }
-    }
+        try {
+            const res = await fetch('/api/v1/ai/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userStory,
+                    acceptanceCriteria,
+                    project: 'playwright',
+                    environment
+                })
+            });
 
-    function getStatusProgress(status) {
-        switch(status) {
-            case 'QUEUED': return '10%';
-            case 'VALIDATING': return '30%';
-            case 'EXECUTING': return '60%';
-            case 'OBSERVING': return '90%';
-            case 'COMPLETED': return '100%';
-            case 'FAILED': return '100%';
-            default: return '0%';
-        }
-    }
+            const data = await res.json();
+            if (data.pythonScript) {
+                scriptCodeEditor.value = data.pythonScript;
+                updateValidationUI(data.validation);
 
-    function updateExecutionCard(execId, status) {
-        const badge = document.getElementById(`badge-${execId}`);
-        const prog = document.getElementById(`prog-${execId}`);
-        if (!badge) return;
-        
-        badge.textContent = status;
-        badge.className = 'badge';
-        if (status === 'COMPLETED') badge.classList.add('success');
-        else if (status === 'FAILED') badge.classList.add('error');
-        else if (status === 'EXECUTING' || status === 'VALIDATING' || status === 'OBSERVING') badge.classList.add('running');
-        else badge.classList.add('queued');
+                // Switch to workspace view
+                const workspaceNav = document.querySelector('[data-target="workspace-view"]');
+                if (workspaceNav) workspaceNav.click();
 
-        if (prog) {
-            prog.style.width = getStatusProgress(status);
-            if (status === 'FAILED') {
-                prog.style.background = 'var(--error)';
-            } else if (status === 'COMPLETED') {
-                prog.style.background = 'var(--success)';
+                appendChatMessage('assistant', `Test **${data.testName || 'GeneratedTest'}** generated successfully with ${data.ragContextCount || 0} framework context artifacts.`);
             } else {
-                prog.style.background = 'var(--primary)';
+                alert('Generation error: ' + JSON.stringify(data));
             }
+        } catch (err) {
+            alert('Request failed: ' + err.message);
+        } finally {
+            generateBtn.disabled = false;
+            generateBtn.innerHTML = '<i class="fa-solid fa-sparkles"></i> Generate Python Playwright Script';
         }
-
-        const testId = executionMap.get(execId);
-        if (testId && !testId.startsWith('BATCH_')) {
-            const btn = document.querySelector(`.run-single-btn[data-id="${testId}"] i`);
-            if (btn) {
-                if (status === 'COMPLETED' || status === 'FAILED') {
-                    btn.className = 'fa-solid fa-play';
-                    btn.style.color = 'var(--success)';
-                } else {
-                    btn.className = 'fa-solid fa-pause';
-                    btn.style.color = 'var(--secondary)';
-                }
-            }
-        }
-    }
-
-    // Modal Logic
-    function openModal(execId, testId) {
-        currentModalExecutionId = execId;
-        document.getElementById('modal-test-id').textContent = `${testId} (${execId})`;
-        document.getElementById('modal-status').textContent = "LOADING...";
-        document.getElementById('modal-logs').textContent = "Fetching logs...";
-        modal.classList.add('show');
-        
-        // Fetch immediately once
-        fetch(`/api/v1/executions/${execId}`)
-            .then(r => r.json())
-            .then(data => updateModalContent(data))
-            .catch(e => console.error(e));
-    }
-
-    function updateModalContent(data) {
-        const statusEl = document.getElementById('modal-status');
-        const banner = document.getElementById('modal-status-banner');
-        
-        statusEl.textContent = data.status;
-        banner.style.background = 'rgba(255,255,255,0.05)';
-        if (data.status === 'COMPLETED') banner.style.background = 'rgba(16, 185, 129, 0.2)';
-        if (data.status === 'FAILED') banner.style.background = 'rgba(239, 68, 68, 0.2)';
-
-        const modalProg = document.getElementById('modal-progress-bar');
-        if (modalProg) {
-            modalProg.style.width = getStatusProgress(data.status);
-            if (data.status === 'FAILED') {
-                modalProg.style.background = 'var(--error)';
-            } else if (data.status === 'COMPLETED') {
-                modalProg.style.background = 'var(--success)';
-            } else {
-                modalProg.style.background = 'var(--primary)';
-            }
-        }
-
-        let logs = "";
-        if (data.stdout) logs += data.stdout + "\n";
-        if (data.stderr) logs += "[ERROR] " + data.stderr + "\n";
-        if (data.failure_message) logs += "\n[FAILURE] " + data.failure_message;
-        
-        document.getElementById('modal-logs').textContent = logs || "No logs available yet.";
-    }
-
-    closeModalBtn.addEventListener('click', () => {
-        modal.classList.remove('show');
-        currentModalExecutionId = null;
     });
 
-    // Reports Logic
-    const reportsGrid = document.getElementById('reports-grid-container');
-    const refreshReportsBtn = document.getElementById('refresh-reports-btn');
+    // 2. Validate Script Action
+    validateBtn.addEventListener('click', async () => {
+        const code = scriptCodeEditor.value.trim();
+        if (!code) return;
 
-    async function loadReports() {
+        validateBtn.disabled = true;
         try {
-            const res = await fetch('/api/v1/reports');
-            const files = await res.json();
-            
-            reportsGrid.innerHTML = '';
-            
-            if (files.length === 0) {
-                reportsGrid.innerHTML = '<div class="empty-state" style="grid-column: 1/-1;">No reports generated yet.</div>';
+            const res = await fetch('/api/v1/ai/validate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pythonScript: code })
+            });
+            const data = await res.json();
+            updateValidationUI(data);
+        } catch (err) {
+            alert('Validation failed: ' + err.message);
+        } finally {
+            validateBtn.disabled = false;
+        }
+    });
+
+    // 3. Execute Script from Workspace Action
+    runScriptBtn.addEventListener('click', async () => {
+        const code = scriptCodeEditor.value.trim();
+        if (!code) {
+            alert('No script in workspace to execute.');
+            return;
+        }
+
+        runScriptBtn.disabled = true;
+        runScriptBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Running...';
+
+        // Switch to runner view
+        const runnerNav = document.querySelector('[data-target="runner-view"]');
+        if (runnerNav) runnerNav.click();
+
+        const consoleBox = document.getElementById('execution-logs');
+        consoleBox.innerHTML = '<div class="console-line text-primary"><i class="fa-solid fa-gear fa-spin"></i> Spawning isolated pytest execution workspace...</div>';
+
+        try {
+            const res = await fetch('/api/v1/ai/execute', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    pythonScript: code,
+                    testName: 'test_generated_tc.py',
+                    environment: envSelect.value,
+                    headless: true
+                })
+            });
+
+            const data = await res.json();
+            const colorClass = data.status === 'PASSED' ? 'text-success' : 'text-danger';
+            consoleBox.innerHTML = `
+                <div class="console-line ${colorClass}">[EXECUTION ${data.status}] ID: ${data.executionId} (Duration: ${data.durationSeconds}s)</div>
+                <div class="console-line mt-4">--- STDOUT ---</div>
+                <pre class="console-line text-muted">${escapeHtml(data.stdout || '')}</pre>
+                ${data.stderr ? `<div class="console-line text-danger mt-4">--- STDERR ---</div><pre class="console-line text-danger">${escapeHtml(data.stderr)}</pre>` : ''}
+            `;
+        } catch (err) {
+            consoleBox.innerHTML += `<div class="console-line text-danger">Execution error: ${err.message}</div>`;
+        } finally {
+            runScriptBtn.disabled = false;
+            runScriptBtn.innerHTML = '<i class="fa-solid fa-play"></i> Execute';
+        }
+    });
+
+    // 4. AI Chat Modification
+    async function sendChat() {
+        const message = chatInput.value.trim();
+        const currentScript = scriptCodeEditor.value.trim();
+        if (!message || !currentScript) return;
+
+        appendChatMessage('user', message);
+        chatInput.value = '';
+        sendChatBtn.disabled = true;
+
+        const loadingMsg = appendChatMessage('assistant', '<i class="fa-solid fa-spinner fa-spin"></i> Applying modifications to script...');
+
+        try {
+            const res = await fetch('/api/v1/ai/modify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    currentScript,
+                    message
+                })
+            });
+
+            const data = await res.json();
+            if (data.pythonScript) {
+                scriptCodeEditor.value = data.pythonScript;
+                updateValidationUI(data.validation);
+                loadingMsg.innerHTML = `<i class="fa-solid fa-check text-success"></i> ${data.description || 'Script updated successfully.'}`;
+            } else {
+                loadingMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-danger"></i> Could not modify script: ${JSON.stringify(data)}`;
+            }
+        } catch (err) {
+            loadingMsg.innerHTML = `<i class="fa-solid fa-circle-xmark text-danger"></i> Chat request failed: ${err.message}`;
+        } finally {
+            sendChatBtn.disabled = false;
+        }
+    }
+
+    sendChatBtn.addEventListener('click', sendChat);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendChat();
+    });
+
+    // 5. Copy Script Action
+    copyScriptBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(scriptCodeEditor.value);
+        copyScriptBtn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
+        setTimeout(() => copyScriptBtn.innerHTML = '<i class="fa-solid fa-copy"></i>', 2000);
+    });
+
+    // 6. Reports Summary Loader
+    async function loadReportsSummary() {
+        const tbody = document.getElementById('reports-table-body');
+        tbody.innerHTML = '<tr><td colspan="7" class="text-muted"><i class="fa-solid fa-spinner fa-spin"></i> Loading Extent Reports...</td></tr>';
+
+        try {
+            const res = await fetch('/api/v1/ai/reports/summary');
+            const data = await res.json();
+
+            document.getElementById('metric-total-reports').textContent = data.totalReports || 0;
+
+            if (!data.reports || data.reports.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-muted">No Extent Reports found in python_playwright/reports.</td></tr>';
                 return;
             }
 
-            files.forEach(file => {
-                const a = document.createElement('a');
-                a.href = `/api/v1/reports/${file}`;
-                a.target = "_blank";
-                a.className = "report-card";
-                a.style.position = "relative";
-                
-                a.innerHTML = `
-                    <i class="fa-solid fa-file-code"></i>
-                    <div class="report-name">${file}</div>
-                    <button class="delete-report-btn" data-file="${file}" title="Delete Report" style="position: absolute; top: 10px; right: 10px; background: rgba(239, 68, 68, 0.1); border: none; color: #ef4444; border-radius: 4px; padding: 6px 8px; cursor: pointer;">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                `;
-                reportsGrid.appendChild(a);
-            });
+            let html = '';
+            data.reports.forEach(r => {
+                const statusBadge = r.overallStatus === 'PASSED' 
+                    ? '<span class="badge badge-pass">PASS</span>'
+                    : '<span class="badge badge-fail">FAIL</span>';
 
-            // Attach delete listeners
-            document.querySelectorAll('.delete-report-btn').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    e.preventDefault(); // Prevent navigating to the report link
-                    e.stopPropagation();
-                    const file = e.currentTarget.getAttribute('data-file');
-                    if (confirm(`Are you sure you want to delete ${file}?`)) {
-                        try {
-                            const response = await fetch(`/api/v1/reports/${file}`, { method: 'DELETE' });
-                            if (response.ok) {
-                                loadReports();
-                            } else {
-                                alert("Failed to delete report.");
-                            }
-                        } catch (err) {
-                            console.error("Delete failed", err);
-                        }
-                    }
-                });
+                html += `
+                    <tr>
+                        <td><strong>${escapeHtml(r.fileName)}</strong></td>
+                        <td>${r.totalTestCases || 1}</td>
+                        <td class="text-success">${r.passed || 0}</td>
+                        <td class="text-danger">${r.failed || 0}</td>
+                        <td>${r.passPercentage || 100}%</td>
+                        <td>${statusBadge}</td>
+                        <td>
+                            <a href="/api/v1/reports/${encodeURIComponent(r.fileName)}" target="_blank" class="btn outline-btn btn-sm">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Extent HTML
+                            </a>
+                        </td>
+                    </tr>
+                `;
             });
-        } catch (e) {
-            console.error("Failed to load reports", e);
+            tbody.innerHTML = html;
+        } catch (err) {
+            tbody.innerHTML = `<tr><td colspan="7" class="text-danger">Failed to load reports: ${err.message}</td></tr>`;
         }
     }
 
-    refreshReportsBtn.addEventListener('click', loadReports);
+    if (refreshReportsBtn) {
+        refreshReportsBtn.addEventListener('click', loadReportsSummary);
+    }
 
-    // Initial load
-    loadTests();
+    // 7. Test Suite Loader & Runner
+    async function loadAvailableTests() {
+        const tbody = document.getElementById('tests-table-body');
+        tbody.innerHTML = '<tr><td colspan="4" class="text-muted"><i class="fa-solid fa-spinner fa-spin"></i> Loading test catalog...</td></tr>';
+
+        try {
+            const res = await fetch('/api/v1/agent/tests');
+            const data = await res.json();
+
+            if (!data.tests || data.tests.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-muted">No existing test files found.</td></tr>';
+                return;
+            }
+
+            let html = '';
+            data.tests.forEach(t => {
+                html += `
+                    <tr>
+                        <td><input type="checkbox" class="test-checkbox" value="${escapeHtml(t.testId)}"></td>
+                        <td><code>${escapeHtml(t.testId)}</code></td>
+                        <td>${escapeHtml(t.name)}</td>
+                        <td>
+                            <button class="btn outline-btn btn-sm run-single-btn" data-id="${escapeHtml(t.testId)}">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+
+            // Wire up single run buttons
+            document.querySelectorAll('.run-single-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const testId = btn.getAttribute('data-id');
+                    executeTestBatch([testId]);
+                });
+            });
+
+            // Wire up checkboxes
+            document.querySelectorAll('.test-checkbox').forEach(cb => {
+                cb.addEventListener('change', updateRunSelectedState);
+            });
+
+        } catch (err) {
+            tbody.innerHTML = `<tr><td colspan="4" class="text-danger">Failed to load tests: ${err.message}</td></tr>`;
+        }
+    }
+
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', () => {
+            document.querySelectorAll('.test-checkbox').forEach(cb => {
+                cb.checked = selectAllCheckbox.checked;
+            });
+            updateRunSelectedState();
+        });
+    }
+
+    function updateRunSelectedState() {
+        const checked = document.querySelectorAll('.test-checkbox:checked');
+        if (runSelectedBtn) {
+            runSelectedBtn.disabled = checked.length === 0;
+            runSelectedBtn.textContent = checked.length > 0 ? `Run Selected (${checked.length})` : 'Run Selected';
+        }
+    }
+
+    if (runSelectedBtn) {
+        runSelectedBtn.addEventListener('click', () => {
+            const checked = Array.from(document.querySelectorAll('.test-checkbox:checked')).map(cb => cb.value);
+            if (checked.length > 0) {
+                executeTestBatch(checked);
+            }
+        });
+    }
+
+    if (refreshTestsBtn) {
+        refreshTestsBtn.addEventListener('click', loadAvailableTests);
+    }
+
+    // Execute Test Batch Function
+    async function executeTestBatch(testIds) {
+        const env = runnerEnvSelect ? runnerEnvSelect.value : 'stage';
+        const consoleBox = document.getElementById('execution-logs');
+        consoleBox.innerHTML = `<div class="console-line text-primary"><i class="fa-solid fa-spinner fa-spin"></i> Launching test run for [${testIds.join(', ')}] on environment '${env}'...</div>`;
+
+        try {
+            const res = await fetch('/api/v1/agent/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'run_test',
+                    testIds: testIds,
+                    environment: env
+                })
+            });
+
+            const data = await res.json();
+            if (data.executionId) {
+                consoleBox.innerHTML += `<div class="console-line text-success">Task created: ${data.taskId} | Execution ID: ${data.executionId}</div>`;
+                pollExecutionProgress(data.executionId);
+            } else {
+                consoleBox.innerHTML += `<div class="console-line text-danger">Failed to start execution: ${JSON.stringify(data)}</div>`;
+            }
+        } catch (err) {
+            consoleBox.innerHTML += `<div class="console-line text-danger">Error: ${err.message}</div>`;
+        }
+    }
+
+    // Poll execution status
+    async function pollExecutionProgress(executionId) {
+        const consoleBox = document.getElementById('execution-logs');
+        const interval = setInterval(async () => {
+            try {
+                const res = await fetch(`/api/v1/executions/${executionId}`);
+                const data = await res.json();
+
+                if (data.status === 'EXECUTING' || data.status === 'VALIDATING' || data.status === 'QUEUED') {
+                    consoleBox.innerHTML = `
+                        <div class="console-line text-primary"><i class="fa-solid fa-spinner fa-spin"></i> Status: ${data.status} (Execution ID: ${executionId})</div>
+                        ${data.stdout ? `<pre class="console-line text-muted">${escapeHtml(data.stdout)}</pre>` : ''}
+                    `;
+                } else {
+                    // Terminal state reached (COMPLETED, FAILED, etc.)
+                    clearInterval(interval);
+                    const colorClass = (data.status === 'COMPLETED' || data.status === 'PASSED') ? 'text-success' : 'text-danger';
+                    consoleBox.innerHTML = `
+                        <div class="console-line ${colorClass}">[FINISHED] Status: ${data.status} | Duration: ${data.duration || 0}s</div>
+                        <div class="console-line mt-4">--- STDOUT ---</div>
+                        <pre class="console-line text-muted">${escapeHtml(data.stdout || '')}</pre>
+                        ${data.stderr ? `<div class="console-line text-danger mt-4">--- STDERR ---</div><pre class="console-line text-danger">${escapeHtml(data.stderr)}</pre>` : ''}
+                    `;
+                }
+            } catch (err) {
+                clearInterval(interval);
+                consoleBox.innerHTML += `<div class="console-line text-danger">Error polling status: ${err.message}</div>`;
+            }
+        }, 1500);
+    }
+
+    // UI Helpers
+    function updateValidationUI(val) {
+        if (!val) return;
+        if (val.status === 'PASS' || val.isValid) {
+            validationBadge.className = 'badge badge-pass';
+            validationBadge.textContent = 'VALID';
+            validationSummary.innerHTML = '<i class="fa-solid fa-circle-check text-success"></i> Python syntax and framework symbols verified.';
+        } else {
+            validationBadge.className = 'badge badge-fail';
+            validationBadge.textContent = 'ERROR';
+            const errors = (val.errors || []).join('; ');
+            validationSummary.innerHTML = `<i class="fa-solid fa-circle-xmark text-danger"></i> ${escapeHtml(errors)}`;
+        }
+    }
+
+    function appendChatMessage(role, text) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `chat-msg ${role}`;
+        msgDiv.innerHTML = `
+            <div class="msg-avatar"><i class="fa-solid ${role === 'user' ? 'fa-user' : 'fa-robot'}"></i></div>
+            <div class="msg-content">${text}</div>
+        `;
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        return msgDiv.querySelector('.msg-content');
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
 });

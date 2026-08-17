@@ -1,0 +1,331 @@
+{
+  "info": {
+    "_postman_id": "8c44f912-32a1-4df2-a3fa-92b1a8d07119",
+    "name": "Playwright Agent AI Platform API",
+    "description": "Complete Postman collection for all endpoints of the AI-Driven Playwright Test Automation Platform (Health Check, Inputs/Generation, Moderation Layer, Embedding & RAG Retrieval, Test Execution, and Extent Report Generation).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Checks the operational status of the FastAPI backend."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Pre-Embedding Moderation Layer",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"content\": \"Login url = 'https://stage.momentecbrands.com/login' with user = 'suriyaa@momentec.com' and password: 'SuperSecretPassword123!'\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/ai/moderate",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "ai",
+            "moderate"
+          ]
+        },
+        "description": "Demonstrates deterministic rule-based security moderation, PII/credential masking (URLs, emails, passwords), and toxic term blocking before sending to external LLM/embeddings."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Embedding & RAG Context Retrieval",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Generate login test using HomePage, LoginPage and MyAccountPage with cookies handled\",\n  \"topK\": 4,\n  \"scoreThreshold\": 0.0\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/ai/rag/retrieve",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "ai",
+            "rag",
+            "retrieve"
+          ]
+        },
+        "description": "Generates Mistral embeddings and retrieves the most relevant Python Playwright AST code chunks via semantic vector search."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Discovered Framework Symbols",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/ai/symbols",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "ai",
+            "symbols"
+          ]
+        },
+        "description": "Returns all 39 discovered Page Objects, methods, fixtures, and configuration schemas extracted from the Python Playwright framework."
+      },
+      "response": []
+    },
+    {
+      "name": "5. AI Test Generation (Inputs -> Script)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userStory\": \"As a user, I should be able to log in using valid credentials so that I can access my account.\",\n  \"acceptanceCriteria\": [\n    \"1. Navigate to the login page\",\n    \"2. Enter valid username and password\",\n    \"3. Click login button\",\n    \"4. Verify user account icon is visible\",\n    \"5. Log out of the application\"\n  ],\n  \"project\": \"playwright\",\n  \"environment\": \"stage\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/ai/generate",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "ai",
+            "generate"
+          ]
+        },
+        "description": "Main test generation pipeline: User Story -> RAG Context -> LangChain / Groq -> Structured Output -> Deterministic AST Validation -> Self-Correction."
+      },
+      "response": []
+    },
+    {
+      "name": "6. AI Chat Script Modification",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"currentScript\": \"import pytest\\nfrom playwright.sync_api import expect\\nfrom python_playwright.pages.home_page import HomePage\\nfrom python_playwright.utils.reporter import Reporter\\n\\ndef test_run_login(auth_page_tc001, env_config):\\n    Reporter.start_test_case('TC001_VerifyLogin', 'Verify Login', 'Smoke', 'SURIYAA')\\n    url = env_config['url']\\n    auth_page_tc001.goto(url)\\n    home = HomePage(auth_page_tc001, url)\\n    home.verify_home_page().click_login()\",\n  \"message\": \"Add username and password entry using env_config, and verify signout link is visible.\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/ai/modify",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "ai",
+            "modify"
+          ]
+        },
+        "description": "Conversationally updates an existing generated test script through AI chat while preserving framework conventions."
+      },
+      "response": []
+    },
+    {
+      "name": "7. AST Script Quality Gate Validation",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"pythonScript\": \"import pytest\\nfrom playwright.sync_api import expect\\nfrom python_playwright.pages.home_page import HomePage\\nfrom python_playwright.utils.reporter import Reporter\\n\\nclass TestLogin:\\n    def test_login(self, auth_page_tc001, env_config):\\n        Reporter.start_test_case('TC001', 'Login', 'Smoke', 'SURIYAA')\\n        url = env_config['url']\\n        home = HomePage(auth_page_tc001, url)\\n        home.verify_home_page()\",\n  \"acceptanceCriteria\": [\n    \"User navigates to login page\"\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/ai/validate",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "ai",
+            "validate"
+          ]
+        },
+        "description": "Performs static AST compilation, symbol compliance checks, security checks, and acceptance criteria coverage verification."
+      },
+      "response": []
+    },
+    {
+      "name": "8. Test Execution (AI Generated Script)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"pythonScript\": \"import pytest\\nfrom playwright.sync_api import expect\\nfrom python_playwright.pages.home_page import HomePage\\nfrom python_playwright.utils.reporter import Reporter\\n\\n@pytest.fixture(scope=\\\"class\\\")\\ndef auth_context_tc001(request, env_config, browser_instance):\\n    context = browser_instance.new_context(viewport={\\\"width\\\": 1440, \\\"height\\\": 900}, ignore_https_errors=True)\\n    context.set_default_timeout(30000)\\n    yield context\\n    context.close()\\n\\n@pytest.fixture(scope=\\\"class\\\")\\ndef auth_page_tc001(auth_context_tc001):\\n    page = auth_context_tc001.new_page()\\n    yield page\\n    page.close()\\n\\n@pytest.mark.usefixtures(\\\"auth_page_tc001\\\")\\nclass TestTC001VerifyLogin:\\n    def test_run_login(self, auth_page_tc001, env_config):\\n        Reporter.start_test_case(\\\"TC001_VerifyLogin\\\", \\\"Verify Login functionality\\\", \\\"Smoke\\\", \\\"SURIYAA\\\")\\n        url = env_config[\\\"url\\\"]\\n        username = env_config[\\\"username\\\"]\\n        password = env_config[\\\"password\\\"]\\n        auth_page_tc001.goto(url)\\n        home = HomePage(auth_page_tc001, url)\\n        home.accept_cookies()\\n        home.verify_home_page().click_login()\\n        home.enter_username(username).enter_password(password).click_login_button()\\n        expect(auth_page_tc001.locator(\\\"id=Header_GlobalLogin_signOutQuickLinkUser\\\")).to_be_visible(timeout=15000)\\n        home.click_username().log_out()\",\n  \"testName\": \"test_tc001_verify_login.py\",\n  \"environment\": \"stage\",\n  \"headless\": true\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/ai/execute",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "ai",
+            "execute"
+          ]
+        },
+        "description": "Provisions an isolated execution workspace and spawns pytest subprocess with real-time logs and Extent Report creation."
+      },
+      "response": []
+    },
+    {
+      "name": "9. Test Execution Task (Existing Test Suite)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"action\": \"run_test\",\n  \"testIds\": [\n    \"TC001_VERIFY_LOGIN\"\n  ],\n  \"environment\": \"stage\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/agent/tasks",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "agent",
+            "tasks"
+          ]
+        },
+        "description": "Launches a background test execution task for one or more tests from the suite catalog."
+      },
+      "response": []
+    },
+    {
+      "name": "10. Execution Status & Logs Poll",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/executions/EXEC-631f90a1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "executions",
+            "EXEC-631f90a1"
+          ]
+        },
+        "description": "Polls status, duration, stdout, and stderr for an active or completed execution."
+      },
+      "response": []
+    },
+    {
+      "name": "11. Reports Summary Dashboard",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/ai/reports/summary",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "ai",
+            "reports",
+            "summary"
+          ]
+        },
+        "description": "Returns aggregated summary metrics, pass rates, and parsed Extent Report files."
+      },
+      "response": []
+    },
+    {
+      "name": "12. Download / View HTML Extent Report",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/reports/extent_report_20260817_173750.html",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "reports",
+            "extent_report_20260817_173750.html"
+          ]
+        },
+        "description": "Serves the full standalone Extent Report HTML artifact."
+      },
+      "response": []
+    }
+  ]
+}

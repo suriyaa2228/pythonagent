@@ -1,0 +1,5464 @@
+{
+  "metadata": {
+    "project": "python_playwright",
+    "framework": "playwright-python",
+    "runner": "pytest",
+    "root_path": "C:\\Users\\SuriyaaP\\OneDrive - Royal Cyber Inc\\Desktop\\AGUSTA\\MOMENTEC\\agentplaywrightpython\\playwright-agent\\python_playwright",
+    "version": "1.0.0"
+  },
+  "page_objects": {
+    "AccountBillingCreditPage": {
+      "class_name": "AccountBillingCreditPage",
+      "file_path": "pages/account_billing_credit_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_accounts_billing_page": {
+          "name": "verify_accounts_billing_page",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_accounts_billing_page",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "APIDocumentationPage": {
+      "class_name": "APIDocumentationPage",
+      "file_path": "pages/api_documentation_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_api_documentation_page_link": {
+          "name": "verify_api_documentation_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_api_documentation_page_link",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "ApparelAndHeadwarDecoPage": {
+      "class_name": "ApparelAndHeadwarDecoPage",
+      "file_path": "pages/apparel_and_headwar_deco_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_apparel_and_headwar_deco_page_link": {
+          "name": "verify_apparel_and_headwar_deco_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_apparel_and_headwar_deco_page_link",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "ApparelSublimationPage": {
+      "class_name": "ApparelSublimationPage",
+      "file_path": "pages/apparel_sublimation_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_apparel_sublimation_page_link": {
+          "name": "verify_apparel_sublimation_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_apparel_sublimation_page_link",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "Locators": {
+      "class_name": "Locators",
+      "file_path": "pages/base_page.py",
+      "base_classes": [],
+      "docstring": "",
+      "methods": {},
+      "locators": [
+        "XPATH",
+        "ID",
+        "CLASS_NAME",
+        "NAME",
+        "LINK_TEXT",
+        "PARTIAL_LINKTEXT",
+        "CSS",
+        "TAGNAME"
+      ],
+      "all_callable_methods": []
+    },
+    "BasePage": {
+      "class_name": "BasePage",
+      "file_path": "pages/base_page.py",
+      "base_classes": [],
+      "docstring": "",
+      "methods": {
+        "__init__": {
+          "name": "__init__",
+          "parameters": [
+            "page"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "resolve_selector": {
+          "name": "resolve_selector",
+          "parameters": [
+            "locator_type",
+            "value"
+          ],
+          "docstring": "",
+          "returns": [
+            "value"
+          ],
+          "is_async": false
+        },
+        "accept_cookies": {
+          "name": "accept_cookies",
+          "parameters": [],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "locate_element": {
+          "name": "locate_element",
+          "parameters": [
+            "locator_type",
+            "value"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "locate_elements": {
+          "name": "locate_elements",
+          "parameters": [
+            "locator_type",
+            "value"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "click": {
+          "name": "click",
+          "parameters": [
+            "element_or_selector",
+            "value"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "click_using_js": {
+          "name": "click_using_js",
+          "parameters": [
+            "element_or_selector",
+            "value"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "wait_and_click": {
+          "name": "wait_and_click",
+          "parameters": [
+            "element_or_selector",
+            "value",
+            "timeout"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "wait_and_click_using_js": {
+          "name": "wait_and_click_using_js",
+          "parameters": [
+            "element_or_selector",
+            "value",
+            "timeout"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "clear": {
+          "name": "clear",
+          "parameters": [
+            "element"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "clear_and_type": {
+          "name": "clear_and_type",
+          "parameters": [
+            "element",
+            "data"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "type": {
+          "name": "type",
+          "parameters": [
+            "element",
+            "data"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "type_and_tab": {
+          "name": "type_and_tab",
+          "parameters": [
+            "element",
+            "data"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "type_and_enter": {
+          "name": "type_and_enter",
+          "parameters": [
+            "element",
+            "data"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "get_element_text": {
+          "name": "get_element_text",
+          "parameters": [
+            "element"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "get_element_numeric": {
+          "name": "get_element_numeric",
+          "parameters": [
+            "element"
+          ],
+          "docstring": "",
+          "returns": [
+            "float"
+          ],
+          "is_async": false
+        },
+        "get_background_color": {
+          "name": "get_background_color",
+          "parameters": [
+            "element"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "get_typed_text": {
+          "name": "get_typed_text",
+          "parameters": [
+            "element"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "select_drop_down_using_text": {
+          "name": "select_drop_down_using_text",
+          "parameters": [
+            "element",
+            "text"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "select_drop_down_using_value": {
+          "name": "select_drop_down_using_value",
+          "parameters": [
+            "element",
+            "value"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "select_drop_down_using_index": {
+          "name": "select_drop_down_using_index",
+          "parameters": [
+            "element",
+            "index"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "verify_displayed": {
+          "name": "verify_displayed",
+          "parameters": [
+            "element",
+            "timeout"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "verify_disappeared": {
+          "name": "verify_disappeared",
+          "parameters": [
+            "element"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "verify_enabled": {
+          "name": "verify_enabled",
+          "parameters": [
+            "element"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "verify_selected": {
+          "name": "verify_selected",
+          "parameters": [
+            "element"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "verify_url": {
+          "name": "verify_url",
+          "parameters": [
+            "expected_url"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "verify_title": {
+          "name": "verify_title",
+          "parameters": [
+            "title"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "refresh_page": {
+          "name": "refresh_page",
+          "parameters": [],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "pause": {
+          "name": "pause",
+          "parameters": [
+            "ms"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "wait_for_appearance": {
+          "name": "wait_for_appearance",
+          "parameters": [
+            "element",
+            "timeout"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "wait_for_disappearance": {
+          "name": "wait_for_disappearance",
+          "parameters": [
+            "element"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "scroll_to_element": {
+          "name": "scroll_to_element",
+          "parameters": [
+            "element"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "move_to_element": {
+          "name": "move_to_element",
+          "parameters": [
+            "element"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "drag_and_drop": {
+          "name": "drag_and_drop",
+          "parameters": [
+            "source",
+            "target"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "switch_to_tab": {
+          "name": "switch_to_tab",
+          "parameters": [
+            "title_or_index"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "switch_to_main_tab": {
+          "name": "switch_to_main_tab",
+          "parameters": [],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "switch_to_home_page": {
+          "name": "switch_to_home_page",
+          "parameters": [],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "switch_to_alert": {
+          "name": "switch_to_alert",
+          "parameters": [],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "accept_alert": {
+          "name": "accept_alert",
+          "parameters": [],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "dismiss_alert": {
+          "name": "dismiss_alert",
+          "parameters": [],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "get_alert_text": {
+          "name": "get_alert_text",
+          "parameters": [],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "type_alert": {
+          "name": "type_alert",
+          "parameters": [
+            "data"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "switch_to_frame": {
+          "name": "switch_to_frame",
+          "parameters": [
+            "frame_selector"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "default_content": {
+          "name": "default_content",
+          "parameters": [],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "file_upload": {
+          "name": "file_upload",
+          "parameters": [
+            "element",
+            "file_path"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "get_current_date_time": {
+          "name": "get_current_date_time",
+          "parameters": [],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "get_text_with_date_time": {
+          "name": "get_text_with_date_time",
+          "parameters": [
+            "element"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "store_text_with_date_time": {
+          "name": "store_text_with_date_time",
+          "parameters": [
+            "text",
+            "relative_path"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "handle_onetrust_cookie": {
+          "name": "handle_onetrust_cookie",
+          "parameters": [],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "report_step": {
+          "name": "report_step",
+          "parameters": [
+            "description",
+            "status",
+            "snap"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "BrandInfoPage": {
+      "class_name": "BrandInfoPage",
+      "file_path": "pages/brand_info_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_brand_info_page_link": {
+          "name": "verify_brand_info_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_brand_info_page_link",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "CartPage": {
+      "class_name": "CartPage",
+      "file_path": "pages/cart_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_cart_heading": {
+          "name": "verify_cart_heading",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_checkout": {
+          "name": "click_checkout",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "ShippingAndBillingPage"
+          ],
+          "is_async": false
+        },
+        "update_qty_txt_fld": {
+          "name": "update_qty_txt_fld",
+          "parameters": [
+            "data"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "clear_cart": {
+          "name": "clear_cart",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "validate_empty_cart_continue_shopping": {
+          "name": "validate_empty_cart_continue_shopping",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "HomePage"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_cart_heading",
+        "click_checkout",
+        "update_qty_txt_fld",
+        "clear_cart",
+        "validate_empty_cart_continue_shopping",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "ConfiguratorPage": {
+      "class_name": "ConfiguratorPage",
+      "file_path": "pages/configurator_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "__init__": {
+          "name": "__init__",
+          "parameters": [
+            "page"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "verify_configurator_loaded": {
+          "name": "verify_configurator_loaded",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_design_tab_is_open": {
+          "name": "verify_design_tab_is_open",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_3d_image_showing": {
+          "name": "verify_3d_image_showing",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_design_lines_showing": {
+          "name": "verify_design_lines_showing",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "select_design": {
+          "name": "select_design",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_next_color": {
+          "name": "click_next_color",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_navigated_to_colors_tab": {
+          "name": "verify_navigated_to_colors_tab",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_color_dropdowns_and_select": {
+          "name": "verify_color_dropdowns_and_select",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_next_text_and_logo": {
+          "name": "click_next_text_and_logo",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "add_text_decoration": {
+          "name": "add_text_decoration",
+          "parameters": [
+            "text"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "add_art_decoration": {
+          "name": "add_art_decoration",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "add_custom_text_with_location": {
+          "name": "add_custom_text_with_location",
+          "parameters": [
+            "location",
+            "text"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "add_custom_art_upload": {
+          "name": "add_custom_art_upload",
+          "parameters": [
+            "location",
+            "file_path"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_custom_art_showing": {
+          "name": "verify_custom_art_showing",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_next_roster": {
+          "name": "click_next_roster",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_roster_fields_and_add_size": {
+          "name": "verify_roster_fields_and_add_size",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_next_summary": {
+          "name": "click_next_summary",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_summary_info": {
+          "name": "verify_summary_info",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "add_to_cart": {
+          "name": "add_to_cart",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "fill_cart_popup": {
+          "name": "fill_cart_popup",
+          "parameters": [
+            "name",
+            "email",
+            "phone"
+          ],
+          "docstring": "",
+          "returns": [
+            "CartPage"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "__init__",
+        "verify_configurator_loaded",
+        "verify_design_tab_is_open",
+        "verify_3d_image_showing",
+        "verify_design_lines_showing",
+        "select_design",
+        "click_next_color",
+        "verify_navigated_to_colors_tab",
+        "verify_color_dropdowns_and_select",
+        "click_next_text_and_logo",
+        "add_text_decoration",
+        "add_art_decoration",
+        "add_custom_text_with_location",
+        "add_custom_art_upload",
+        "verify_custom_art_showing",
+        "click_next_roster",
+        "verify_roster_fields_and_add_size",
+        "click_next_summary",
+        "verify_summary_info",
+        "add_to_cart",
+        "fill_cart_popup",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "ContactUsPage": {
+      "class_name": "ContactUsPage",
+      "file_path": "pages/contact_us_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_contact_us_page_link": {
+          "name": "verify_contact_us_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_contact_us_page_link",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "CustomLeadTimePage": {
+      "class_name": "CustomLeadTimePage",
+      "file_path": "pages/custom_lead_time_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_custom_lead_page_title": {
+          "name": "verify_custom_lead_page_title",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_custom_lead_page_title",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "CustomSublimationPage": {
+      "class_name": "CustomSublimationPage",
+      "file_path": "pages/custom_sublimation_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "__init__": {
+          "name": "__init__",
+          "parameters": [
+            "page"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "verify_custom_sublimation_page_title": {
+          "name": "verify_custom_sublimation_page_title",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_products_listed": {
+          "name": "verify_products_listed",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_customize_button_on_hover": {
+          "name": "verify_customize_button_on_hover",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_customize_on_product": {
+          "name": "click_customize_on_product",
+          "parameters": [
+            "style_number"
+          ],
+          "docstring": "Hovers over the first product and clicks the Customize link.",
+          "returns": [
+            "ConfiguratorPage"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "__init__",
+        "verify_custom_sublimation_page_title",
+        "verify_products_listed",
+        "verify_customize_button_on_hover",
+        "click_customize_on_product",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "CustomerServicePage": {
+      "class_name": "CustomerServicePage",
+      "file_path": "pages/customer_service_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_customer_service_link": {
+          "name": "verify_customer_service_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_customer_service_link",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "DataFeedsPage": {
+      "class_name": "DataFeedsPage",
+      "file_path": "pages/data_feeds_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_data_feeds_page": {
+          "name": "verify_data_feeds_page",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_data_feeds_page",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "DigitalCustIntegPage": {
+      "class_name": "DigitalCustIntegPage",
+      "file_path": "pages/digital_cust_integ_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_digital_cust_integ_page_link": {
+          "name": "verify_digital_cust_integ_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_digital_cust_integ_page_link",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "EducationPage": {
+      "class_name": "EducationPage",
+      "file_path": "pages/education_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_education_page_link": {
+          "name": "verify_education_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_education_page_link",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "FAQPage": {
+      "class_name": "FAQPage",
+      "file_path": "pages/faq_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_faq_page_title": {
+          "name": "verify_faq_page_title",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_faq_page_title",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "FlyerCatalogMediaPage": {
+      "class_name": "FlyerCatalogMediaPage",
+      "file_path": "pages/flyer_catalog_media_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_flyer_catalog_media_page_link": {
+          "name": "verify_flyer_catalog_media_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_flyer_catalog_media_page_link",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "ForgotPasswordPage": {
+      "class_name": "ForgotPasswordPage",
+      "file_path": "pages/forgot_password_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "enter_user_id": {
+          "name": "enter_user_id",
+          "parameters": [
+            "data"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_continue": {
+          "name": "click_continue",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_reset_with_sec_ques": {
+          "name": "click_reset_with_sec_ques",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "enter_security_answer": {
+          "name": "enter_security_answer",
+          "parameters": [
+            "data"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "enter_new_password": {
+          "name": "enter_new_password",
+          "parameters": [
+            "data"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "enter_confirm_password": {
+          "name": "enter_confirm_password",
+          "parameters": [
+            "data"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_save_and_login": {
+          "name": "click_save_and_login",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "MyAccountPage"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "enter_user_id",
+        "click_continue",
+        "click_reset_with_sec_ques",
+        "enter_security_answer",
+        "enter_new_password",
+        "enter_confirm_password",
+        "click_save_and_login",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "FreeStyleDigitalPrintPage": {
+      "class_name": "FreeStyleDigitalPrintPage",
+      "file_path": "pages/freestyle_digital_print_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "__init__": {
+          "name": "__init__",
+          "parameters": [
+            "page"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "verify_freestyle_digital_print_page_title": {
+          "name": "verify_freestyle_digital_print_page_title",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_select_date_field_and_dropdown": {
+          "name": "verify_select_date_field_and_dropdown",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_search_field_and_button": {
+          "name": "verify_search_field_and_button",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_clear_results_link": {
+          "name": "verify_clear_results_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_start_new_design_link": {
+          "name": "verify_start_new_design_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "__init__",
+        "verify_freestyle_digital_print_page_title",
+        "verify_select_date_field_and_dropdown",
+        "verify_search_field_and_button",
+        "verify_clear_results_link",
+        "verify_start_new_design_link",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "FreeStyleHeadwearPage": {
+      "class_name": "FreeStyleHeadwearPage",
+      "file_path": "pages/freestyle_headwear_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "__init__": {
+          "name": "__init__",
+          "parameters": [
+            "page"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "verify_freestyle_headwear_page_title": {
+          "name": "verify_freestyle_headwear_page_title",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_select_date_field_and_dropdown": {
+          "name": "verify_select_date_field_and_dropdown",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_search_field_and_button": {
+          "name": "verify_search_field_and_button",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_clear_results_link": {
+          "name": "verify_clear_results_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_start_new_design_link": {
+          "name": "verify_start_new_design_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "__init__",
+        "verify_freestyle_headwear_page_title",
+        "verify_select_date_field_and_dropdown",
+        "verify_search_field_and_button",
+        "verify_clear_results_link",
+        "verify_start_new_design_link",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "FreeStyleSublimationPage": {
+      "class_name": "FreeStyleSublimationPage",
+      "file_path": "pages/freestyle_sublimation_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "__init__": {
+          "name": "__init__",
+          "parameters": [
+            "page"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "verify_freestyle_sublimation_page_title": {
+          "name": "verify_freestyle_sublimation_page_title",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_select_date_field_and_dropdown": {
+          "name": "verify_select_date_field_and_dropdown",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_search_field_and_button": {
+          "name": "verify_search_field_and_button",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_clear_results_link": {
+          "name": "verify_clear_results_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_start_new_design_link": {
+          "name": "verify_start_new_design_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "__init__",
+        "verify_freestyle_sublimation_page_title",
+        "verify_select_date_field_and_dropdown",
+        "verify_search_field_and_button",
+        "verify_clear_results_link",
+        "verify_start_new_design_link",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "GlobalCitizePage": {
+      "class_name": "GlobalCitizePage",
+      "file_path": "pages/global_citize_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_global_citize_page_link": {
+          "name": "verify_global_citize_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_global_citize_page_link",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "HomePage": {
+      "class_name": "HomePage",
+      "file_path": "pages/home_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "__init__": {
+          "name": "__init__",
+          "parameters": [
+            "page",
+            "url"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "verify_home_page": {
+          "name": "verify_home_page",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_login": {
+          "name": "click_login",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "enter_username": {
+          "name": "enter_username",
+          "parameters": [
+            "data"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "enter_password": {
+          "name": "enter_password",
+          "parameters": [
+            "data"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "clear_cart_if_dirty": {
+          "name": "clear_cart_if_dirty",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_login_button": {
+          "name": "click_login_button",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_username": {
+          "name": "click_username",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_my_account": {
+          "name": "click_my_account",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "MyAccountPage"
+          ],
+          "is_async": false
+        },
+        "log_out": {
+          "name": "log_out",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "forgot_password_link": {
+          "name": "forgot_password_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "ForgotPasswordPage"
+          ],
+          "is_async": false
+        },
+        "verify_login_error_message": {
+          "name": "verify_login_error_message",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "search_product": {
+          "name": "search_product",
+          "parameters": [
+            "style_no"
+          ],
+          "docstring": "",
+          "returns": [
+            "PDPPage"
+          ],
+          "is_async": false
+        },
+        "click_brand_logo": {
+          "name": "click_brand_logo",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_info_and_resources": {
+          "name": "click_info_and_resources",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "ensure_resources_dropdown_open": {
+          "name": "ensure_resources_dropdown_open",
+          "parameters": [],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "click_custom_lead_times": {
+          "name": "click_custom_lead_times",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "CustomLeadTimePage"
+          ],
+          "is_async": false
+        },
+        "click_faq": {
+          "name": "click_faq",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "FAQPage"
+          ],
+          "is_async": false
+        },
+        "click_web_tips_tricks": {
+          "name": "click_web_tips_tricks",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "WebTipsTricksPage"
+          ],
+          "is_async": false
+        },
+        "click_returns_and_orders_page": {
+          "name": "click_returns_and_orders_page",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "ReturnsAndOrdersPage"
+          ],
+          "is_async": false
+        },
+        "click_shipping_location_hours": {
+          "name": "click_shipping_location_hours",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "ShippingLocationHoursPage"
+          ],
+          "is_async": false
+        },
+        "click_account_billing_credit_link": {
+          "name": "click_account_billing_credit_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "AccountBillingCreditPage"
+          ],
+          "is_async": false
+        },
+        "click_customer_sev_link": {
+          "name": "click_customer_sev_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "CustomerServicePage"
+          ],
+          "is_async": false
+        },
+        "click_data_feeds_link": {
+          "name": "click_data_feeds_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "DataFeedsPage"
+          ],
+          "is_async": false
+        },
+        "click_news_page_link": {
+          "name": "click_news_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "NewsPage"
+          ],
+          "is_async": false
+        },
+        "click_flyer_catalog_media_page_link": {
+          "name": "click_flyer_catalog_media_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "FlyerCatalogMediaPage"
+          ],
+          "is_async": false
+        },
+        "click_on_demand_solution_page_link": {
+          "name": "click_on_demand_solution_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "OnDemandSolutionPage"
+          ],
+          "is_async": false
+        },
+        "click_product_info_page_link": {
+          "name": "click_product_info_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "ProductInfoPage"
+          ],
+          "is_async": false
+        },
+        "click_samples_page_link": {
+          "name": "click_samples_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "SamplesPage"
+          ],
+          "is_async": false
+        },
+        "click_apparel_sublimation_page_link": {
+          "name": "click_apparel_sublimation_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "ApparelSublimationPage"
+          ],
+          "is_async": false
+        },
+        "click_apparel_and_headwar_deco_page_link": {
+          "name": "click_apparel_and_headwar_deco_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "ApparelAndHeadwarDecoPage"
+          ],
+          "is_async": false
+        },
+        "click_digital_cust_integ_page_link": {
+          "name": "click_digital_cust_integ_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "DigitalCustIntegPage"
+          ],
+          "is_async": false
+        },
+        "click_brand_info_page_link": {
+          "name": "click_brand_info_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "BrandInfoPage"
+          ],
+          "is_async": false
+        },
+        "click_global_citize_page_link": {
+          "name": "click_global_citize_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "GlobalCitizePage"
+          ],
+          "is_async": false
+        },
+        "click_contact_use_page_link": {
+          "name": "click_contact_use_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "ContactUsPage"
+          ],
+          "is_async": false
+        },
+        "click_education_page_link": {
+          "name": "click_education_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "EducationPage"
+          ],
+          "is_async": false
+        },
+        "click_api_documentation_page_link": {
+          "name": "click_api_documentation_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "APIDocumentationPage"
+          ],
+          "is_async": false
+        },
+        "click_native_cart_demo_page_link": {
+          "name": "click_native_cart_demo_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "NativeCartDemoPage"
+          ],
+          "is_async": false
+        },
+        "validate_page_load_and_errors": {
+          "name": "validate_page_load_and_errors",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "validate_header_elements": {
+          "name": "validate_header_elements",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "validate_brand_logo": {
+          "name": "validate_brand_logo",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "validate_username_dropdown": {
+          "name": "validate_username_dropdown",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "validate_mega_menus": {
+          "name": "validate_mega_menus",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "hover_mega_menu": {
+          "name": "hover_mega_menu",
+          "parameters": [
+            "facet"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_brands_dropdown": {
+          "name": "verify_brands_dropdown",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_sub_category_in_mega_menu": {
+          "name": "click_sub_category_in_mega_menu",
+          "parameters": [
+            "sub_category_name"
+          ],
+          "docstring": "",
+          "returns": [
+            "PLPPage"
+          ],
+          "is_async": false
+        },
+        "validate_direct_navigation_links": {
+          "name": "validate_direct_navigation_links",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "navigate_to_category": {
+          "name": "navigate_to_category",
+          "parameters": [
+            "category_name"
+          ],
+          "docstring": "",
+          "returns": [
+            "PLPPage"
+          ],
+          "is_async": false
+        },
+        "validate_footer_sections": {
+          "name": "validate_footer_sections",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "__init__",
+        "verify_home_page",
+        "click_login",
+        "enter_username",
+        "enter_password",
+        "clear_cart_if_dirty",
+        "click_login_button",
+        "click_username",
+        "click_my_account",
+        "log_out",
+        "forgot_password_link",
+        "verify_login_error_message",
+        "search_product",
+        "click_brand_logo",
+        "click_info_and_resources",
+        "ensure_resources_dropdown_open",
+        "click_custom_lead_times",
+        "click_faq",
+        "click_web_tips_tricks",
+        "click_returns_and_orders_page",
+        "click_shipping_location_hours",
+        "click_account_billing_credit_link",
+        "click_customer_sev_link",
+        "click_data_feeds_link",
+        "click_news_page_link",
+        "click_flyer_catalog_media_page_link",
+        "click_on_demand_solution_page_link",
+        "click_product_info_page_link",
+        "click_samples_page_link",
+        "click_apparel_sublimation_page_link",
+        "click_apparel_and_headwar_deco_page_link",
+        "click_digital_cust_integ_page_link",
+        "click_brand_info_page_link",
+        "click_global_citize_page_link",
+        "click_contact_use_page_link",
+        "click_education_page_link",
+        "click_api_documentation_page_link",
+        "click_native_cart_demo_page_link",
+        "validate_page_load_and_errors",
+        "validate_header_elements",
+        "validate_brand_logo",
+        "validate_username_dropdown",
+        "validate_mega_menus",
+        "hover_mega_menu",
+        "verify_brands_dropdown",
+        "click_sub_category_in_mega_menu",
+        "validate_direct_navigation_links",
+        "navigate_to_category",
+        "validate_footer_sections",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "LoginPage": {
+      "class_name": "LoginPage",
+      "file_path": "pages/login_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "enter_username": {
+          "name": "enter_username",
+          "parameters": [
+            "data"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "enter_password": {
+          "name": "enter_password",
+          "parameters": [
+            "data"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_login": {
+          "name": "click_login",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "HomePage"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "enter_username",
+        "enter_password",
+        "click_login",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "MyAccountPage": {
+      "class_name": "MyAccountPage",
+      "file_path": "pages/my_account_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_dashboard": {
+          "name": "verify_dashboard",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_dashboard_details": {
+          "name": "verify_dashboard_details",
+          "parameters": [
+            "username"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_password_and_security": {
+          "name": "click_password_and_security",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_password_security_page": {
+          "name": "verify_password_security_page",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_update_password_fields": {
+          "name": "verify_update_password_fields",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "update_password": {
+          "name": "update_password",
+          "parameters": [
+            "current_password"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_shipping_addresses": {
+          "name": "click_shipping_addresses",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_shipping_addresses_page": {
+          "name": "verify_shipping_addresses_page",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_shipping_address_dropdown": {
+          "name": "verify_shipping_address_dropdown",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "add_new_address": {
+          "name": "add_new_address",
+          "parameters": [
+            "address_data"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_saved_credit_cards": {
+          "name": "click_saved_credit_cards",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_saved_credit_cards_page": {
+          "name": "verify_saved_credit_cards_page",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "add_new_credit_card": {
+          "name": "add_new_credit_card",
+          "parameters": [
+            "cc_data"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_dashboard",
+        "verify_dashboard_details",
+        "click_password_and_security",
+        "verify_password_security_page",
+        "verify_update_password_fields",
+        "update_password",
+        "click_shipping_addresses",
+        "verify_shipping_addresses_page",
+        "verify_shipping_address_dropdown",
+        "add_new_address",
+        "click_saved_credit_cards",
+        "verify_saved_credit_cards_page",
+        "add_new_credit_card",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "NativeCartDemoPage": {
+      "class_name": "NativeCartDemoPage",
+      "file_path": "pages/native_cart_demo_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_native_cart_demo_page_link": {
+          "name": "verify_native_cart_demo_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_native_cart_demo_page_link",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "NewsPage": {
+      "class_name": "NewsPage",
+      "file_path": "pages/news_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_news_page_link": {
+          "name": "verify_news_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_news_page_link",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "OnDemandSolutionPage": {
+      "class_name": "OnDemandSolutionPage",
+      "file_path": "pages/on_demand_solution_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_on_demand_solution_page_link": {
+          "name": "verify_on_demand_solution_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_on_demand_solution_page_link",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "PDPPage": {
+      "class_name": "PDPPage",
+      "file_path": "pages/pdp_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_customise_button": {
+          "name": "verify_customise_button",
+          "parameters": [
+            "data"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_search_product": {
+          "name": "verify_search_product",
+          "parameters": [
+            "style_no"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "select_color_black": {
+          "name": "select_color_black",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_place_holder": {
+          "name": "verify_place_holder",
+          "parameters": [
+            "style_no"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "enter_quantity": {
+          "name": "enter_quantity",
+          "parameters": [
+            "style_no"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "add_to_cart": {
+          "name": "add_to_cart",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_mini_shop_cart": {
+          "name": "verify_mini_shop_cart",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_go_to_cart": {
+          "name": "click_go_to_cart",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "CartPage"
+          ],
+          "is_async": false
+        },
+        "verify_url_contains": {
+          "name": "verify_url_contains",
+          "parameters": [
+            "expected_string"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_brand_logo_on_pdp": {
+          "name": "verify_brand_logo_on_pdp",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_product_title": {
+          "name": "verify_product_title",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_product_description": {
+          "name": "verify_product_description",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_page_headings": {
+          "name": "verify_page_headings",
+          "parameters": [
+            "expected_texts"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_show_more_less_functionality": {
+          "name": "verify_show_more_less_functionality",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_view_spec_link": {
+          "name": "verify_view_spec_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_view_inventory_link": {
+          "name": "verify_view_inventory_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_view_sizing_info_link": {
+          "name": "verify_view_sizing_info_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_hero_and_angle_images": {
+          "name": "verify_hero_and_angle_images",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_color_thumbnails": {
+          "name": "verify_color_thumbnails",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_placeholder_empty": {
+          "name": "verify_placeholder_empty",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_placeholder_with_color": {
+          "name": "verify_placeholder_with_color",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_show_hide_price_toggle": {
+          "name": "verify_show_hide_price_toggle",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_similar_styles_section": {
+          "name": "verify_similar_styles_section",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_collection_styles_section": {
+          "name": "verify_collection_styles_section",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_minicart_buttons": {
+          "name": "verify_minicart_buttons",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_customise_button",
+        "verify_search_product",
+        "select_color_black",
+        "verify_place_holder",
+        "enter_quantity",
+        "add_to_cart",
+        "verify_mini_shop_cart",
+        "click_go_to_cart",
+        "verify_url_contains",
+        "verify_brand_logo_on_pdp",
+        "verify_product_title",
+        "verify_product_description",
+        "verify_page_headings",
+        "verify_show_more_less_functionality",
+        "verify_view_spec_link",
+        "verify_view_inventory_link",
+        "verify_view_sizing_info_link",
+        "verify_hero_and_angle_images",
+        "verify_color_thumbnails",
+        "verify_placeholder_empty",
+        "verify_placeholder_with_color",
+        "verify_show_hide_price_toggle",
+        "verify_similar_styles_section",
+        "verify_collection_styles_section",
+        "verify_minicart_buttons",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "PLPPage": {
+      "class_name": "PLPPage",
+      "file_path": "pages/plp_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "__init__": {
+          "name": "__init__",
+          "parameters": [
+            "page"
+          ],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "_extract_prices_from_grid": {
+          "name": "_extract_prices_from_grid",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "prices"
+          ],
+          "is_async": false
+        },
+        "validate_sort_by_price": {
+          "name": "validate_sort_by_price",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "validate_category_and_multiple_filters": {
+          "name": "validate_category_and_multiple_filters",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "validate_product_grid": {
+          "name": "validate_product_grid",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_page_heading": {
+          "name": "verify_page_heading",
+          "parameters": [
+            "expected_text"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "validate_load_more": {
+          "name": "validate_load_more",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_brand_logo": {
+          "name": "click_brand_logo",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "HomePage"
+          ],
+          "is_async": false
+        },
+        "get_random_product": {
+          "name": "get_random_product",
+          "parameters": [],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        },
+        "validate_product_card_elements": {
+          "name": "validate_product_card_elements",
+          "parameters": [
+            "product"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "hover_and_click_quick_order": {
+          "name": "hover_and_click_quick_order",
+          "parameters": [
+            "product"
+          ],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "validate_quick_order_popup": {
+          "name": "validate_quick_order_popup",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "add_to_cart_from_quick_order": {
+          "name": "add_to_cart_from_quick_order",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "validate_items_added_popup_and_navigate": {
+          "name": "validate_items_added_popup_and_navigate",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "CartPage"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "__init__",
+        "_extract_prices_from_grid",
+        "validate_sort_by_price",
+        "validate_category_and_multiple_filters",
+        "validate_product_grid",
+        "verify_page_heading",
+        "validate_load_more",
+        "click_brand_logo",
+        "get_random_product",
+        "validate_product_card_elements",
+        "hover_and_click_quick_order",
+        "validate_quick_order_popup",
+        "add_to_cart_from_quick_order",
+        "validate_items_added_popup_and_navigate",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "ProductInfoPage": {
+      "class_name": "ProductInfoPage",
+      "file_path": "pages/product_info_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_product_info_page_link": {
+          "name": "verify_product_info_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_product_info_page_link",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "ReturnsAndOrdersPage": {
+      "class_name": "ReturnsAndOrdersPage",
+      "file_path": "pages/returns_and_orders_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_returns_and_orders_page": {
+          "name": "verify_returns_and_orders_page",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_returns_and_orders_page",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "ReviewSubmitPage": {
+      "class_name": "ReviewSubmitPage",
+      "file_path": "pages/review_submit_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "click_place_order": {
+          "name": "click_place_order",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "ThankYouPage"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "click_place_order",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "SamplesPage": {
+      "class_name": "SamplesPage",
+      "file_path": "pages/samples_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_click_samples_page_link": {
+          "name": "verify_click_samples_page_link",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_click_samples_page_link",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "ShippingAndBillingPage": {
+      "class_name": "ShippingAndBillingPage",
+      "file_path": "pages/shipping_billing_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_shipping_billing_page": {
+          "name": "verify_shipping_billing_page",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "select_fedex_ground_shipping_method": {
+          "name": "select_fedex_ground_shipping_method",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_only_fedex_ground_in_dropdown": {
+          "name": "verify_only_fedex_ground_in_dropdown",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "_get_shipping_element": {
+          "name": "_get_shipping_element",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "shipping_element"
+          ],
+          "is_async": false
+        },
+        "verify_fedex_ground_charge": {
+          "name": "verify_fedex_ground_charge",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_fedex_ground_free": {
+          "name": "verify_fedex_ground_free",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_shipping_methods_dd": {
+          "name": "click_shipping_methods_dd",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "click_review_and_submit": {
+          "name": "click_review_and_submit",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "ReviewSubmitPage"
+          ],
+          "is_async": false
+        },
+        "navigate_back_to_cart": {
+          "name": "navigate_back_to_cart",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "CartPage"
+          ],
+          "is_async": false
+        },
+        "select_fedex_2day": {
+          "name": "select_fedex_2day",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_fedex_2day_charge": {
+          "name": "verify_fedex_2day_charge",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "select_fedex_3day": {
+          "name": "select_fedex_3day",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_fedex_3day": {
+          "name": "verify_fedex_3day",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "select_fedex_2day_am": {
+          "name": "select_fedex_2day_am",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_fedex_2day_am": {
+          "name": "verify_fedex_2day_am",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "select_fedex_int_exp_2day": {
+          "name": "select_fedex_int_exp_2day",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_fedex_int_exp_2day": {
+          "name": "verify_fedex_int_exp_2day",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "select_fedex_next_day_air": {
+          "name": "select_fedex_next_day_air",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "select_fedex_next_day_am": {
+          "name": "select_fedex_next_day_am",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "verify_fedex_next_day_air": {
+          "name": "verify_fedex_next_day_air",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        },
+        "trigger_select_change": {
+          "name": "trigger_select_change",
+          "parameters": [],
+          "docstring": "",
+          "returns": [],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_shipping_billing_page",
+        "select_fedex_ground_shipping_method",
+        "verify_only_fedex_ground_in_dropdown",
+        "_get_shipping_element",
+        "verify_fedex_ground_charge",
+        "verify_fedex_ground_free",
+        "click_shipping_methods_dd",
+        "click_review_and_submit",
+        "navigate_back_to_cart",
+        "select_fedex_2day",
+        "verify_fedex_2day_charge",
+        "select_fedex_3day",
+        "verify_fedex_3day",
+        "select_fedex_2day_am",
+        "verify_fedex_2day_am",
+        "select_fedex_int_exp_2day",
+        "verify_fedex_int_exp_2day",
+        "select_fedex_next_day_air",
+        "select_fedex_next_day_am",
+        "verify_fedex_next_day_air",
+        "trigger_select_change",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "ShippingLocationHoursPage": {
+      "class_name": "ShippingLocationHoursPage",
+      "file_path": "pages/shipping_location_hours_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_shipping_location_hours_page": {
+          "name": "verify_shipping_location_hours_page",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_shipping_location_hours_page",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "ThankYouPage": {
+      "class_name": "ThankYouPage",
+      "file_path": "pages/thank_you_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "get_order_number": {
+          "name": "get_order_number",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "get_order_number",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    },
+    "WebTipsTricksPage": {
+      "class_name": "WebTipsTricksPage",
+      "file_path": "pages/web_tips_tricks_page.py",
+      "base_classes": [
+        "BasePage"
+      ],
+      "docstring": "",
+      "methods": {
+        "verify_website_tips_tricks": {
+          "name": "verify_website_tips_tricks",
+          "parameters": [],
+          "docstring": "",
+          "returns": [
+            "self"
+          ],
+          "is_async": false
+        }
+      },
+      "locators": [],
+      "all_callable_methods": [
+        "verify_website_tips_tricks",
+        "__init__",
+        "resolve_selector",
+        "accept_cookies",
+        "locate_element",
+        "locate_elements",
+        "click",
+        "click_using_js",
+        "wait_and_click",
+        "wait_and_click_using_js",
+        "clear",
+        "clear_and_type",
+        "type",
+        "type_and_tab",
+        "type_and_enter",
+        "get_element_text",
+        "get_element_numeric",
+        "get_background_color",
+        "get_typed_text",
+        "select_drop_down_using_text",
+        "select_drop_down_using_value",
+        "select_drop_down_using_index",
+        "verify_displayed",
+        "verify_disappeared",
+        "verify_enabled",
+        "verify_selected",
+        "verify_url",
+        "verify_title",
+        "refresh_page",
+        "pause",
+        "wait_for_appearance",
+        "wait_for_disappearance",
+        "scroll_to_element",
+        "move_to_element",
+        "drag_and_drop",
+        "switch_to_tab",
+        "switch_to_main_tab",
+        "switch_to_home_page",
+        "switch_to_alert",
+        "accept_alert",
+        "dismiss_alert",
+        "get_alert_text",
+        "type_alert",
+        "switch_to_frame",
+        "default_content",
+        "file_upload",
+        "get_current_date_time",
+        "get_text_with_date_time",
+        "store_text_with_date_time",
+        "handle_onetrust_cookie",
+        "report_step"
+      ]
+    }
+  },
+  "fixtures": {
+    "env": {
+      "name": "env",
+      "scope": "session",
+      "parameters": [
+        "request"
+      ],
+      "file_path": "conftest.py",
+      "docstring": ""
+    },
+    "env_config": {
+      "name": "env_config",
+      "scope": "session",
+      "parameters": [
+        "request"
+      ],
+      "file_path": "conftest.py",
+      "docstring": ""
+    },
+    "browser_instance": {
+      "name": "browser_instance",
+      "scope": "class",
+      "parameters": [
+        "request"
+      ],
+      "file_path": "conftest.py",
+      "docstring": ""
+    },
+    "page_instance": {
+      "name": "page_instance",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "browser_instance"
+      ],
+      "file_path": "conftest.py",
+      "docstring": ""
+    },
+    "auth_context_tc001": {
+      "name": "auth_context_tc001",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc001_verify_login.py",
+      "docstring": "Class-scoped context without storage_state.\nThis ensures a fresh session for testing authentication explicitly."
+    },
+    "auth_page_tc001": {
+      "name": "auth_page_tc001",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc001"
+      ],
+      "file_path": "tests/test_tc001_verify_login.py",
+      "docstring": ""
+    },
+    "auth_context_tc002": {
+      "name": "auth_context_tc002",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc002_reset_password.py",
+      "docstring": "Class-scoped context without storage_state.\nThis ensures a fresh session for testing authentication/forgot password explicitly."
+    },
+    "auth_page_tc002": {
+      "name": "auth_page_tc002",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc002"
+      ],
+      "file_path": "tests/test_tc002_reset_password.py",
+      "docstring": ""
+    },
+    "auth_context_tc003": {
+      "name": "auth_context_tc003",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc003_verify_login_error_message.py",
+      "docstring": "Class-scoped context without storage_state.\nThis ensures a fresh session for testing authentication failure explicitly."
+    },
+    "auth_page_tc003": {
+      "name": "auth_page_tc003",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc003"
+      ],
+      "file_path": "tests/test_tc003_verify_login_error_message.py",
+      "docstring": ""
+    },
+    "auth_context_tc007": {
+      "name": "auth_context_tc007",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc007_category_navigation_functionality.py",
+      "docstring": "Session Reuse (Mandatory): Logs in once and reuses session using Storage State.\nIf storage state does not exist, authenticates and creates it."
+    },
+    "auth_page_tc007": {
+      "name": "auth_page_tc007",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc007"
+      ],
+      "file_path": "tests/test_tc007_category_navigation_functionality.py",
+      "docstring": "Yields a single page within the authenticated context for the entire class execution."
+    },
+    "cleanup_browser_state": {
+      "name": "cleanup_browser_state",
+      "scope": "function",
+      "parameters": [
+        "self",
+        "auth_page_tc007",
+        "env_config"
+      ],
+      "file_path": "tests/test_tc004_verify_info_and_resource.py",
+      "docstring": ""
+    },
+    "auth_context_tc005": {
+      "name": "auth_context_tc005",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc018_verify_shipping_fedex_2day_validation.py",
+      "docstring": "Session Reuse (Mandatory): Logs in once and reuses session using Storage State.\nIf storage state does not exist, authenticates and creates it."
+    },
+    "auth_page_tc005": {
+      "name": "auth_page_tc005",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc005"
+      ],
+      "file_path": "tests/test_tc018_verify_shipping_fedex_2day_validation.py",
+      "docstring": ""
+    },
+    "auth_context_tc006": {
+      "name": "auth_context_tc006",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc020_verify_blank_order.py",
+      "docstring": "Session Reuse (Mandatory): Logs in once and reuses session using Storage State.\nIf storage state does not exist, authenticates and creates it."
+    },
+    "auth_page_tc006": {
+      "name": "auth_page_tc006",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc006"
+      ],
+      "file_path": "tests/test_tc020_verify_blank_order.py",
+      "docstring": ""
+    },
+    "auth_context_tc008": {
+      "name": "auth_context_tc008",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc019_blank_order_with_fedex_2day.py",
+      "docstring": "Session Reuse (Mandatory): Logs in once and reuses session using Storage State.\nIf storage state does not exist, authenticates and creates it."
+    },
+    "auth_page_tc008": {
+      "name": "auth_page_tc008",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc008"
+      ],
+      "file_path": "tests/test_tc019_blank_order_with_fedex_2day.py",
+      "docstring": ""
+    },
+    "auth_context_tc010": {
+      "name": "auth_context_tc010",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc010_freestyle_headwear_page.py",
+      "docstring": "Session Reuse (Mandatory): Logs in once and reuses session using Storage State.\nIf storage state does not exist, authenticates and creates it."
+    },
+    "auth_page_tc010": {
+      "name": "auth_page_tc010",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc010"
+      ],
+      "file_path": "tests/test_tc010_freestyle_headwear_page.py",
+      "docstring": "Yields a single page within the authenticated context for the entire class execution."
+    },
+    "auth_context_tc011": {
+      "name": "auth_context_tc011",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc011_freestyle_digital_print.py",
+      "docstring": "Session Reuse (Mandatory): Logs in once and reuses session using Storage State.\nIf storage state does not exist, authenticates and creates it."
+    },
+    "auth_page_tc011": {
+      "name": "auth_page_tc011",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc011"
+      ],
+      "file_path": "tests/test_tc011_freestyle_digital_print.py",
+      "docstring": "Yields a single page within the authenticated context for the entire class execution."
+    },
+    "auth_context_tc009": {
+      "name": "auth_context_tc009",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc012_freestyle_sublimation_page.py",
+      "docstring": "Session Reuse (Mandatory): Logs in once and reuses session using Storage State.\nIf storage state does not exist, authenticates and creates it."
+    },
+    "auth_page_tc009": {
+      "name": "auth_page_tc009",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc009"
+      ],
+      "file_path": "tests/test_tc012_freestyle_sublimation_page.py",
+      "docstring": "Yields a single page within the authenticated context for the entire class execution."
+    },
+    "auth_context_tc013": {
+      "name": "auth_context_tc013",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc013_home_page_validation.py",
+      "docstring": "Session Reuse (Mandatory): Logs in once and reuses session using Storage State.\nIf storage state does not exist, authenticates and creates it."
+    },
+    "auth_page_tc013": {
+      "name": "auth_page_tc013",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc013"
+      ],
+      "file_path": "tests/test_tc013_home_page_validation.py",
+      "docstring": ""
+    },
+    "auth_context_tc014": {
+      "name": "auth_context_tc014",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc014_blank_plp_validation.py",
+      "docstring": "Session Reuse (Mandatory): Logs in once and reuses session using Storage State.\nIf storage state does not exist, authenticates and creates it."
+    },
+    "auth_page_tc014": {
+      "name": "auth_page_tc014",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc014"
+      ],
+      "file_path": "tests/test_tc014_blank_plp_validation.py",
+      "docstring": ""
+    },
+    "auth_context_tc015": {
+      "name": "auth_context_tc015",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc022_blank_order_with_fedex_next_day_am.py",
+      "docstring": "Session Reuse (Mandatory): Logs in once and reuses session using Storage State.\nIf storage state does not exist, authenticates and creates it."
+    },
+    "auth_page_tc015": {
+      "name": "auth_page_tc015",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc015"
+      ],
+      "file_path": "tests/test_tc022_blank_order_with_fedex_next_day_am.py",
+      "docstring": ""
+    },
+    "auth_context_tc016": {
+      "name": "auth_context_tc016",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc016_blank_order_with_fedex_2day_am.py",
+      "docstring": "Session Reuse (Mandatory): Logs in once and reuses session using Storage State.\nIf storage state does not exist, authenticates and creates it."
+    },
+    "auth_page_tc016": {
+      "name": "auth_page_tc016",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc016"
+      ],
+      "file_path": "tests/test_tc016_blank_order_with_fedex_2day_am.py",
+      "docstring": ""
+    },
+    "auth_context_tc004": {
+      "name": "auth_context_tc004",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc017_verify_shipping_fedex_ground_validation.py",
+      "docstring": "Session Reuse (Mandatory): Logs in once and reuses session using Storage State.\nIf storage state does not exist, authenticates and creates it."
+    },
+    "auth_page_tc004": {
+      "name": "auth_page_tc004",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc004"
+      ],
+      "file_path": "tests/test_tc017_verify_shipping_fedex_ground_validation.py",
+      "docstring": "Yields a single page within the authenticated context for the entire class execution."
+    },
+    "auth_context_tc012": {
+      "name": "auth_context_tc012",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc021_sublimation_order_placing.py",
+      "docstring": "Session Reuse (Mandatory): Logs in once and reuses session using Storage State.\nIf storage state does not exist, authenticates and creates it."
+    },
+    "auth_page_tc012": {
+      "name": "auth_page_tc012",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc012"
+      ],
+      "file_path": "tests/test_tc021_sublimation_order_placing.py",
+      "docstring": "Yields a single page within the authenticated context for the entire class execution."
+    },
+    "auth_context_tc023": {
+      "name": "auth_context_tc023",
+      "scope": "class",
+      "parameters": [
+        "request",
+        "env_config",
+        "browser_instance"
+      ],
+      "file_path": "tests/test_tc023_sublimation_order_placing.py",
+      "docstring": "Session Reuse (Mandatory): Logs in once and reuses session using Storage State."
+    },
+    "auth_page_tc023": {
+      "name": "auth_page_tc023",
+      "scope": "class",
+      "parameters": [
+        "auth_context_tc023"
+      ],
+      "file_path": "tests/test_tc023_sublimation_order_placing.py",
+      "docstring": ""
+    }
+  },
+  "utilities": {
+    "Reporter": {
+      "class_name": "Reporter",
+      "file_path": "utils/reporter.py",
+      "methods": {
+        "start_report": {
+          "name": "start_report",
+          "parameters": [],
+          "is_static": false,
+          "is_classmethod": true,
+          "docstring": ""
+        },
+        "start_test_case": {
+          "name": "start_test_case",
+          "parameters": [
+            "name",
+            "description",
+            "category",
+            "author"
+          ],
+          "is_static": false,
+          "is_classmethod": true,
+          "docstring": ""
+        },
+        "report_step": {
+          "name": "report_step",
+          "parameters": [
+            "page",
+            "description",
+            "status",
+            "snap",
+            "raise_error"
+          ],
+          "is_static": false,
+          "is_classmethod": true,
+          "docstring": ""
+        },
+        "end_result": {
+          "name": "end_result",
+          "parameters": [],
+          "is_static": false,
+          "is_classmethod": true,
+          "docstring": ""
+        }
+      },
+      "docstring": ""
+    }
+  },
+  "config": {
+    "file_path": "config/config.json",
+    "environments": {
+      "stage": {
+        "keys": [
+          "url",
+          "username",
+          "password"
+        ],
+        "has_url": true,
+        "has_credentials": true
+      },
+      "prod": {
+        "keys": [
+          "url",
+          "username",
+          "password"
+        ],
+        "has_url": true,
+        "has_credentials": true
+      },
+      "dev": {
+        "keys": [
+          "url",
+          "username",
+          "password"
+        ],
+        "has_url": true,
+        "has_credentials": true
+      }
+    }
+  },
+  "conventions": {
+    "standard_imports": [
+      "import pytest",
+      "from playwright.sync_api import sync_playwright, expect",
+      "from python_playwright.utils.reporter import Reporter"
+    ],
+    "common_assertions": [
+      "expect(locator).to_be_visible()",
+      "expect(locator).to_have_text()",
+      "expect(locator).to_contain_text()"
+    ],
+    "test_class_naming": "Test<TC_ID><Description>",
+    "test_method_naming": "test_run_<action>"
+  }
+}

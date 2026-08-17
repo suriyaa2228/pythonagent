@@ -3,104 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Playwright Agent Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/style.css?v=2">
+    <title>AI Playwright Automation Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css?v=3">
 </head>
 <body>
     <div class="app-container">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo">
-                <i class="fa-solid fa-robot"></i>
-                <h2>PW Agent</h2>
+                <i class="fa-solid fa-wand-magic-sparkles logo-icon"></i>
+                <div>
+                    <h2>PW Studio</h2>
+                    <span class="logo-subtitle">AI Test Platform</span>
+                </div>
             </div>
             <nav class="nav-menu">
-                <button class="nav-item active" data-target="test-runner-view">
+                <button class="nav-item active" data-target="generator-view">
+                    <i class="fa-solid fa-bolt-lightning"></i>
+                    <span>AI Test Generator</span>
+                </button>
+                <button class="nav-item" data-target="workspace-view">
+                    <i class="fa-solid fa-code"></i>
+                    <span>Script Workspace</span>
+                </button>
+                <button class="nav-item" data-target="runner-view">
                     <i class="fa-solid fa-play"></i>
                     <span>Test Runner</span>
                 </button>
                 <button class="nav-item" data-target="reports-view">
-                    <i class="fa-solid fa-chart-line"></i>
-                    <span>Reports Dashboard</span>
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Extent Reports</span>
                 </button>
             </nav>
+            <div class="sidebar-footer">
+                <div class="framework-tag">
+                    <i class="fa-brands fa-python"></i> Playwright + Pytest
+                </div>
+            </div>
         </aside>
 
-        <!-- Main Content -->
+        <!-- Main Content Area -->
         <main class="main-content">
-            <!-- Header -->
+            <!-- Top Header -->
             <header class="top-header">
-                <h1 id="page-title">Test Runner</h1>
+                <div class="header-title-container">
+                    <h1 id="page-title">AI Test Generator</h1>
+                    <p id="page-subtitle" class="subtitle">Convert user stories into framework-compliant Python Playwright tests</p>
+                </div>
                 <div class="header-actions">
                     <div class="status-indicator">
                         <span class="pulse"></span>
-                        <span class="status-text">Server Online</span>
+                        <span class="status-text">LangChain & Groq Online</span>
                     </div>
                 </div>
             </header>
 
-            <!-- Test Runner View -->
-            <section id="test-runner-view" class="view active">
-                <div class="content-grid">
-                    <div class="card available-tests-card">
+            <!-- 1. AI Test Generator View -->
+            <section id="generator-view" class="view active">
+                <div class="grid-2col">
+                    <!-- User Story Form Card -->
+                    <div class="card glass">
                         <div class="card-header">
-                            <h3><i class="fa-solid fa-list-check"></i> Available Tests</h3>
-                            <button id="refresh-tests-btn" class="icon-btn" title="Refresh Tests"><i class="fa-solid fa-rotate-right"></i></button>
+                            <h3><i class="fa-solid fa-book-bookmark"></i> Requirement Input</h3>
+                            <span class="badge-pill">RAG Grounded</span>
                         </div>
                         <div class="card-body">
-                            <div class="controls">
-                                <select id="env-selector" class="form-select" style="margin-right: 10px; padding: 6px 12px; border-radius: 4px; border: 1px solid #ccc;">
-                                    <option value="stage">Stage</option>
-                                    <option value="dev">Dev</option>
-                                </select>
-                                <button id="run-selected-btn" class="btn primary" disabled>Run Selected</button>
-                                <button id="run-all-btn" class="btn secondary">Run All (Suite)</button>
+                            <div class="form-group">
+                                <label for="user-story-input">User Story</label>
+                                <textarea id="user-story-input" rows="4" class="form-textarea" placeholder="As a user, I should be able to log in using valid credentials so that I can access my account.">As a user, I should be able to log in using valid credentials so that I can access my account.</textarea>
                             </div>
-                            <div class="test-list-container">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th width="40"><input type="checkbox" id="select-all"></th>
-                                            <th>Test ID</th>
-                                            <th>Name</th>
-                                            <th width="100">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tests-table-body">
-                                        <!-- Populated via JS -->
-                                    </tbody>
-                                </table>
+
+                            <div class="form-group">
+                                <label for="ac-input">Acceptance Criteria (one per line)</label>
+                                <textarea id="ac-input" rows="5" class="form-textarea" placeholder="1. Navigate to the login page&#10;2. Enter valid username and password&#10;3. Click login button&#10;4. Verify user account icon&#10;5. Log out successfully">1. Navigate to the login page
+2. Enter valid username and password
+3. Click login button
+4. Verify user account icon is visible
+5. Log out successfully</textarea>
                             </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-half">
+                                    <label>Project</label>
+                                    <input type="text" class="form-input" id="project-input" value="playwright" readonly>
+                                </div>
+                                <div class="form-group col-half">
+                                    <label>Environment</label>
+                                    <select id="env-select" class="form-select">
+                                        <option value="stage" selected>Stage</option>
+                                        <option value="dev">Dev</option>
+                                        <option value="prod">Prod</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button id="generate-btn" class="btn primary-btn btn-block">
+                                <i class="fa-solid fa-sparkles"></i> Generate Python Playwright Script
+                            </button>
                         </div>
                     </div>
 
-                    <div class="card active-executions-card">
+                    <!-- Generation Meta / Overview Card -->
+                    <div class="card glass">
                         <div class="card-header">
-                            <h3><i class="fa-solid fa-bolt"></i> Executions</h3>
+                            <h3><i class="fa-solid fa-shield-halved"></i> Guardrails & Framework Context</h3>
                         </div>
                         <div class="card-body">
-                            <div id="executions-container">
-                                <!-- Populated via JS -->
-                                <div class="empty-state">No active executions.</div>
+                            <div class="feature-item">
+                                <div class="feature-icon"><i class="fa-solid fa-shield-virus"></i></div>
+                                <div>
+                                    <h4>Pre-Embedding Security</h4>
+                                    <p>URLs, emails, and credentials are automatically masked deterministically before vectorization.</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon"><i class="fa-solid fa-diagram-project"></i></div>
+                                <div>
+                                    <h4>Page Object Model Reuse</h4>
+                                    <p>Discovers and reuses existing Page Objects (HomePage, LoginPage, PDPPage, etc.) and fixtures.</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon"><i class="fa-solid fa-spell-check"></i></div>
+                                <div>
+                                    <h4>Deterministic AST Quality Gate</h4>
+                                    <p>Verifies Python syntax, symbol compatibility, and Reporter calls with auto self-correction.</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon"><i class="fa-solid fa-file-invoice"></i></div>
+                                <div>
+                                    <h4>Extent Report Native</h4>
+                                    <p>Preserves existing Extent Report implementation for centralized execution telemetry.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Reports Dashboard View -->
+            <!-- 2. Script Workspace & AI Chat View -->
+            <section id="workspace-view" class="view" style="display: none;">
+                <div class="workspace-grid">
+                    <!-- Left: Script Editor -->
+                    <div class="card glass script-editor-card">
+                        <div class="card-header flex-between">
+                            <div class="flex-align-center gap-2">
+                                <h3><i class="fa-brands fa-python text-primary"></i> Generated Script</h3>
+                                <span id="validation-badge" class="badge badge-pass">VALID</span>
+                            </div>
+                            <div class="header-button-group">
+                                <button id="validate-btn" class="btn secondary-btn btn-sm"><i class="fa-solid fa-check-double"></i> Validate</button>
+                                <button id="run-script-btn" class="btn primary-btn btn-sm"><i class="fa-solid fa-play"></i> Execute</button>
+                                <button id="copy-script-btn" class="btn outline-btn btn-sm"><i class="fa-solid fa-copy"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body no-padding">
+                            <textarea id="script-code-editor" class="code-editor" spellcheck="false"></textarea>
+                        </div>
+                        <div class="card-footer" id="validation-footer">
+                            <div class="validation-msg" id="validation-summary">
+                                <i class="fa-solid fa-circle-check text-success"></i> Code is compatible with Python Playwright framework.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: AI Chat Assistant -->
+                    <div class="card glass chat-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-comments"></i> AI Script Assistant</h3>
+                            <span class="badge-pill">Interactive Refinement</span>
+                        </div>
+                        <div class="card-body chat-messages-container" id="chat-messages">
+                            <div class="chat-msg assistant">
+                                <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
+                                <div class="msg-content">
+                                    Hello! I am grounded in your Python Playwright framework. You can ask me to add assertions, negative test cases, or modify cookie/logout handling.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <input type="text" id="chat-input" class="chat-input" placeholder="e.g., Add an invalid login test step with assertion...">
+                            <button id="send-chat-btn" class="btn primary-btn"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Test Runner View -->
+            <section id="runner-view" class="view" style="display: none;">
+                <div class="grid-2col">
+                    <div class="card glass">
+                        <div class="card-header flex-between">
+                            <h3><i class="fa-solid fa-list-check"></i> Available Suite Tests</h3>
+                            <button id="refresh-tests-btn" class="btn outline-btn btn-sm"><i class="fa-solid fa-rotate"></i></button>
+                        </div>
+                        <div class="card-body">
+                            <div class="controls-row">
+                                <select id="runner-env-select" class="form-select select-inline">
+                                    <option value="stage">Stage Environment</option>
+                                    <option value="dev">Dev Environment</option>
+                                    <option value="prod">Prod Environment</option>
+                                </select>
+                                <button id="run-selected-tests-btn" class="btn primary-btn" disabled>Run Selected</button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th width="40"><input type="checkbox" id="select-all-tests"></th>
+                                            <th>Test ID</th>
+                                            <th>Name</th>
+                                            <th width="80">Run</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tests-table-body">
+                                        <!-- Loaded dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card glass">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-terminal"></i> Execution Console</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="execution-logs" class="console-box">
+                                <div class="console-line text-muted">Ready to launch tests. Logs and Extent Report updates will stream here.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Extent Reports Dashboard View -->
             <section id="reports-view" class="view" style="display: none;">
-                <div class="card">
-                    <div class="card-header">
-                        <h3><i class="fa-solid fa-folder-open"></i> Local Reports History</h3>
-                        <button id="refresh-reports-btn" class="icon-btn" title="Refresh Reports"><i class="fa-solid fa-rotate-right"></i></button>
+                <div class="card glass">
+                    <div class="card-header flex-between">
+                        <h3><i class="fa-solid fa-chart-line"></i> Extent Report Dashboard</h3>
+                        <button id="refresh-reports-btn" class="btn outline-btn btn-sm"><i class="fa-solid fa-rotate"></i> Refresh</button>
                     </div>
                     <div class="card-body">
-                        <div class="reports-grid" id="reports-grid-container">
-                            <!-- Populated via JS -->
-                            <div class="empty-state">No reports generated yet.</div>
+                        <!-- Metrics Row -->
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <div class="metric-value text-primary" id="metric-total-reports">0</div>
+                                <div class="metric-label">Total Reports</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value text-success" id="metric-passed">100%</div>
+                                <div class="metric-label">Average Pass Rate</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value text-muted" id="metric-framework">Python Playwright</div>
+                                <div class="metric-label">Execution Engine</div>
+                            </div>
+                        </div>
+
+                        <!-- Reports Table -->
+                        <div class="table-responsive mt-4">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Report File</th>
+                                        <th>Total Cases</th>
+                                        <th>Passed</th>
+                                        <th>Failed</th>
+                                        <th>Pass %</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reports-table-body">
+                                    <!-- Populated via API -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -108,28 +289,6 @@
         </main>
     </div>
 
-    <!-- Execution Modal -->
-    <div id="execution-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modal-test-id">Execution Details</h3>
-                <button class="close-btn"><i class="fa-solid fa-times"></i></button>
-            </div>
-            <div class="modal-body">
-                <div class="status-banner" id="modal-status-banner">
-                    <span id="modal-status">QUEUED</span>
-                </div>
-                <div class="progress-container" id="modal-progress-container">
-                    <div class="progress-bar" id="modal-progress-bar"></div>
-                </div>
-                <div class="logs-container">
-                    <h4>Console Output</h4>
-                    <pre id="modal-logs" class="terminal"></pre>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="/static/app.js?v=2"></script>
+    <script src="/static/app.js?v=3"></script>
 </body>
 </html>

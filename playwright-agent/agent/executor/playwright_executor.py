@@ -22,18 +22,22 @@ class PlaywrightExecutor:
                 "duration": time.time() - start_time
             }
 
-        # Inject environment variable to simulate passing configuration
+        playwright_cwd = os.path.join(self.base_dir, "python_playwright")
+        rel_test_path = os.path.relpath(full_script_path, playwright_cwd)
+
         env = os.environ.copy()
+        env["PYTHONPATH"] = self.base_dir
         env["TEST_ENVIRONMENT"] = environment
         
         try:
             if test_type == "pytest":
-                cmd = ["pytest", full_script_path, "--headless"]
+                cmd = ["pytest", rel_test_path, f"--env={environment}", "--headless"]
             else:
                 cmd = ["python", full_script_path]
                 
             result = subprocess.run(
                 cmd,
+                cwd=playwright_cwd,
                 capture_output=True,
                 text=True,
                 env=env
@@ -58,7 +62,9 @@ class PlaywrightExecutor:
     def execute_batch(self, test_infos: list[dict], environment: str) -> dict:
         start_time = time.time()
         
+        playwright_cwd = os.path.join(self.base_dir, "python_playwright")
         env = os.environ.copy()
+        env["PYTHONPATH"] = self.base_dir
         env["TEST_ENVIRONMENT"] = environment
         
         cmd = ["pytest"]
@@ -66,13 +72,15 @@ class PlaywrightExecutor:
             script_path = test_info.get("path", "")
             if script_path:
                 full_script_path = os.path.join(self.base_dir, script_path)
-                cmd.append(full_script_path)
+                rel_test_path = os.path.relpath(full_script_path, playwright_cwd)
+                cmd.append(rel_test_path)
                 
-        cmd.append("--headless")
+        cmd.extend([f"--env={environment}", "--headless"])
         
         try:
             result = subprocess.run(
                 cmd,
+                cwd=playwright_cwd,
                 capture_output=True,
                 text=True,
                 env=env

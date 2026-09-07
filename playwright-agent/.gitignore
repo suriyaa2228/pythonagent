@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+ENV/
+
+# Playwright & Temporary test outputs
+*.png
+*.html
+!frontend/index.html
+*_dump.html
+*_screenshot.png
+tc*_state.json
+reports/images/
+.pytest_cache/
+
+# System / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

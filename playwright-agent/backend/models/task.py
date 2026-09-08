@@ -7,6 +7,8 @@ class AgentTaskRequest(BaseModel):
     testId: Optional[str] = None
     testIds: Optional[list[str]] = None
     environment: Optional[str] = "default"
+    engine: Optional[str] = "PYTEST"
+    headless: Optional[bool] = False
 
 class AgentTaskResponse(BaseModel):
     taskId: str

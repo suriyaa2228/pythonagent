@@ -482,6 +482,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const runnerModeSelect = document.getElementById('runner-mode-select');
 
+    // Helper to reset and show runner progress bar
+    function showRunnerProgress(totalTests, firstTestName) {
+        const container = document.getElementById('progress-container');
+        const fill = document.getElementById('progress-bar-fill');
+        const statusText = document.getElementById('progress-status-text');
+        const percentText = document.getElementById('progress-percent-text');
+        const currentTestName = document.getElementById('current-test-name');
+        const badge = document.getElementById('runner-status-badge');
+
+        if (container) container.style.display = 'flex';
+        if (fill) {
+            fill.style.width = '0%';
+            fill.style.background = 'linear-gradient(90deg, #4f46e5, #818cf8, #10b981)';
+        }
+        if (statusText) statusText.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-primary"></i> Executing Suite (0/${totalTests} Completed)`;
+        if (percentText) percentText.textContent = '0%';
+        if (currentTestName) currentTestName.textContent = `Running Test 1 of ${totalTests}: ${firstTestName || 'Initializing...'}`;
+        if (badge) {
+            badge.className = 'badge badge-executing';
+            badge.textContent = 'RUNNING';
+        }
+    }
+
     // Execute Test Batch Function (Supports Pytest Subprocess vs Playwright MCP Agent)
     async function executeTestBatch(testIds) {
         const env = runnerEnvSelect ? runnerEnvSelect.value : 'stage';
@@ -489,44 +512,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const isHeadless = runnerModeSelect ? (runnerModeSelect.value === 'true') : false;
         const consoleBox = document.getElementById('execution-logs');
 
-        if (engine === 'MCP_AGENT') {
-            consoleBox.innerHTML = `<div class="console-line text-primary"><i class="fa-solid fa-wand-magic-sparkles fa-spin"></i> Launching Playwright MCP Agentic Regression for [${testIds.join(', ')}] (${isHeadless ? 'Headless' : 'Headed'})...</div>`;
-            try {
-                const res = await fetch('/api/v1/ai/mcp/execute-regression', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        testCaseIds: testIds,
-                        environment: env,
-                        enableLiveHealing: true,
-                        headless: isHeadless
-                    })
-                });
-                
-                if (!res.ok) {
-                    const errText = await res.text();
-                    consoleBox.innerHTML += `<div class="console-line text-danger">MCP Regression Server Error (${res.status}): ${escapeHtml(errText)}</div>`;
-                    return;
-                }
+        showRunnerProgress(testIds.length, testIds[0]);
 
-                const data = await res.json();
-                
-                let logHtml = `<div class="console-line text-success">[PLAYWRIGHT MCP REGRESSION COMPLETE] Engine: ${data.executionEngine} | Duration: ${data.durationSeconds}s</div>`;
-                logHtml += `<div class="console-line text-muted">Summary: Total: ${data.totalCases} | Passed: ${data.passed} | Failed: ${data.failed}</div>`;
-                logHtml += `<div class="console-line mt-4">--- MCP TOOL TRACE LOGS ---</div>`;
-                
-                (data.mcpToolLog || []).forEach(log => {
-                    logHtml += `<div class="console-line">Step ${log.step}: <code>${log.tool}</code> - ${log.status} ${log.testId ? `(Test: ${log.testId})` : ''} ${log.error ? `<span class="text-danger">(${log.error})</span>` : ''}</div>`;
-                });
-                consoleBox.innerHTML = logHtml;
-            } catch (err) {
-                consoleBox.innerHTML += `<div class="console-line text-danger">MCP Regression Error: ${escapeHtml(err.message)}</div>`;
-            }
-            return;
-        }
-
-        // Standard Pytest Runner
-        consoleBox.innerHTML = `<div class="console-line text-primary"><i class="fa-solid fa-spinner fa-spin"></i> Launching test run for [${testIds.join(', ')}] on environment '${env}'...</div>`;
+        consoleBox.innerHTML = `<div class="console-line text-primary"><i class="fa-solid fa-spinner fa-spin"></i> Launching test suite run (${engine === 'MCP_AGENT' ? 'Playwright MCP Agent' : 'Pytest Engine'}) for [${testIds.join(', ')}] on environment '${env}' (${isHeadless ? 'Headless' : 'Headed'})...</div>`;
 
         try {
             const res = await fetch('/api/v1/agent/tasks', {
@@ -535,7 +523,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({
                     action: 'run_test',
                     testIds: testIds,
-                    environment: env
+                    environment: env,
+                    engine: engine,
+                    headless: isHeadless
                 })
             });
 
@@ -554,32 +544,95 @@ document.addEventListener('DOMContentLoaded', () => {
     // Poll execution status
     async function pollExecutionProgress(executionId) {
         const consoleBox = document.getElementById('execution-logs');
+        const fill = document.getElementById('progress-bar-fill');
+        const statusText = document.getElementById('progress-status-text');
+        const percentText = document.getElementById('progress-percent-text');
+        const currentTestName = document.getElementById('current-test-name');
+        const badge = document.getElementById('runner-status-badge');
+
         const interval = setInterval(async () => {
             try {
                 const res = await fetch(`/api/v1/executions/${executionId}`);
                 const data = await res.json();
 
+                const total = data.total_tests || 1;
+                const completed = data.completed_tests || 0;
+                const currentTest = data.current_test || 'Executing...';
+                const currIdx = data.current_test_index || 1;
+                const pct = data.progress_percent || 0;
+
                 if (data.status === 'EXECUTING' || data.status === 'VALIDATING' || data.status === 'QUEUED') {
+                    if (fill) fill.style.width = `${pct}%`;
+                    if (percentText) percentText.textContent = `${pct}%`;
+                    if (statusText) statusText.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-primary"></i> Executing Suite (${completed}/${total} Completed)`;
+                    if (currentTestName) currentTestName.textContent = `Running Test ${currIdx} of ${total}: ${currentTest}`;
+
                     consoleBox.innerHTML = `
-                        <div class="console-line text-primary"><i class="fa-solid fa-spinner fa-spin"></i> Status: ${data.status} (Execution ID: ${executionId})</div>
-                        ${data.stdout ? `<pre class="console-line text-muted">${escapeHtml(data.stdout)}</pre>` : ''}
+                        <div class="console-line text-primary" style="font-weight: 600; padding: 4px 8px; background: rgba(99, 102, 241, 0.15); border-radius: 4px;">
+                            <i class="fa-solid fa-vial-circle-check text-primary"></i> [RUNNING TEST CASE ${currIdx}/${total}]: ${escapeHtml(currentTest)} (${pct}% Complete)
+                        </div>
+                        <div class="console-line text-muted mt-2">Execution ID: ${executionId} | Status: ${data.status}</div>
+                        ${data.stdout ? `<pre class="console-line text-muted mt-3">${escapeHtml(data.stdout)}</pre>` : ''}
                     `;
+                    consoleBox.scrollTop = consoleBox.scrollHeight;
                 } else {
-                    // Terminal state reached (COMPLETED, FAILED, etc.)
+                    // Terminal state reached (COMPLETED, PASSED, FAILED, etc.)
                     clearInterval(interval);
-                    const colorClass = (data.status === 'COMPLETED' || data.status === 'PASSED') ? 'text-success' : 'text-danger';
+                    const isSuccess = (data.status === 'COMPLETED' || data.status === 'PASSED');
+                    const colorClass = isSuccess ? 'text-success' : 'text-danger';
+
+                    if (fill) {
+                        fill.style.width = '100%';
+                        fill.style.background = isSuccess 
+                            ? 'linear-gradient(90deg, #10b981, #059669)' 
+                            : 'linear-gradient(90deg, #ef4444, #dc2626)';
+                    }
+                    if (percentText) percentText.textContent = '100%';
+
+                    if (badge) {
+                        badge.className = isSuccess ? 'badge badge-pass' : 'badge badge-fail';
+                        badge.textContent = isSuccess ? 'PASSED' : 'FAILED';
+                    }
+
+                    if (statusText) {
+                        statusText.innerHTML = isSuccess 
+                            ? `<i class="fa-solid fa-circle-check text-success"></i> Suite Run Complete (${total}/${total} Tests Finished)`
+                            : `<i class="fa-solid fa-circle-xmark text-danger"></i> Suite Run Finished with Errors`;
+                    }
+
+                    if (currentTestName) {
+                        currentTestName.textContent = isSuccess 
+                            ? `All ${total} suite test cases finished successfully (${data.duration || 0}s)`
+                            : `Suite finished with failures (${data.duration || 0}s)`;
+                    }
+
+                    let mcpLogHtml = '';
+                    if (data.mcpResult && data.mcpResult.mcpToolLog) {
+                        mcpLogHtml += `<div class="console-line text-info mt-4">--- MCP TOOL TRACE LOGS ---</div>`;
+                        (data.mcpResult.mcpToolLog || []).forEach(log => {
+                            mcpLogHtml += `<div class="console-line">Step ${log.step}: <code>${log.tool}</code> - ${log.status} ${log.testId ? `(Test: ${log.testId})` : ''} ${log.error ? `<span class="text-danger">(${log.error})</span>` : ''}</div>`;
+                        });
+                    }
+
                     consoleBox.innerHTML = `
-                        <div class="console-line ${colorClass}">[FINISHED] Status: ${data.status} | Duration: ${data.duration || 0}s</div>
-                        <div class="console-line mt-4">--- STDOUT ---</div>
+                        <div class="console-line ${colorClass}" style="font-size: 1rem; font-weight: 700;">
+                            [SUITE EXECUTION FINISHED] Status: ${data.status} | Total Tests: ${total} | Duration: ${data.duration || 0}s
+                        </div>
+                        <div class="console-line text-success mt-2">
+                            <i class="fa-solid fa-file-invoice"></i> Extent Report successfully generated for entire suite run!
+                        </div>
+                        ${mcpLogHtml}
+                        <div class="console-line mt-4">--- STDOUT LOGS ---</div>
                         <pre class="console-line text-muted">${escapeHtml(data.stdout || '')}</pre>
-                        ${data.stderr ? `<div class="console-line text-danger mt-4">--- STDERR ---</div><pre class="console-line text-danger">${escapeHtml(data.stderr)}</pre>` : ''}
+                        ${data.stderr ? `<div class="console-line text-danger mt-4">--- STDERR LOGS ---</div><pre class="console-line text-danger">${escapeHtml(data.stderr)}</pre>` : ''}
                     `;
+                    consoleBox.scrollTop = consoleBox.scrollHeight;
                 }
             } catch (err) {
                 clearInterval(interval);
-                consoleBox.innerHTML += `<div class="console-line text-danger">Error polling status: ${err.message}</div>`;
+                consoleBox.innerHTML += `<div class="console-line text-danger">Error polling execution status: ${err.message}</div>`;
             }
-        }, 1500);
+        }, 1000);
     }
 
     // UI Helpers

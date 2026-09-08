@@ -16,6 +16,9 @@ ENV/
 tc*_state.json
 reports/images/
 .pytest_cache/
+mcp_results*.xml
+executions/
+backend/executions/
 
 # System / IDE
 .DS_Store

@@ -71,7 +71,7 @@ class BasePage:
             self.page.locator(selector).first.click()
         else:
             element_or_selector.first.click() if hasattr(element_or_selector, "first") else element_or_selector.click()
-        self.report_step("Clicked element", "pass", snap=False)
+        self.report_step("Clicked element", "pass", snap=True)
 
     def click_using_js(self, element_or_selector, value=None):
         if isinstance(element_or_selector, str):
@@ -81,7 +81,7 @@ class BasePage:
             locator = element_or_selector.first if hasattr(element_or_selector, "first") else element_or_selector
             
         locator.evaluate("node => node.click()", timeout=90000)
-        print("[INFO] Clicked element using JS (forced click)")
+        self.report_step("Clicked element using JS", "pass", snap=True)
 
     def wait_and_click(self, element_or_selector, value=None, timeout=5000):
         if isinstance(element_or_selector, str):
@@ -93,14 +93,14 @@ class BasePage:
         try:
             element.wait_for(state="visible", timeout=timeout)
             element.click()
-            self.report_step("Clicked element", "pass", snap=False)
+            self.report_step("Clicked element", "pass", snap=True)
         except Exception:
             print(f"[RETRY] Failed to click within {timeout}ms. Refreshing page and retrying...")
             self.refresh_page()
             self.page.wait_for_timeout(2000)
             element.wait_for(state="visible", timeout=timeout)
             element.click()
-            self.report_step("Clicked element after retry", "pass", snap=False)
+            self.report_step("Clicked element after retry", "pass", snap=True)
 
     def wait_and_click_using_js(self, element_or_selector, value=None, timeout=5000):
         if isinstance(element_or_selector, str):
@@ -112,14 +112,14 @@ class BasePage:
         try:
             element.wait_for(state="visible", timeout=timeout)
             element.evaluate("node => node.click()", timeout=timeout)
-            print("[INFO] Clicked element using JS (forced click)")
+            self.report_step("Clicked element using JS", "pass", snap=True)
         except Exception:
             print(f"[RETRY] Failed to click JS within {timeout}ms. Refreshing page and retrying...")
             self.refresh_page()
             self.page.wait_for_timeout(2000)
             element.wait_for(state="visible", timeout=timeout)
             element.evaluate("node => node.click()", timeout=timeout)
-            print("[INFO] Clicked element using JS after retry")
+            self.report_step("Clicked element using JS after retry", "pass", snap=True)
 
     def clear(self, element):
         element.fill("")
@@ -127,21 +127,21 @@ class BasePage:
     def clear_and_type(self, element, data):
         element.fill("")
         element.press_sequentially(str(data), delay=20)
-        self.report_step(f"Typed value: {data}", "pass", snap=False)
+        self.report_step(f"Typed value: {data}", "pass", snap=True)
 
     def type(self, element, data):
         element.press_sequentially(str(data), delay=20)
-        self.report_step(f"Typed value: {data}", "pass", snap=False)
+        self.report_step(f"Typed value: {data}", "pass", snap=True)
 
     def type_and_tab(self, element, data):
         element.press_sequentially(str(data), delay=20)
         element.press("Tab")
-        self.report_step(f"Typed and Tabbed value: {data}", "pass", snap=False)
+        self.report_step(f"Typed and Tabbed value: {data}", "pass", snap=True)
 
     def type_and_enter(self, element, data):
         element.press_sequentially(str(data), delay=20)
         element.press("Enter")
-        self.report_step(f"Typed and Entered value: {data}", "pass", snap=False)
+        self.report_step(f"Typed and Entered value: {data}", "pass", snap=True)
 
     def get_element_text(self, element):
         try:
@@ -164,38 +164,47 @@ class BasePage:
 
     def select_drop_down_using_text(self, element, text):
         element.select_option(label=text)
+        self.report_step(f"Selected option '{text}' from dropdown", "pass", snap=True)
 
     def select_drop_down_using_value(self, element, value):
         element.select_option(value=value)
+        self.report_step(f"Selected value '{value}' from dropdown", "pass", snap=True)
 
     def select_drop_down_using_index(self, element, index):
         element.select_option(index=index)
+        self.report_step(f"Selected index '{index}' from dropdown", "pass", snap=True)
 
     def verify_displayed(self, element, timeout=15000):
         expect(element).to_be_visible(timeout=timeout)
+        self.report_step("Verified element is displayed", "pass", snap=True)
         return True
 
     def verify_disappeared(self, element):
         expect(element).to_be_hidden(timeout=15000)
+        self.report_step("Verified element is hidden", "pass", snap=True)
         return True
 
     def verify_enabled(self, element):
         expect(element).to_be_enabled(timeout=15000)
+        self.report_step("Verified element is enabled", "pass", snap=True)
         return True
 
     def verify_selected(self, element):
         expect(element).to_be_checked(timeout=15000)
+        self.report_step("Verified element is checked/selected", "pass", snap=True)
         return True
 
     def verify_url(self, expected_url):
         current_url = self.page.url
         assert expected_url in current_url, f"Expected URL '{expected_url}' to be inside current url: '{current_url}'"
+        self.report_step(f"Verified URL contains '{expected_url}'", "pass", snap=True)
         return True
 
     def verify_title(self, title):
         # Java verifyTitle does exact match, or we can check contains
         current_title = self.page.title()
         assert title in current_title or current_title == title, f"Expected title '{title}' to match '{current_title}'"
+        self.report_step(f"Verified page title matches '{title}'", "pass", snap=True)
         return True
 
     def refresh_page(self):

@@ -17,16 +17,49 @@ executions = {}
 
 
 
-def run_task_background(task_id: str, execution_id: str, test_ids: list[str], environment: str):
-    executions[execution_id] = {"status": "QUEUED"}
+def run_task_background(task_id: str, execution_id: str, test_ids: list[str], environment: str, engine: str = "PYTEST", headless: bool = False):
+    total_count = len(test_ids)
+    first_test = test_ids[0] if test_ids else ""
+    executions[execution_id] = {
+        "status": "QUEUED",
+        "total_tests": total_count,
+        "completed_tests": 0,
+        "current_test": first_test,
+        "current_test_index": 1,
+        "progress_percent": 0,
+        "stdout": "",
+        "stderr": "",
+        "duration": 0.0,
+        "failure_message": None
+    }
     
-    display_test_id = test_ids[0] if len(test_ids) == 1 else f"BATCH_OF_{len(test_ids)}_TESTS"
+    display_test_id = first_test if total_count == 1 else f"BATCH_OF_{total_count}_TESTS"
     state = orchestrator.state_machine.initialize(task_id, display_test_id, environment)
     state.execution_id = execution_id
     
     state = orchestrator.state_machine.transition(state, "VALIDATING")
-    executions[execution_id] = {"status": "VALIDATING"}
+    executions[execution_id]["status"] = "VALIDATING"
+    executions[execution_id]["progress_percent"] = 5
     
+    if engine == "MCP_AGENT":
+        from agent.mcp.playwright_mcp_adapter import PlaywrightMcpAdapter
+        mcp_adapter = PlaywrightMcpAdapter()
+        test_infos = []
+        for tid in test_ids:
+            t_info = registry.get_test(tid)
+            if t_info:
+                test_infos.append({"testId": tid, "name": t_info.get("name", tid), "path": t_info.get("path", "")})
+        
+        executions[execution_id]["status"] = "EXECUTING"
+        mcp_res = mcp_adapter.run_agentic_regression(
+            test_infos=test_infos,
+            environment=environment,
+            headless=headless,
+            execution_id=execution_id,
+            executions_store=executions
+        )
+        return
+
     while not state.is_terminal():
         rule = orchestrator.rule_engine.decide(state)
         if not rule:
@@ -37,27 +70,26 @@ def run_task_background(task_id: str, execution_id: str, test_ids: list[str], en
         state = rule.execute(state)
         
         if state.status == "EXECUTING":
-            executions[execution_id] = {"status": "EXECUTING"}
+            executions[execution_id]["status"] = "EXECUTING"
             
             test_infos = [registry.get_test(tid) for tid in test_ids]
-            if len(test_infos) == 1:
-                result = executor.execute(test_infos[0], state.environment)
-            else:
-                result = executor.execute_batch(test_infos, state.environment)
+            result = executor.execute_batch(test_infos, state.environment, execution_id=execution_id, executions_store=executions)
             state.exit_code = result["exit_code"]
             state.stdout = result["stdout"]
             state.stderr = result["stderr"]
             state.duration = result["duration"]
             state = orchestrator.state_machine.transition(state, "OBSERVING")
             
-        executions[execution_id] = {
+        executions[execution_id].update({
             "status": state.status,
             "duration": state.duration,
             "stdout": state.stdout,
             "stderr": state.stderr,
-            "failure_message": state.failure_message
-        }
-    
+            "failure_message": state.failure_message,
+            "completed_tests": total_count,
+            "progress_percent": 100
+        })
+
 
 
 @router.get("/tests", response_model=AgentTestListResponse)
@@ -93,12 +125,32 @@ async def create_task(request: AgentTaskRequest, background_tasks: BackgroundTas
     task_id = f"TASK-{uuid.uuid4().hex[:8]}"
     execution_id = f"EXEC-{uuid.uuid4().hex[:8]}"
     
-    executions[execution_id] = {"status": "QUEUED"}
+    executions[execution_id] = {
+        "status": "QUEUED",
+        "total_tests": len(tests_to_run),
+        "completed_tests": 0,
+        "current_test": tests_to_run[0],
+        "current_test_index": 1,
+        "progress_percent": 0,
+        "stdout": "",
+        "stderr": "",
+        "duration": 0.0,
+        "failure_message": None
+    }
     
-    background_tasks.add_task(run_task_background, task_id, execution_id, tests_to_run, request.environment)
+    background_tasks.add_task(
+        run_task_background,
+        task_id,
+        execution_id,
+        tests_to_run,
+        request.environment,
+        request.engine or "PYTEST",
+        request.headless if request.headless is not None else False
+    )
     
     return AgentTaskResponse(
         taskId=task_id,
         executionId=execution_id,
         status="QUEUED"
     )
+

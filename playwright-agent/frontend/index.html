@@ -237,10 +237,28 @@
                     </div>
 
                     <div class="card glass">
-                        <div class="card-header">
+                        <div class="card-header flex-between">
                             <h3><i class="fa-solid fa-terminal"></i> Execution Console</h3>
+                            <span id="runner-status-badge" class="badge badge-idle">IDLE</span>
                         </div>
                         <div class="card-body">
+                            <!-- Execution Progress Bar Component -->
+                            <div id="progress-container" class="progress-card-container" style="display: none;">
+                                <div class="progress-info-row">
+                                    <span id="progress-status-text" class="progress-status-text">
+                                        <i class="fa-solid fa-spinner fa-spin text-primary"></i> Executing Suite (0/0)
+                                    </span>
+                                    <span id="progress-percent-text" class="progress-percent-text">0%</span>
+                                </div>
+                                <div class="progress-bar-bg">
+                                    <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+                                </div>
+                                <div id="current-test-indicator" class="current-test-indicator">
+                                    <i class="fa-solid fa-vial-circle-check text-primary"></i>
+                                    <span id="current-test-name">Running: Idle</span>
+                                </div>
+                            </div>
+
                             <div id="execution-logs" class="console-box">
                                 <div class="console-line text-muted">Ready to launch tests. Logs and Extent Report updates will stream here.</div>
                             </div>

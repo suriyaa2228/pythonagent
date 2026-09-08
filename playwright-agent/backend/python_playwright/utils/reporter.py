@@ -98,19 +98,16 @@ class Reporter:
         failed_tests = sum(1 for t in deduplicated if t["status"] == "FAIL")
         warning_tests = sum(1 for t in deduplicated if t["status"] == "WARNING")
         
-        # Calculate step-level pass percentage for chart and metrics
-        all_steps = [s for t in deduplicated for s in t.get("steps", [])]
-        passed_steps_cnt = sum(1 for s in all_steps if s.get("status") in ["PASS", "INFO", "WARNING"])
-        failed_steps_cnt = sum(1 for s in all_steps if s.get("status") == "FAIL")
-        eval_steps_cnt = passed_steps_cnt + failed_steps_cnt
-
-        if eval_steps_cnt > 0:
-            pass_pct = int((passed_steps_cnt / eval_steps_cnt) * 100)
-        elif len(all_steps) > 0:
-            pass_pct = int((passed_steps_cnt / len(all_steps)) * 100)
+        # Calculate suite scenario pass & fail percentages
+        if total_tests > 0:
+            pass_pct = int((passed_tests / total_tests) * 100)
+            fail_pct = 100 - pass_pct
         else:
             pass_pct = 100 if failed_tests == 0 else 0
+            fail_pct = 0 if failed_tests == 0 else 100
+            
         dash_offset = int(100 - pass_pct)
+
 
 
         # Build Sidebar menu list

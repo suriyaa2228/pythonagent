@@ -108,8 +108,3 @@ TC023_SUBLIMATION_ORDER_2:
   type: pytest
   path: python_playwright/tests/test_tc023_sublimation_order_placing.py
   enabled: true
-TC999_UNIT_TEST_PERSISTENCE_VERIFICATION:
-  name: TC999 Unit_Test_Persistence_Verification
-  type: pytest
-  path: python_playwright/tests/test_tc999_unit_test_persistence_verification.py
-  enabled: true

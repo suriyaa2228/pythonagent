@@ -83,6 +83,7 @@ class TestIntegratedAgents(unittest.TestCase):
         # Clean up test artifacts
         if os.path.exists(saved["filePath"]):
             os.remove(saved["filePath"])
+        self.repo.delete_test_case("TC999_UNIT_TEST_PERSISTENCE_VERIFICATION")
 
     def test_mcp_adapter_initialization(self):
         mcp = PlaywrightMcpAdapter(headless=True)

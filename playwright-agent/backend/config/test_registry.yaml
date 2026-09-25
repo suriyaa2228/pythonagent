@@ -108,3 +108,18 @@ TC023_SUBLIMATION_ORDER_2:
   type: pytest
   path: python_playwright/tests/test_tc023_sublimation_order_placing.py
   enabled: true
+TC_024_SUBLIMATIONSAVEICONVALIDATION:
+  name: TC_024 SublimationSaveIconValidation
+  type: pytest
+  path: python_playwright/tests/test_tc024_sublimationsaveiconvalidation.py
+  enabled: true
+TC024_SUBLIMATION_SAVE_ICON:
+  name: TC024 Sublimation Save Icon Validation
+  type: pytest
+  path: python_playwright/tests/test_tc024_sublimationsaveiconvalidation.py
+  enabled: true
+TC025_SHAREICNVALIDATION:
+  name: tc025 shareicnvalidation
+  type: pytest
+  path: python_playwright/tests/test_tc025_shareicnvalidation.py
+  enabled: true

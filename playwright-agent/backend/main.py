@@ -9,6 +9,15 @@ src_dir = os.path.join(base_dir, "src")
 if src_dir not in sys.path:
     sys.path.insert(0, src_dir)
 
+try:
+    from dotenv import load_dotenv
+    # Attempt loading .env from backend directory, playwright-agent root, and workspace root
+    load_dotenv(os.path.join(base_dir, ".env"))
+    load_dotenv(os.path.join(base_dir, "..", ".env"))
+    load_dotenv(os.path.join(base_dir, "..", "..", ".env"))
+except ImportError:
+    pass
+
 frontend_dir = os.path.abspath(os.path.join(base_dir, "..", "frontend"))
 
 from fastapi import FastAPI
@@ -86,4 +95,6 @@ def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    host = os.environ.get("HOST", "127.0.0.1")
+    port = int(os.environ.get("PORT", "8000"))
+    uvicorn.run("main:app", host=host, port=port, reload=True)

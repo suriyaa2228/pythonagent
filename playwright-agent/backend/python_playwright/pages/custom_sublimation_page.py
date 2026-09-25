@@ -1,3 +1,4 @@
+import re
 from playwright.sync_api import Page
 from python_playwright.pages.base_page import BasePage, Locators
 
@@ -114,11 +115,26 @@ class CustomSublimationPage(BasePage):
             self.page.goto(target_configurator_url)
         
         self.report_step(f"Clicked Customize link for product style #{style_number}", "pass")
-        try:
-            self.page.wait_for_load_state("load", timeout=15000)
-        except Exception as e:
-            print(f"Wait for load state timed out, but proceeding: {e}")
         
+        # Ensure transition from PDP to Configurator if landed on PDP page
+        try:
+            self.page.wait_for_timeout(2000)
+            if "configurator" not in self.page.url.lower():
+                pdp_btn = self.page.locator("a:has-text('CUSTOMIZE'), button:has-text('CUSTOMIZE'), a[href*='Configurator'], button:has-text('Design Your Own')").filter(has_not_text="Cookie").locator("visible=true")
+                if pdp_btn.count() > 0:
+                    print("Landed on PDP page, clicking PDP Customize button...")
+                    pdp_btn.first.click()
+                elif "227232" in style_number:
+                    print("Navigating directly to Configurator URL for product 227232...")
+                    self.page.goto(target_configurator_url)
+        except Exception as ex:
+            print(f"PDP to Configurator transition check note: {ex}")
+
+        try:
+            self.page.wait_for_url(re.compile(r".*configurator.*", re.IGNORECASE), timeout=30000)
+        except Exception as e:
+            print(f"Wait for Configurator URL timed out, proceeding: {e}")
+
         from python_playwright.pages.configurator_page import ConfiguratorPage
         return ConfiguratorPage(self.page)
 

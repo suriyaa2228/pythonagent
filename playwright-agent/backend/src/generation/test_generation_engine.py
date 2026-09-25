@@ -90,6 +90,31 @@ def test_login(auth_page_tc001, env_config):
         self.assertEqual(result.get("validation", {}).get("status"), "PASS")
         self.assertIn("TestTC001VerifyLogin", result["pythonScript"])
 
+    def test_orchestrator_generates_sublimation_save_icon_script(self):
+        user_story = "As a user, I should be able to see the save icon on the sublimation builder"
+        acceptance_criteria = [
+            "Navigate to Home page",
+            "click user login icon",
+            "Enter valid username and password",
+            "Click login button",
+            "Verify user account name is visible",
+            "search the product 227232",
+            "click customize button",
+            "Verify the page is navigated to Design",
+            "verify the save icon button is present."
+        ]
+
+        result = self.orchestrator.generate_test_script(
+            user_story=user_story,
+            acceptance_criteria=acceptance_criteria
+        )
+
+        self.assertIn("pythonScript", result)
+        self.assertEqual(result.get("validation", {}).get("status"), "PASS")
+        self.assertIn("SaveIconSublimationBuilder", result["pythonScript"])
+        self.assertIn("click_customize_on_product", result["pythonScript"])
+        self.assertIn("227232", result["pythonScript"])
+
 
 if __name__ == "__main__":
     unittest.main()

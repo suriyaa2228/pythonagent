@@ -65,7 +65,8 @@ class TestCaseRepository:
         if not clean_num or not clean_name:
             raise ValueError("Test Case Number and Test Case Name are mandatory.")
 
-        file_basename = f"test_{clean_num.lower()}_{clean_name}.py"
+        clean_num_file = clean_num.lower().replace("_", "")
+        file_basename = f"test_{clean_num_file}_{clean_name}.py"
         target_path = os.path.join(self.tests_dir, file_basename)
         relative_path = os.path.join("python_playwright", "tests", file_basename)
 

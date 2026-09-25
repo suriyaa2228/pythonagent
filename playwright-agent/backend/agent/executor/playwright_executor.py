@@ -21,10 +21,18 @@ class PlaywrightExecutor:
         test_paths = []
         test_names = []
         for test_info in test_infos:
+            if not test_info:
+                continue
             t_id = test_info.get("testId") or test_info.get("name") or "Test"
             script_path = test_info.get("path", "")
             if script_path:
                 full_script_path = os.path.join(self.base_dir, script_path)
+                if not os.path.exists(full_script_path):
+                    # Fallback check for alternate path separator / underscore variations
+                    alt_path = full_script_path.replace("test_tc_", "test_tc") if "test_tc_" in full_script_path else full_script_path.replace("test_tc", "test_tc_")
+                    if os.path.exists(alt_path):
+                        full_script_path = alt_path
+
                 if os.path.exists(full_script_path):
                     rel_test_path = os.path.relpath(full_script_path, playwright_cwd)
                     test_paths.append(rel_test_path)

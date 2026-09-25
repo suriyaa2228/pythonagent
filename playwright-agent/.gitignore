@@ -7,6 +7,12 @@ venv/
 env/
 ENV/
 
+# Environments & secrets
+.env
+.env.*
+!.env.example
+
+
 # Playwright & Temporary test outputs
 *.png
 *.html

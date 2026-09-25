@@ -148,6 +148,23 @@ async def generate_test(request: GenerateTestRequest):
     return result
 
 
+@router.post("/generate-and-evaluate")
+async def generate_and_evaluate_test(request: GenerateTestRequest):
+    """LangGraph + DeepEval Pipeline: Generates, validates, and semantically evaluates test scripts."""
+    if not request.userStory.strip():
+        raise HTTPException(status_code=400, detail="User story is required.")
+
+    from ai.graph.workflow import TestGenerationWorkflow
+    workflow = TestGenerationWorkflow(orchestrator, symbol_registry)
+    state = workflow.run(
+        user_story=request.userStory,
+        acceptance_criteria=request.acceptanceCriteria,
+        project=request.project or "playwright",
+        environment=request.environment or "stage"
+    )
+    return state
+
+
 @router.post("/planner/draft")
 async def draft_test_plan(request: PlannerDraftRequest):
     """Planner Agent: Drafts structured test cases and steps from user requirements."""

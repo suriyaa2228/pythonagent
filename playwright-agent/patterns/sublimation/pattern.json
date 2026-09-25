@@ -1,0 +1,52 @@
+{
+  "pattern_id": "PAT_SUBLIMATION",
+  "name": "Custom Sublimation Builder & Save Icon Workflow",
+  "category": "sublimation",
+  "description": "Navigates to Custom Sublimation page, launches Configurator, and verifies builder/save icon.",
+  "preconditions": [
+    "User logged in or on Home Page",
+    "Product is customizable"
+  ],
+  "page_objects": [
+    "HomePage",
+    "LoginPage",
+    "CustomSublimationPage",
+    "ConfiguratorPage"
+  ],
+  "required_assertions": [
+    "Configurator page loaded",
+    "Save icon / builder element visible"
+  ],
+  "dsl_template": {
+    "test_id": "TC002",
+    "name": "Verify Sublimation Save Icon",
+    "steps": [
+      {
+        "page": "HomePage",
+        "action": "goto",
+        "arguments": {"url": "{url}"}
+      },
+      {
+        "page": "CustomSublimationPage",
+        "action": "click_customize_on_product",
+        "arguments": {"product_id": "227232"}
+      },
+      {
+        "page": "ConfiguratorPage",
+        "action": "verify_configurator_loaded",
+        "arguments": {}
+      },
+      {
+        "page": "ConfiguratorPage",
+        "action": "verify_save_icon_present",
+        "arguments": {}
+      }
+    ],
+    "assertions": [
+      {
+        "page": "ConfiguratorPage",
+        "condition": "save_icon_visible"
+      }
+    ]
+  }
+}

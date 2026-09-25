@@ -1,0 +1,15 @@
+[
+  {
+    "case_id": "GOLDEN_LOG_01",
+    "requirement": "User should be able to log in with valid credentials and verify authentication.",
+    "acceptance_criteria": [
+      "Navigate to home page",
+      "Click sign in",
+      "Enter valid username and password",
+      "Verify user is logged in"
+    ],
+    "expected_page_objects": ["HomePage", "LoginPage"],
+    "required_assertions": ["Header_GlobalLogin_signOutQuickLinkUser"],
+    "expected_test_pattern": "PAT_LOGIN"
+  }
+]

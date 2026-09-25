@@ -1,0 +1,54 @@
+{
+  "pattern_id": "PAT_LOGIN",
+  "name": "Standard Login Workflow",
+  "category": "login",
+  "description": "Authenticates user using HomePage and LoginPage components.",
+  "preconditions": [
+    "User is on Home Page"
+  ],
+  "page_objects": [
+    "HomePage",
+    "LoginPage",
+    "MyAccountPage"
+  ],
+  "required_assertions": [
+    "Header_GlobalLogin_signOutQuickLinkUser visible"
+  ],
+  "dsl_template": {
+    "test_id": "TC001",
+    "name": "Verify Login Flow",
+    "steps": [
+      {
+        "page": "HomePage",
+        "action": "goto",
+        "arguments": {"url": "{url}"}
+      },
+      {
+        "page": "HomePage",
+        "action": "click_login",
+        "arguments": {}
+      },
+      {
+        "page": "LoginPage",
+        "action": "enter_username",
+        "arguments": {"username": "{username}"}
+      },
+      {
+        "page": "LoginPage",
+        "action": "enter_password",
+        "arguments": {"password": "{password}"}
+      },
+      {
+        "page": "LoginPage",
+        "action": "click_login_button",
+        "arguments": {}
+      }
+    ],
+    "assertions": [
+      {
+        "page": "HomePage",
+        "condition": "sign_out_link_visible"
+      }
+    ]
+  }
+}

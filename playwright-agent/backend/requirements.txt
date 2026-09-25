@@ -4,3 +4,5 @@ playwright==1.42.0
 pydantic==2.6.4
 pyyaml==6.0.1
 python-dotenv==1.0.1
+langgraph>=0.0.30
+deepeval>=0.20.0

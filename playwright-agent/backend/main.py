@@ -23,17 +23,20 @@ frontend_dir = os.path.abspath(os.path.join(base_dir, "..", "frontend"))
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from api.routes import agent_routes, execution_routes, ai_generation_routes
+from api.routes import agent_routes, execution_routes, ai_generation_routes, evaluation_routes, registry_routes, reports_routes
 
 # Ensure reports directory exists at startup
 reports_dir = os.path.join(base_dir, "python_playwright", "reports")
 os.makedirs(reports_dir, exist_ok=True)
 
-app = FastAPI(title="Playwright Agent AI Platform", version="2.0.0")
+app = FastAPI(title="Playwright Agent AI Platform — GenAI Target Architecture", version="3.0.0")
 
 app.include_router(agent_routes.router, prefix="/api/v1/agent", tags=["Agent"])
 app.include_router(execution_routes.router, prefix="/api/v1/executions", tags=["Executions"])
-app.include_router(ai_generation_routes.router, prefix="/api/v1/ai", tags=["AI Generation & Reports"])
+app.include_router(ai_generation_routes.router, prefix="/api/v1/ai", tags=["AI Generation"])
+app.include_router(evaluation_routes.router, prefix="/api/v1/ai", tags=["DeepEval Evaluation"])
+app.include_router(registry_routes.router, prefix="/api/v1/ai", tags=["Symbol Registry & Patterns"])
+app.include_router(reports_routes.router, prefix="/api/v1/reports", tags=["Reports"])
 
 # Mount frontend static files and images
 app.mount("/static", StaticFiles(directory=frontend_dir), name="static")

@@ -1,0 +1,59 @@
+{
+  "pattern_id": "PAT_CHECKOUT",
+  "name": "Blank & Custom Order Checkout Workflow",
+  "category": "checkout",
+  "description": "Performs complete checkout flow from PDP -> Cart -> Shipping & Billing -> Review & Submit -> Thank You Page.",
+  "preconditions": [
+    "User logged in",
+    "Product added to cart"
+  ],
+  "page_objects": [
+    "HomePage",
+    "LoginPage",
+    "PDPPage",
+    "CartPage",
+    "ShippingAndBillingPage",
+    "ReviewSubmitPage",
+    "ThankYouPage"
+  ],
+  "required_assertions": [
+    "Order confirmation number visible on ThankYouPage"
+  ],
+  "dsl_template": {
+    "test_id": "TC020",
+    "name": "Verify Blank Order Placement",
+    "steps": [
+      {
+        "page": "HomePage",
+        "action": "search_product",
+        "arguments": {"product_id": "7001"}
+      },
+      {
+        "page": "PDPPage",
+        "action": "add_to_cart_quick_order",
+        "arguments": {}
+      },
+      {
+        "page": "CartPage",
+        "action": "click_checkout",
+        "arguments": {}
+      },
+      {
+        "page": "ShippingAndBillingPage",
+        "action": "select_fedex_ground_shipping_method",
+        "arguments": {}
+      },
+      {
+        "page": "ReviewSubmitPage",
+        "action": "click_submit_order",
+        "arguments": {}
+      }
+    ],
+    "assertions": [
+      {
+        "page": "ThankYouPage",
+        "condition": "order_confirmation_visible"
+      }
+    ]
+  }
+}

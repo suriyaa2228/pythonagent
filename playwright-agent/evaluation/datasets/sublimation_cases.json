@@ -1,0 +1,16 @@
+[
+  {
+    "case_id": "GOLDEN_SUB_01",
+    "requirement": "User should customize product 227232 on Custom Sublimation page and verify save icon presence.",
+    "acceptance_criteria": [
+      "Navigate to home page",
+      "Open Custom Sublimation page",
+      "Click customize on product 227232",
+      "Verify configurator page loaded",
+      "Verify save icon is present"
+    ],
+    "expected_page_objects": ["HomePage", "CustomSublimationPage", "ConfiguratorPage"],
+    "required_assertions": ["save_icon_visible"],
+    "expected_test_pattern": "PAT_SUBLIMATION"
+  }
+]

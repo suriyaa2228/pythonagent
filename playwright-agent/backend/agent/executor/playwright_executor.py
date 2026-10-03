@@ -10,7 +10,7 @@ class PlaywrightExecutor:
     def execute(self, test_info: dict, environment: str, execution_id: str = None, executions_store: dict = None) -> dict:
         return self.execute_batch([test_info], environment, execution_id, executions_store)
 
-    def execute_batch(self, test_infos: list[dict], environment: str, execution_id: str = None, executions_store: dict = None) -> dict:
+    def execute_batch(self, test_infos: list[dict], environment: str, execution_id: str = None, executions_store: dict = None, active_processes: dict = None, current_idx: int = 1, total_count: int = 1) -> dict:
         start_time = time.time()
         
         playwright_cwd = os.path.join(self.base_dir, "python_playwright")
@@ -47,21 +47,16 @@ class PlaywrightExecutor:
                 "duration": round(time.time() - start_time, 2)
             }
 
-        # Run all test paths in a single pytest invocation so a single consolidated Extent Report is generated
         cmd = [sys.executable, "-m", "pytest", "-v", "-s"] + test_paths + [f"--env={environment}", "--headless"]
 
-        total_tests = len(test_names)
-        completed_tests = 0
         current_test = test_names[0] if test_names else ""
-        current_test_index = 1
+        pct_base = int(((current_idx - 1) / total_count) * 100) if total_count > 0 else 0
 
         if executions_store is not None and execution_id and execution_id in executions_store:
             executions_store[execution_id].update({
-                "total_tests": total_tests,
-                "completed_tests": 0,
+                "total_tests": total_count,
                 "current_test": current_test,
-                "current_test_index": 1,
-                "progress_percent": 0,
+                "current_test_index": current_idx,
                 "status": "EXECUTING"
             })
 
@@ -79,32 +74,53 @@ class PlaywrightExecutor:
                 env=env
             )
 
+            if active_processes is not None and execution_id:
+                active_processes[execution_id] = process
+
+            import re
+            completed_steps = 0
             for line in iter(process.stdout.readline, ''):
                 if not line:
                     break
+
+                # Check if execution was terminated by user
+                if executions_store is not None and execution_id and executions_store.get(execution_id, {}).get("status") == "TERMINATED":
+                    try:
+                        process.kill()
+                    except Exception:
+                        pass
+                    break
+
+                # Handle active pause loop
+                while executions_store is not None and execution_id and executions_store.get(execution_id, {}).get("is_paused", False):
+                    if executions_store.get(execution_id, {}).get("status") == "TERMINATED":
+                        try:
+                            process.kill()
+                        except Exception:
+                            pass
+                        break
+                    time.sleep(0.3)
+
                 stdout_lines.append(line)
                 clean_line = line.strip()
 
-                # Live progress tracking
-                for idx, t_name in enumerate(test_names):
-                    if t_name in clean_line or (idx < len(test_paths) and test_paths[idx] in clean_line):
-                        current_test = t_name
-                        current_test_index = idx + 1
-                        completed_tests = max(completed_tests, idx)
-                        break
+                # Increment step progress on logged step markers
+                if any(marker in clean_line for marker in ["[PASS]", "[WARNING]", "[FAIL]", "[INFO]", "::test_"]):
+                    completed_steps += 1
 
-                if "PASSED" in clean_line or "FAILED" in clean_line or "SKIPPED" in clean_line:
-                    completed_tests = min(completed_tests + 1, total_tests)
-
-                progress_pct = int((completed_tests / total_tests) * 100) if total_tests > 0 else 0
+                base_pct = ((current_idx - 1) / total_count) * 100.0
+                max_pct = (current_idx / total_count) * 100.0
+                step_progress_pct = min(95.0, (completed_steps / 22.0) * 100.0)
+                dyn_pct = int(base_pct + (step_progress_pct / 100.0) * (max_pct - base_pct))
+                dyn_pct = max(5, min(95, dyn_pct))
 
                 if executions_store is not None and execution_id and execution_id in executions_store:
+                    existing_stdout = executions_store[execution_id].get("stdout", "")
                     executions_store[execution_id].update({
-                        "completed_tests": completed_tests,
+                        "stdout": existing_stdout + line,
                         "current_test": current_test,
-                        "current_test_index": current_test_index,
-                        "progress_percent": progress_pct,
-                        "stdout": "".join(stdout_lines)
+                        "current_test_index": current_idx,
+                        "progress_percent": dyn_pct
                     })
 
             stderr_out = process.stderr.read()
@@ -112,19 +128,15 @@ class PlaywrightExecutor:
                 stderr_lines.append(stderr_out)
 
             process.wait()
+            if active_processes is not None and execution_id in active_processes:
+                active_processes.pop(execution_id, None)
+
             exit_code = process.returncode
             duration = round(time.time() - start_time, 2)
-            final_status = "PASSED" if exit_code == 0 else "FAILED"
-
-            if executions_store is not None and execution_id and execution_id in executions_store:
-                executions_store[execution_id].update({
-                    "completed_tests": total_tests,
-                    "progress_percent": 100,
-                    "status": final_status,
-                    "duration": duration,
-                    "stdout": "".join(stdout_lines),
-                    "stderr": "".join(stderr_lines)
-                })
+            
+            # Check if terminated
+            is_terminated = executions_store is not None and execution_id and executions_store.get(execution_id, {}).get("status") == "TERMINATED"
+            final_status = "TERMINATED" if is_terminated else ("PASSED" if exit_code == 0 else "FAILED")
 
             return {
                 "exit_code": exit_code,
@@ -135,12 +147,8 @@ class PlaywrightExecutor:
             }
         except Exception as e:
             duration = round(time.time() - start_time, 2)
-            if executions_store is not None and execution_id and execution_id in executions_store:
-                executions_store[execution_id].update({
-                    "status": "FAILED",
-                    "duration": duration,
-                    "stderr": str(e)
-                })
+            if active_processes is not None and execution_id in active_processes:
+                active_processes.pop(execution_id, None)
             return {
                 "exit_code": -1,
                 "stdout": "".join(stdout_lines),

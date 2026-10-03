@@ -90,6 +90,8 @@ class Reporter:
         report_path = os.path.join(reports_dir, f"extent_report_{timestamp}.html")
 
         end_time = datetime.now()
+        if cls._start_time is None:
+            cls._start_time = end_time
         duration = str(end_time - cls._start_time).split(".")[0]
         
         # Calculate dashboard numbers based on deduplicated scenarios

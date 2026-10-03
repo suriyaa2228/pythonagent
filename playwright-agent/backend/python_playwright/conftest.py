@@ -66,6 +66,65 @@ def browser_instance(request):
     browser.close()
     playwright_ctx.stop()
 
+def get_authenticated_context(browser_instance, env_config, state_filename):
+    import os
+    url = env_config["url"]
+    username = env_config["username"]
+    password = env_config["password"]
+    
+    config_dir = os.path.join(os.path.dirname(__file__), "config")
+    os.makedirs(config_dir, exist_ok=True)
+    state_file = os.path.join(config_dir, state_filename)
+
+    is_valid = False
+    if os.path.exists(state_file):
+        try:
+            context = browser_instance.new_context(
+                storage_state=state_file,
+                ignore_https_errors=True
+            )
+            context.set_default_timeout(10000)
+            test_page = context.new_page()
+            test_page.goto(url, wait_until="domcontentloaded")
+            if test_page.locator("id=Header_GlobalLogin_signOutQuickLinkUser").is_visible(timeout=5000):
+                is_valid = True
+            test_page.close()
+            if is_valid:
+                context.set_default_timeout(30000)
+                return context
+            context.close()
+        except Exception:
+            pass
+
+    # If state file is missing or expired, perform fresh UI login and save state
+    temp_context = browser_instance.new_context(ignore_https_errors=True)
+    temp_context.set_default_timeout(30000)
+    temp_page = temp_context.new_page()
+    temp_page.goto(url)
+    
+    from python_playwright.pages.home_page import HomePage
+    home = HomePage(temp_page, url)
+    home.handle_onetrust_cookie()
+    login_page = home.verify_home_page().click_login()
+    login_page.enter_username(username) \
+        .enter_password(password) \
+        .click_login_button()
+        
+    from playwright.sync_api import expect
+    expect(temp_page.locator("id=Header_GlobalLogin_signOutQuickLinkUser")).to_be_visible(timeout=15000)
+        
+    temp_context.storage_state(path=state_file)
+    temp_page.close()
+    temp_context.close()
+
+    context = browser_instance.new_context(
+        storage_state=state_file,
+        ignore_https_errors=True
+    )
+    context.set_default_timeout(30000)
+    return context
+
+
 @pytest.fixture(scope="class")
 def page_instance(request, browser_instance):
     # Share a single context and page across all tests in a test class

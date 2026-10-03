@@ -56,7 +56,381 @@ document.addEventListener('DOMContentLoaded', () => {
     const runnerEnvSelect = document.getElementById('runner-env-select');
     const refreshReportsBtn = document.getElementById('refresh-reports-btn');
 
-    // 1. Generate Test Action
+    // Control & Diagnostics Elements
+    const pauseExecutionBtn = document.getElementById('pause-execution-btn');
+    const terminateExecutionBtn = document.getElementById('terminate-execution-btn');
+    const failureLogsCard = document.getElementById('failure-logs-card');
+    const failureSummaryText = document.getElementById('failure-summary-text');
+    const parsedErrorList = document.getElementById('parsed-error-list');
+    const rawStderrBox = document.getElementById('raw-stderr-box');
+    const copyErrorLogsBtn = document.getElementById('copy-error-logs-btn');
+    const closeErrorLogsBtn = document.getElementById('close-error-logs-btn');
+    const envChangeToast = document.getElementById('env-change-toast');
+    const envChangeToastText = document.getElementById('env-change-toast-text');
+
+    let currentExecutionId = null;
+    let isExecutionPaused = false;
+    let toastTimeout = null;
+
+    // Environment Sync & Popup Alert Handler
+    function showEnvChangeToast(newEnv) {
+        if (envSelect && envSelect.value !== newEnv) envSelect.value = newEnv;
+        if (runnerEnvSelect && runnerEnvSelect.value !== newEnv) runnerEnvSelect.value = newEnv;
+
+        if (envChangeToast) {
+            if (envChangeToastText) {
+                envChangeToastText.textContent = `*** environment changed successfully`;
+            }
+            envChangeToast.style.display = 'block';
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                envChangeToast.style.display = 'none';
+            }, 3500);
+        }
+    }
+
+    if (envSelect) {
+        envSelect.addEventListener('change', (e) => {
+            showEnvChangeToast(e.target.value);
+        });
+    }
+    if (runnerEnvSelect) {
+        runnerEnvSelect.addEventListener('change', (e) => {
+            showEnvChangeToast(e.target.value);
+        });
+    }
+
+    // Pause Execution Handler
+    if (pauseExecutionBtn) {
+        pauseExecutionBtn.addEventListener('click', async () => {
+            if (!currentExecutionId) return;
+            try {
+                const res = await fetch(`/api/v1/agent/tasks/${currentExecutionId}/pause`, { method: 'POST' });
+                const data = await res.json();
+                isExecutionPaused = data.is_paused;
+
+                const badge = document.getElementById('runner-status-badge');
+                if (isExecutionPaused) {
+                    pauseExecutionBtn.innerHTML = '<i class="fa-solid fa-play"></i> Resume';
+                    if (badge) {
+                        badge.className = 'badge badge-paused';
+                        badge.textContent = 'PAUSED';
+                    }
+                } else {
+                    pauseExecutionBtn.innerHTML = '<i class="fa-solid fa-pause"></i> Pause';
+                    if (badge) {
+                        badge.className = 'badge badge-executing';
+                        badge.textContent = 'RUNNING';
+                    }
+                }
+            } catch (err) {
+                alert('Pause toggle error: ' + err.message);
+            }
+        });
+    }
+
+    // Terminate Execution Handler
+    if (terminateExecutionBtn) {
+        terminateExecutionBtn.addEventListener('click', async () => {
+            if (!currentExecutionId) return;
+            if (confirm('Are you sure you want to forcibly terminate the running test execution?')) {
+                try {
+                    const res = await fetch(`/api/v1/agent/tasks/${currentExecutionId}/terminate`, { method: 'POST' });
+                    const data = await res.json();
+
+                    if (pauseExecutionBtn) pauseExecutionBtn.disabled = true;
+                    if (terminateExecutionBtn) terminateExecutionBtn.disabled = true;
+
+                    const badge = document.getElementById('runner-status-badge');
+                    if (badge) {
+                        badge.className = 'badge badge-terminated';
+                        badge.textContent = 'TERMINATED';
+                    }
+
+                    const consoleBox = document.getElementById('execution-logs');
+                    if (consoleBox) {
+                        consoleBox.innerHTML += `<div class="console-line text-danger mt-2" style="font-weight: 700;">[TERMINATED] Execution forcibly stopped by user.</div>`;
+                        consoleBox.scrollTop = consoleBox.scrollHeight;
+                    }
+                } catch (err) {
+                    alert('Termination request failed: ' + err.message);
+                }
+            }
+        });
+    }
+
+    // Error Diagnostics Panel Tab Switchers & Actions
+    document.querySelectorAll('.error-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.error-tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.error-tab-content').forEach(c => c.style.display = 'none');
+
+            btn.classList.add('active');
+            const targetTab = btn.getAttribute('data-tab');
+            const targetEl = document.getElementById(targetTab);
+            if (targetEl) targetEl.style.display = 'block';
+        });
+    });
+
+    if (closeErrorLogsBtn && failureLogsCard) {
+        closeErrorLogsBtn.addEventListener('click', () => {
+            failureLogsCard.style.display = 'none';
+        });
+    }
+
+    if (copyErrorLogsBtn) {
+        copyErrorLogsBtn.addEventListener('click', () => {
+            const rawErr = rawStderrBox ? rawStderrBox.textContent : '';
+            const summaryErr = failureSummaryText ? failureSummaryText.textContent : '';
+            navigator.clipboard.writeText(`FAILURE DIAGNOSTIC SUMMARY:\n${summaryErr}\n\nFULL ERROR LOGS:\n${rawErr}`);
+            copyErrorLogsBtn.innerHTML = '<i class="fa-solid fa-check text-success"></i> Copied!';
+            setTimeout(() => {
+                copyErrorLogsBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy Error Trace';
+            }, 2000);
+        });
+    }
+
+    function renderFailureDiagnostics(data) {
+        if (!failureLogsCard) return;
+
+        failureLogsCard.style.display = 'block';
+        failureLogsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        const failureMsg = data.failure_message || (data.stderr ? data.stderr.split('\n')[0] : 'Test execution failed.');
+        if (failureSummaryText) {
+            failureSummaryText.textContent = failureMsg;
+        }
+
+        if (rawStderrBox) {
+            rawStderrBox.textContent = data.stderr || data.stdout || 'No raw stderr output available.';
+        }
+
+        if (parsedErrorList) {
+            const lines = (data.stderr || data.stdout || '').split('\n');
+            const failureLines = [];
+
+            lines.forEach(line => {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('E ') || trimmed.includes('AssertionError') || trimmed.includes('FAILED') || trimmed.includes('Error:') || trimmed.includes('TimeoutError')) {
+                    failureLines.push(trimmed);
+                }
+            });
+
+            if (failureLines.length === 0) {
+                failureLines.push(failureMsg);
+            }
+
+            parsedErrorList.innerHTML = failureLines.map(item => `
+                <div class="error-parsed-item">
+                    <i class="fa-solid fa-circle-exclamation text-danger"></i> ${escapeHtml(item)}
+                </div>
+            `).join('');
+        }
+    }
+
+    // Helper to reset and show runner progress bar
+    function showRunnerProgress(totalTests, firstTestName) {
+        const container = document.getElementById('progress-container');
+        const fill = document.getElementById('progress-bar-fill');
+        const statusText = document.getElementById('progress-status-text');
+        const percentText = document.getElementById('progress-percent-text');
+        const currentTestName = document.getElementById('current-test-name');
+        const badge = document.getElementById('runner-status-badge');
+
+        if (container) container.style.display = 'flex';
+        if (fill) {
+            fill.style.width = '0%';
+            fill.style.background = 'linear-gradient(90deg, #4f46e5, #818cf8, #10b981)';
+        }
+        if (statusText) statusText.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-primary"></i> Executing Suite (0/${totalTests} Completed)`;
+        if (percentText) percentText.textContent = '0%';
+        if (currentTestName) currentTestName.textContent = `Running Test 1 of ${totalTests}: ${firstTestName || 'Initializing...'}`;
+        if (badge) {
+            badge.className = 'badge badge-executing';
+            badge.textContent = 'RUNNING';
+        }
+
+        if (pauseExecutionBtn) {
+            pauseExecutionBtn.disabled = false;
+            pauseExecutionBtn.innerHTML = '<i class="fa-solid fa-pause"></i> Pause';
+        }
+        if (terminateExecutionBtn) {
+            terminateExecutionBtn.disabled = false;
+        }
+        if (failureLogsCard) {
+            failureLogsCard.style.display = 'none';
+        }
+    }
+
+    // Execute Test Batch Function (Supports Pytest Subprocess vs Playwright MCP Agent)
+    async function executeTestBatch(testIds) {
+        const env = runnerEnvSelect ? runnerEnvSelect.value : 'stage';
+        const engine = runnerEngineSelect ? runnerEngineSelect.value : 'PYTEST';
+        const isHeadless = runnerModeSelect ? (runnerModeSelect.value === 'true') : false;
+        const consoleBox = document.getElementById('execution-logs');
+
+        showRunnerProgress(testIds.length, testIds[0]);
+
+        consoleBox.innerHTML = `<div class="console-line text-primary"><i class="fa-solid fa-spinner fa-spin"></i> Launching test suite run (${engine === 'MCP_AGENT' ? 'Playwright MCP Agent' : 'Pytest Engine'}) for [${testIds.join(', ')}] on environment '${env}' (${isHeadless ? 'Headless' : 'Headed'})...</div>`;
+
+        try {
+            const res = await fetch('/api/v1/agent/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'run_test',
+                    testIds: testIds,
+                    environment: env,
+                    engine: engine,
+                    headless: isHeadless
+                })
+            });
+
+            const data = await res.json();
+            if (data.executionId) {
+                currentExecutionId = data.executionId;
+                consoleBox.innerHTML += `<div class="console-line text-success">Task created: ${data.taskId} | Execution ID: ${data.executionId}</div>`;
+                pollExecutionProgress(data.executionId);
+            } else {
+                consoleBox.innerHTML += `<div class="console-line text-danger">Failed to start execution: ${JSON.stringify(data)}</div>`;
+            }
+        } catch (err) {
+            consoleBox.innerHTML += `<div class="console-line text-danger">Error: ${err.message}</div>`;
+        }
+    }
+
+    // Poll execution status
+    async function pollExecutionProgress(executionId) {
+        const consoleBox = document.getElementById('execution-logs');
+        const fill = document.getElementById('progress-bar-fill');
+        const statusText = document.getElementById('progress-status-text');
+        const percentText = document.getElementById('progress-percent-text');
+        const currentTestName = document.getElementById('current-test-name');
+        const badge = document.getElementById('runner-status-badge');
+
+        const interval = setInterval(async () => {
+            try {
+                const res = await fetch(`/api/v1/executions/${executionId}`);
+                const data = await res.json();
+
+                const total = data.total_tests || 1;
+                const completed = data.completed_tests || 0;
+                const currentTest = data.current_test || 'Executing...';
+                const currIdx = data.current_test_index || 1;
+                const pct = data.progress_percent || 0;
+
+                if (data.status === 'PAUSED') {
+                    if (badge) {
+                        badge.className = 'badge badge-paused';
+                        badge.textContent = 'PAUSED';
+                    }
+                    if (statusText) statusText.innerHTML = `<i class="fa-solid fa-pause text-warning"></i> Execution Paused by User`;
+                    if (pauseExecutionBtn) pauseExecutionBtn.innerHTML = '<i class="fa-solid fa-play"></i> Resume';
+                    return;
+                }
+
+                if (data.status === 'EXECUTING' || data.status === 'VALIDATING' || data.status === 'QUEUED') {
+                    if (fill) fill.style.width = `${pct}%`;
+                    if (percentText) percentText.textContent = `${pct}%`;
+                    if (statusText) statusText.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-primary"></i> Executing Suite (${completed}/${total} Completed)`;
+                    if (currentTestName) currentTestName.textContent = `Running Test ${currIdx} of ${total}: ${currentTest}`;
+                    if (badge) {
+                        badge.className = 'badge badge-executing';
+                        badge.textContent = 'RUNNING';
+                    }
+
+                    consoleBox.innerHTML = `
+                        <div class="console-line text-primary" style="font-weight: 600; padding: 4px 8px; background: rgba(99, 102, 241, 0.15); border-radius: 4px;">
+                            <i class="fa-solid fa-vial-circle-check text-primary"></i> [RUNNING TEST CASE ${currIdx}/${total}]: ${escapeHtml(currentTest)} (${pct}% Complete)
+                        </div>
+                        <div class="console-line text-muted mt-2">Execution ID: ${executionId} | Status: ${data.status}</div>
+                        ${data.stdout ? `<pre class="console-line text-muted mt-3">${escapeHtml(data.stdout)}</pre>` : ''}
+                    `;
+                    consoleBox.scrollTop = consoleBox.scrollHeight;
+                } else {
+                    // Terminal state reached (COMPLETED, PASSED, FAILED, TERMINATED, etc.)
+                    clearInterval(interval);
+                    if (pauseExecutionBtn) pauseExecutionBtn.disabled = true;
+                    if (terminateExecutionBtn) terminateExecutionBtn.disabled = true;
+
+                    const isSuccess = (data.status === 'COMPLETED' || data.status === 'PASSED');
+                    const isTerminated = (data.status === 'TERMINATED');
+                    const colorClass = isSuccess ? 'text-success' : 'text-danger';
+
+                    if (fill) {
+                        fill.style.width = '100%';
+                        fill.style.background = isSuccess 
+                            ? 'linear-gradient(90deg, #10b981, #059669)' 
+                            : (isTerminated ? 'linear-gradient(90deg, #ef4444, #991b1b)' : 'linear-gradient(90deg, #ef4444, #dc2626)');
+                    }
+                    if (percentText) percentText.textContent = '100%';
+
+                    if (badge) {
+                        if (isSuccess) {
+                            badge.className = 'badge badge-pass';
+                            badge.textContent = 'PASSED';
+                        } else if (isTerminated) {
+                            badge.className = 'badge badge-terminated';
+                            badge.textContent = 'TERMINATED';
+                        } else {
+                            badge.className = 'badge badge-fail';
+                            badge.textContent = 'FAILED';
+                        }
+                    }
+
+                    if (statusText) {
+                        if (isSuccess) {
+                            statusText.innerHTML = `<i class="fa-solid fa-circle-check text-success"></i> Suite Run Complete (${total}/${total} Tests Finished)`;
+                        } else if (isTerminated) {
+                            statusText.innerHTML = `<i class="fa-solid fa-stop text-danger"></i> Execution Terminated by User`;
+                        } else {
+                            statusText.innerHTML = `<i class="fa-solid fa-circle-xmark text-danger"></i> Suite Run Finished with Errors`;
+                        }
+                    }
+
+                    if (currentTestName) {
+                        if (isSuccess) {
+                            currentTestName.textContent = `All ${total} suite test cases finished successfully (${data.duration || 0}s)`;
+                        } else if (isTerminated) {
+                            currentTestName.textContent = `Suite execution stopped forcibly by user.`;
+                        } else {
+                            currentTestName.textContent = `Suite finished with failures (${data.duration || 0}s)`;
+                        }
+                    }
+
+                    let mcpLogHtml = '';
+                    if (data.mcpResult && data.mcpResult.mcpToolLog) {
+                        mcpLogHtml += `<div class="console-line text-info mt-4">--- MCP TOOL TRACE LOGS ---</div>`;
+                        (data.mcpResult.mcpToolLog || []).forEach(log => {
+                            mcpLogHtml += `<div class="console-line">Step ${log.step}: <code>${log.tool}</code> - ${log.status} ${log.testId ? `(Test: ${log.testId})` : ''} ${log.error ? `<span class="text-danger">(${log.error})</span>` : ''}</div>`;
+                        });
+                    }
+
+                    consoleBox.innerHTML = `
+                        <div class="console-line ${colorClass}" style="font-size: 1rem; font-weight: 700;">
+                            [SUITE EXECUTION FINISHED] Status: ${data.status} | Total Tests: ${total} | Duration: ${data.duration || 0}s
+                        </div>
+                        <div class="console-line text-success mt-2">
+                            <i class="fa-solid fa-file-invoice"></i> Extent Report successfully generated for entire suite run!
+                        </div>
+                        ${mcpLogHtml}
+                        <div class="console-line mt-4">--- STDOUT LOGS ---</div>
+                        <pre class="console-line text-muted">${escapeHtml(data.stdout || '')}</pre>
+                        ${data.stderr ? `<div class="console-line text-danger mt-4">--- STDERR LOGS ---</div><pre class="console-line text-danger">${escapeHtml(data.stderr)}</pre>` : ''}
+                    `;
+                    consoleBox.scrollTop = consoleBox.scrollHeight;
+
+                    // Trigger Error Diagnostics panel on failures or stderr logs
+                    if (!isSuccess || data.stderr || isTerminated) {
+                        renderFailureDiagnostics(data);
+                    }
+                }
+            } catch (err) {
+                clearInterval(interval);
+                consoleBox.innerHTML += `<div class="console-line text-danger">Error polling execution status: ${err.message}</div>`;
+            }
+        }, 1000);
+    }
     generateBtn.addEventListener('click', async () => {
         const userStory = userStoryInput.value.trim();
         const rawAc = acInput.value.trim();
@@ -139,6 +513,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Switch to runner view
         const runnerNav = document.querySelector('[data-target="runner-view"]');
         if (runnerNav) runnerNav.click();
+
+        showRunnerProgress(1, 'Generated Workspace Script');
 
         const consoleBox = document.getElementById('execution-logs');
         consoleBox.innerHTML = '<div class="console-line text-primary"><i class="fa-solid fa-gear fa-spin"></i> Spawning isolated pytest execution workspace...</div>';
@@ -482,159 +858,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const runnerModeSelect = document.getElementById('runner-mode-select');
 
-    // Helper to reset and show runner progress bar
-    function showRunnerProgress(totalTests, firstTestName) {
-        const container = document.getElementById('progress-container');
-        const fill = document.getElementById('progress-bar-fill');
-        const statusText = document.getElementById('progress-status-text');
-        const percentText = document.getElementById('progress-percent-text');
-        const currentTestName = document.getElementById('current-test-name');
-        const badge = document.getElementById('runner-status-badge');
-
-        if (container) container.style.display = 'flex';
-        if (fill) {
-            fill.style.width = '0%';
-            fill.style.background = 'linear-gradient(90deg, #4f46e5, #818cf8, #10b981)';
-        }
-        if (statusText) statusText.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-primary"></i> Executing Suite (0/${totalTests} Completed)`;
-        if (percentText) percentText.textContent = '0%';
-        if (currentTestName) currentTestName.textContent = `Running Test 1 of ${totalTests}: ${firstTestName || 'Initializing...'}`;
-        if (badge) {
-            badge.className = 'badge badge-executing';
-            badge.textContent = 'RUNNING';
-        }
-    }
-
-    // Execute Test Batch Function (Supports Pytest Subprocess vs Playwright MCP Agent)
-    async function executeTestBatch(testIds) {
-        const env = runnerEnvSelect ? runnerEnvSelect.value : 'stage';
-        const engine = runnerEngineSelect ? runnerEngineSelect.value : 'PYTEST';
-        const isHeadless = runnerModeSelect ? (runnerModeSelect.value === 'true') : false;
-        const consoleBox = document.getElementById('execution-logs');
-
-        showRunnerProgress(testIds.length, testIds[0]);
-
-        consoleBox.innerHTML = `<div class="console-line text-primary"><i class="fa-solid fa-spinner fa-spin"></i> Launching test suite run (${engine === 'MCP_AGENT' ? 'Playwright MCP Agent' : 'Pytest Engine'}) for [${testIds.join(', ')}] on environment '${env}' (${isHeadless ? 'Headless' : 'Headed'})...</div>`;
-
-        try {
-            const res = await fetch('/api/v1/agent/tasks', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'run_test',
-                    testIds: testIds,
-                    environment: env,
-                    engine: engine,
-                    headless: isHeadless
-                })
-            });
-
-            const data = await res.json();
-            if (data.executionId) {
-                consoleBox.innerHTML += `<div class="console-line text-success">Task created: ${data.taskId} | Execution ID: ${data.executionId}</div>`;
-                pollExecutionProgress(data.executionId);
-            } else {
-                consoleBox.innerHTML += `<div class="console-line text-danger">Failed to start execution: ${JSON.stringify(data)}</div>`;
-            }
-        } catch (err) {
-            consoleBox.innerHTML += `<div class="console-line text-danger">Error: ${err.message}</div>`;
-        }
-    }
-
-    // Poll execution status
-    async function pollExecutionProgress(executionId) {
-        const consoleBox = document.getElementById('execution-logs');
-        const fill = document.getElementById('progress-bar-fill');
-        const statusText = document.getElementById('progress-status-text');
-        const percentText = document.getElementById('progress-percent-text');
-        const currentTestName = document.getElementById('current-test-name');
-        const badge = document.getElementById('runner-status-badge');
-
-        const interval = setInterval(async () => {
-            try {
-                const res = await fetch(`/api/v1/executions/${executionId}`);
-                const data = await res.json();
-
-                const total = data.total_tests || 1;
-                const completed = data.completed_tests || 0;
-                const currentTest = data.current_test || 'Executing...';
-                const currIdx = data.current_test_index || 1;
-                const pct = data.progress_percent || 0;
-
-                if (data.status === 'EXECUTING' || data.status === 'VALIDATING' || data.status === 'QUEUED') {
-                    if (fill) fill.style.width = `${pct}%`;
-                    if (percentText) percentText.textContent = `${pct}%`;
-                    if (statusText) statusText.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-primary"></i> Executing Suite (${completed}/${total} Completed)`;
-                    if (currentTestName) currentTestName.textContent = `Running Test ${currIdx} of ${total}: ${currentTest}`;
-
-                    consoleBox.innerHTML = `
-                        <div class="console-line text-primary" style="font-weight: 600; padding: 4px 8px; background: rgba(99, 102, 241, 0.15); border-radius: 4px;">
-                            <i class="fa-solid fa-vial-circle-check text-primary"></i> [RUNNING TEST CASE ${currIdx}/${total}]: ${escapeHtml(currentTest)} (${pct}% Complete)
-                        </div>
-                        <div class="console-line text-muted mt-2">Execution ID: ${executionId} | Status: ${data.status}</div>
-                        ${data.stdout ? `<pre class="console-line text-muted mt-3">${escapeHtml(data.stdout)}</pre>` : ''}
-                    `;
-                    consoleBox.scrollTop = consoleBox.scrollHeight;
-                } else {
-                    // Terminal state reached (COMPLETED, PASSED, FAILED, etc.)
-                    clearInterval(interval);
-                    const isSuccess = (data.status === 'COMPLETED' || data.status === 'PASSED');
-                    const colorClass = isSuccess ? 'text-success' : 'text-danger';
-
-                    if (fill) {
-                        fill.style.width = '100%';
-                        fill.style.background = isSuccess 
-                            ? 'linear-gradient(90deg, #10b981, #059669)' 
-                            : 'linear-gradient(90deg, #ef4444, #dc2626)';
-                    }
-                    if (percentText) percentText.textContent = '100%';
-
-                    if (badge) {
-                        badge.className = isSuccess ? 'badge badge-pass' : 'badge badge-fail';
-                        badge.textContent = isSuccess ? 'PASSED' : 'FAILED';
-                    }
-
-                    if (statusText) {
-                        statusText.innerHTML = isSuccess 
-                            ? `<i class="fa-solid fa-circle-check text-success"></i> Suite Run Complete (${total}/${total} Tests Finished)`
-                            : `<i class="fa-solid fa-circle-xmark text-danger"></i> Suite Run Finished with Errors`;
-                    }
-
-                    if (currentTestName) {
-                        currentTestName.textContent = isSuccess 
-                            ? `All ${total} suite test cases finished successfully (${data.duration || 0}s)`
-                            : `Suite finished with failures (${data.duration || 0}s)`;
-                    }
-
-                    let mcpLogHtml = '';
-                    if (data.mcpResult && data.mcpResult.mcpToolLog) {
-                        mcpLogHtml += `<div class="console-line text-info mt-4">--- MCP TOOL TRACE LOGS ---</div>`;
-                        (data.mcpResult.mcpToolLog || []).forEach(log => {
-                            mcpLogHtml += `<div class="console-line">Step ${log.step}: <code>${log.tool}</code> - ${log.status} ${log.testId ? `(Test: ${log.testId})` : ''} ${log.error ? `<span class="text-danger">(${log.error})</span>` : ''}</div>`;
-                        });
-                    }
-
-                    consoleBox.innerHTML = `
-                        <div class="console-line ${colorClass}" style="font-size: 1rem; font-weight: 700;">
-                            [SUITE EXECUTION FINISHED] Status: ${data.status} | Total Tests: ${total} | Duration: ${data.duration || 0}s
-                        </div>
-                        <div class="console-line text-success mt-2">
-                            <i class="fa-solid fa-file-invoice"></i> Extent Report successfully generated for entire suite run!
-                        </div>
-                        ${mcpLogHtml}
-                        <div class="console-line mt-4">--- STDOUT LOGS ---</div>
-                        <pre class="console-line text-muted">${escapeHtml(data.stdout || '')}</pre>
-                        ${data.stderr ? `<div class="console-line text-danger mt-4">--- STDERR LOGS ---</div><pre class="console-line text-danger">${escapeHtml(data.stderr)}</pre>` : ''}
-                    `;
-                    consoleBox.scrollTop = consoleBox.scrollHeight;
-                }
-            } catch (err) {
-                clearInterval(interval);
-                consoleBox.innerHTML += `<div class="console-line text-danger">Error polling execution status: ${err.message}</div>`;
-            }
-        }, 1000);
-    }
-
     // UI Helpers
     function updateValidationUI(val) {
         if (!val) return;
@@ -667,4 +890,5 @@ document.addEventListener('DOMContentLoaded', () => {
         return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 });
+
 

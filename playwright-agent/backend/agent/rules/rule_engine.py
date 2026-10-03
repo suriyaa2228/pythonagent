@@ -39,11 +39,11 @@ class ValidateTestRule(Rule):
         return state.status == "VALIDATING"
 
     def execute(self, state: AgentState) -> AgentState:
-        if not self.registry.test_exists(state.test_id):
+        if state.test_id.startswith("BATCH_OF_") or self.registry.test_exists(state.test_id):
+            state.status = "VALIDATED"
+        else:
             state.failure_message = f"Test {state.test_id} not found or disabled."
             state.status = "FAILED"
-        else:
-            state.status = "VALIDATED"
         return state
 
 class ExecuteTestRule(Rule):

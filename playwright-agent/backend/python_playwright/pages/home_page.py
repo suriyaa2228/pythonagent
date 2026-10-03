@@ -183,9 +183,12 @@ class HomePage(BasePage):
         faq_link = self.locate_element(Locators.LINK_TEXT, "FAQ")
         self.verify_displayed(faq_link)
         self.click(faq_link)
-        self.switch_to_tab("GENERAL FAQS")
+        if len(self.page.context.pages) > 1:
+            self.page = self.page.context.pages[-1]
+            self.page.bring_to_front()
         from python_playwright.pages.faq_page import FAQPage
         return FAQPage(self.page)
+
 
     def click_web_tips_tricks(self):
         self.ensure_resources_dropdown_open()

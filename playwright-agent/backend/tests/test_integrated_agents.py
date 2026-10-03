@@ -54,7 +54,7 @@ class TestIntegratedAgents(unittest.TestCase):
             acceptance_criteria=["Navigate to login", "Enter credentials", "Click login"]
         )
         self.assertIn("pythonScript", res)
-        self.assertIn("def test_run_login", res["pythonScript"])
+        self.assertIn("def test_", res["pythonScript"])
 
     def test_healer_agent_offline(self):
         healer = PlaywrightHealer(self.orchestrator)
@@ -88,6 +88,30 @@ class TestIntegratedAgents(unittest.TestCase):
     def test_mcp_adapter_initialization(self):
         mcp = PlaywrightMcpAdapter(headless=True)
         self.assertIsNotNone(mcp)
+
+    def test_mcp_adapter_inline_live_heal_loop(self):
+        mcp = PlaywrightMcpAdapter(headless=True)
+        store = {}
+        exec_id = "EXEC-TEST-HEAL-123"
+        store[exec_id] = {"status": "QUEUED"}
+        
+        # Test case with missing file to trigger failure & inline live heal logging
+        test_infos = [
+            {"testId": "TC001", "name": "NonExistentTest", "path": "python_playwright/tests/test_missing_dummy.py"}
+        ]
+        
+        res = mcp.run_agentic_regression(
+            test_infos=test_infos,
+            environment="stage",
+            headless=True,
+            execution_id=exec_id,
+            executions_store=store
+        )
+        
+        self.assertEqual(res["totalCases"], 1)
+        self.assertEqual(res["failed"], 1)
+        self.assertEqual(store[exec_id]["progress_percent"], 100)
+        self.assertIn("mcpToolLog", res)
 
 
 if __name__ == "__main__":

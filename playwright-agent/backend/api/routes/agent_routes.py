@@ -12,9 +12,9 @@ registry = TestRegistry()
 executor = PlaywrightExecutor()
 orchestrator = AgentOrchestrator(registry, executor)
 
-# In-memory store for execution results (for MVP)
+# In-memory store for execution results and process handles
 executions = {}
-
+active_processes = {}
 
 
 def run_task_background(task_id: str, execution_id: str, test_ids: list[str], environment: str, engine: str = "PYTEST", headless: bool = False):
@@ -30,7 +30,8 @@ def run_task_background(task_id: str, execution_id: str, test_ids: list[str], en
         "stdout": "",
         "stderr": "",
         "duration": 0.0,
-        "failure_message": None
+        "failure_message": None,
+        "is_paused": False
     }
     
     display_test_id = first_test if total_count == 1 else f"BATCH_OF_{total_count}_TESTS"
@@ -61,6 +62,10 @@ def run_task_background(task_id: str, execution_id: str, test_ids: list[str], en
         return
 
     while not state.is_terminal():
+        # Check if execution was terminated externally
+        if executions.get(execution_id, {}).get("status") == "TERMINATED":
+            break
+
         rule = orchestrator.rule_engine.decide(state)
         if not rule:
             state.status = "FAILED"
@@ -73,22 +78,37 @@ def run_task_background(task_id: str, execution_id: str, test_ids: list[str], en
             executions[execution_id]["status"] = "EXECUTING"
             
             test_infos = [registry.get_test(tid) for tid in test_ids]
-            result = executor.execute_batch(test_infos, state.environment, execution_id=execution_id, executions_store=executions)
+            result = executor.execute_batch(
+                test_infos,
+                state.environment,
+                execution_id=execution_id,
+                executions_store=executions,
+                active_processes=active_processes,
+                total_count=total_count
+            )
             state.exit_code = result["exit_code"]
             state.stdout = result["stdout"]
             state.stderr = result["stderr"]
             state.duration = result["duration"]
-            state = orchestrator.state_machine.transition(state, "OBSERVING")
+            if result.get("status") == "TERMINATED":
+                state.status = "TERMINATED"
+                state.failure_message = "Execution terminated by user"
+            else:
+                state = orchestrator.state_machine.transition(state, "OBSERVING")
             
-        executions[execution_id].update({
-            "status": state.status,
-            "duration": state.duration,
-            "stdout": state.stdout,
-            "stderr": state.stderr,
-            "failure_message": state.failure_message,
-            "completed_tests": total_count,
-            "progress_percent": 100
-        })
+        if executions.get(execution_id, {}).get("status") != "TERMINATED":
+            executions[execution_id].update({
+                "status": state.status,
+                "duration": state.duration,
+                "stdout": state.stdout,
+                "stderr": state.stderr,
+                "failure_message": state.failure_message
+            })
+            if state.status in ["PASSED", "FAILED", "COMPLETED", "STOP"]:
+                executions[execution_id].update({
+                    "completed_tests": total_count,
+                    "progress_percent": 100
+                })
 
 
 
@@ -135,7 +155,8 @@ async def create_task(request: AgentTaskRequest, background_tasks: BackgroundTas
         "stdout": "",
         "stderr": "",
         "duration": 0.0,
-        "failure_message": None
+        "failure_message": None,
+        "is_paused": False
     }
     
     background_tasks.add_task(
@@ -153,4 +174,44 @@ async def create_task(request: AgentTaskRequest, background_tasks: BackgroundTas
         executionId=execution_id,
         status="QUEUED"
     )
+
+
+@router.post("/tasks/{execution_id}/terminate")
+async def terminate_execution(execution_id: str):
+    if execution_id not in executions:
+        raise HTTPException(status_code=404, detail="Execution not found")
+
+    proc = active_processes.pop(execution_id, None)
+    if proc:
+        try:
+            proc.kill()
+        except Exception:
+            pass
+
+    executions[execution_id].update({
+        "status": "TERMINATED",
+        "progress_percent": executions[execution_id].get("progress_percent", 0),
+        "failure_message": "Execution terminated by user",
+        "stderr": (executions[execution_id].get("stderr", "") + "\n[TERMINATED] Execution forcibly stopped by user.").strip()
+    })
+    return {"status": "TERMINATED", "message": "Execution terminated successfully"}
+
+
+@router.post("/tasks/{execution_id}/pause")
+async def pause_execution(execution_id: str):
+    if execution_id not in executions:
+        raise HTTPException(status_code=404, detail="Execution not found")
+
+    current_paused = executions[execution_id].get("is_paused", False)
+    new_paused = not current_paused
+    executions[execution_id]["is_paused"] = new_paused
+    new_status = "PAUSED" if new_paused else "EXECUTING"
+    executions[execution_id]["status"] = new_status
+
+    return {
+        "status": new_status,
+        "is_paused": new_paused,
+        "message": f"Execution {'paused' if new_paused else 'resumed'} successfully"
+    }
+
 

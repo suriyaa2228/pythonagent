@@ -36,43 +36,11 @@ from python_playwright.pages.custom_sublimation_page import CustomSublimationPag
 from python_playwright.pages.cart_page import CartPage
 from python_playwright.utils.reporter import Reporter
 
+from python_playwright.conftest import get_authenticated_context
+
 @pytest.fixture(scope="class")
 def auth_context_tc023(request, env_config, browser_instance):
-    """
-    Session Reuse (Mandatory): Logs in once and reuses session using Storage State.
-    """
-    url = env_config["url"]
-    username = env_config["username"]
-    password = env_config["password"]
-    
-    config_dir = os.path.join(os.path.dirname(__file__), "..", "config")
-    os.makedirs(config_dir, exist_ok=True)
-    state_file = os.path.join(config_dir, "tc023_state.json")
-
-    if not os.path.exists(state_file):
-        temp_context = browser_instance.new_context(ignore_https_errors=True, no_viewport=True)
-        temp_page = temp_context.new_page()
-        temp_page.goto(url)
-        
-        home = HomePage(temp_page, url)
-        home.handle_onetrust_cookie()
-        login_page = home.verify_home_page().click_login()
-        login_page.enter_username(username) \
-            .enter_password(password) \
-            .click_login_button()
-            
-        expect(temp_page.locator("id=Header_GlobalLogin_signOutQuickLinkUser")).to_be_visible(timeout=15000)
-            
-        temp_context.storage_state(path=state_file)
-        temp_page.close()
-        temp_context.close()
-
-    context = browser_instance.new_context(
-        storage_state=state_file,
-        ignore_https_errors=True,
-        no_viewport=True
-    )
-    context.set_default_timeout(30000)
+    context = get_authenticated_context(browser_instance, env_config, "tc023_state.json")
     yield context
     context.close()
 
@@ -178,6 +146,7 @@ class TestTC023SublimationOrderPlacing:
         review_submit_page = shipping_billing_page.click_review_and_submit()
         
         # 27. Click Place Order
+        thank_you_page = review_submit_page.click_place_order()
         try:
             expect(auth_page_tc023).to_have_url(re.compile(".*(OrderOKView|ThankYou|Confirmation|OrderShippingBillingConfirmationView|checkout|order).*", re.IGNORECASE), timeout=15000)
         except Exception:

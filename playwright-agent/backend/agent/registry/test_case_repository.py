@@ -113,3 +113,20 @@ class TestCaseRepository:
     def get_test_case(self, test_id: str) -> Optional[Dict[str, Any]]:
         store = self._load_metadata_store()
         return store.get(test_id)
+
+    def delete_test_case(self, test_id: str) -> bool:
+        store = self._load_metadata_store()
+        if test_id in store:
+            del store[test_id]
+            self._save_metadata_store(store)
+        if os.path.exists(self.yaml_registry_file):
+            try:
+                with open(self.yaml_registry_file, "r", encoding="utf-8") as f:
+                    registry_data = yaml.safe_load(f) or {}
+                if test_id in registry_data:
+                    del registry_data[test_id]
+                    with open(self.yaml_registry_file, "w", encoding="utf-8") as f:
+                        yaml.safe_dump(registry_data, f, sort_keys=False)
+            except Exception:
+                pass
+        return True

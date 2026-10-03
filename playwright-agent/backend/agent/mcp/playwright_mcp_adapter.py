@@ -147,19 +147,19 @@ class PlaywrightMcpAdapter:
         healed_cases = []
         total_tests = len(test_infos)
         completed_tests = 0
-        current_test_index = 1
-        test_names = [t.get("testId") or t.get("name") or "Test" for t in test_infos]
-        current_test = test_names[0] if test_names else ""
 
-        if executions_store is not None and execution_id and execution_id in executions_store:
-            executions_store[execution_id].update({
-                "total_tests": total_tests,
-                "completed_tests": 0,
-                "current_test": current_test,
-                "current_test_index": 1,
-                "progress_percent": 0,
-                "status": "EXECUTING"
-            })
+        # Initialize Healer Agent for Inline Live Heal
+        healer_agent = None
+        try:
+            from generation.orchestrator import GenerationOrchestrator
+            from agents.healer_agent import PlaywrightHealer
+            class DummyRagPipeline:
+                def retrieve_context(self, query: str, top_k: int = 5, score_threshold: float = 0.0):
+                    return []
+            orch = GenerationOrchestrator(rag_pipeline=DummyRagPipeline())
+            healer_agent = PlaywrightHealer(orch)
+        except Exception as e:
+            print(f"[WARN] Inline Healer Agent initialization note: {e}")
 
         try:
             playwright_cwd = os.path.join(self.base_dir, "python_playwright")
@@ -168,27 +168,30 @@ class PlaywrightMcpAdapter:
             env["TEST_ENVIRONMENT"] = environment
             mode_flags = ["--headless"] if headless else []
 
-            valid_paths = []
-            test_id_map = {}
-            for test_info in test_infos:
-                t_id = test_info.get("testId", "UNKNOWN")
+            all_stdout = []
+
+            for idx, test_info in enumerate(test_infos):
+                current_test_index = idx + 1
+                t_id = test_info.get("testId") or test_info.get("name") or f"TC{current_test_index}"
                 raw_path = test_info.get("path", "")
                 if raw_path.startswith("backend/") or raw_path.startswith("backend\\"):
                     raw_path = raw_path[8:]
                 full_path = raw_path if os.path.isabs(raw_path) else os.path.abspath(os.path.join(self.base_dir, raw_path))
 
-                if os.path.exists(full_path):
-                    rel_test_path = os.path.relpath(full_path, playwright_cwd)
-                    valid_paths.append(rel_test_path)
-                    test_id_map[rel_test_path] = t_id
-                    tool_logs.append({
-                        "step": len(tool_logs) + 1,
-                        "tool": "playwright_mcp_test_start",
-                        "testId": t_id,
-                        "path": full_path,
+                current_test = t_id
+                pct = int((completed_tests / total_tests) * 100) if total_tests > 0 else 0
+
+                if executions_store is not None and execution_id and execution_id in executions_store:
+                    executions_store[execution_id].update({
+                        "total_tests": total_tests,
+                        "completed_tests": completed_tests,
+                        "current_test": current_test,
+                        "current_test_index": current_test_index,
+                        "progress_percent": pct,
                         "status": "EXECUTING"
                     })
-                else:
+
+                if not os.path.exists(full_path):
                     failed_count += 1
                     tool_logs.append({
                         "step": len(tool_logs) + 1,
@@ -197,10 +200,29 @@ class PlaywrightMcpAdapter:
                         "status": "FAILED",
                         "error": f"Test script file not found: {full_path}"
                     })
+                    completed_tests += 1
+                    pct = int((completed_tests / total_tests) * 100) if total_tests > 0 else 0
+                    if executions_store is not None and execution_id and execution_id in executions_store:
+                        executions_store[execution_id].update({
+                            "completed_tests": completed_tests,
+                            "progress_percent": pct
+                        })
+                    continue
 
-            if valid_paths:
-                xml_report_path = os.path.join(playwright_cwd, f"mcp_results_{int(time.time())}.xml")
-                cmd = [sys.executable, "-m", "pytest", "-v", f"--junitxml={xml_report_path}"] + valid_paths + [f"--env={environment}"] + mode_flags
+                rel_test_path = os.path.relpath(full_path, playwright_cwd)
+                file_name = os.path.basename(full_path)
+
+                tool_logs.append({
+                    "step": len(tool_logs) + 1,
+                    "tool": "playwright_mcp_test_start",
+                    "testId": t_id,
+                    "path": full_path,
+                    "status": "EXECUTING"
+                })
+
+                xml_report_path = os.path.join(playwright_cwd, f"mcp_results_{int(time.time())}_{idx}.xml")
+                cmd = [sys.executable, "-m", "pytest", "-v", f"--junitxml={xml_report_path}", rel_test_path, f"--env={environment}"] + mode_flags
+                
                 stdout_lines = []
                 stderr_lines = []
                 try:
@@ -218,19 +240,7 @@ class PlaywrightMcpAdapter:
                         if not line:
                             break
                         stdout_lines.append(line)
-                        clean_line = line.strip()
-
-                        # Real-time progress tracking
-                        for idx, t_name in enumerate(test_names):
-                            if t_name in clean_line or (idx < len(valid_paths) and valid_paths[idx] in clean_line):
-                                current_test = t_name
-                                current_test_index = idx + 1
-                                break
-
-                        if "PASSED" in clean_line or "FAILED" in clean_line or "SKIPPED" in clean_line:
-                            completed_tests = min(completed_tests + 1, total_tests)
-
-                        pct = int((completed_tests / total_tests) * 100) if total_tests > 0 else 0
+                        all_stdout.append(line)
 
                         if executions_store is not None and execution_id and execution_id in executions_store:
                             executions_store[execution_id].update({
@@ -238,7 +248,7 @@ class PlaywrightMcpAdapter:
                                 "current_test": current_test,
                                 "current_test_index": current_test_index,
                                 "progress_percent": pct,
-                                "stdout": "".join(stdout_lines)
+                                "stdout": "".join(all_stdout)
                             })
 
                     stderr_out = proc.stderr.read()
@@ -248,109 +258,120 @@ class PlaywrightMcpAdapter:
                     proc.wait()
                     stdout_text = "".join(stdout_lines)
                     stderr_text = "".join(stderr_lines)
-                    lines = stdout_text.splitlines()
 
-                    # Parse JUnit XML if generated
-                    parsed_results = {}
+                    # Determine Pass/Fail outcome from XML or process returncode
+                    outcome = "PASSED" if proc.returncode == 0 else "FAILED"
+                    error_msg = None
+
                     if os.path.exists(xml_report_path):
                         try:
                             import xml.etree.ElementTree as ET
                             tree = ET.parse(xml_report_path)
                             root = tree.getroot()
                             for tc in root.findall(".//testcase"):
-                                tc_file = tc.get("file", "")
-                                tc_name = tc.get("name", "")
                                 failure_node = tc.find("failure")
                                 error_node = tc.find("error")
                                 skipped_node = tc.find("skipped")
-                                
-                                err_msg = None
                                 if failure_node is not None or error_node is not None:
                                     node = failure_node if failure_node is not None else error_node
-                                    status = "FAILED"
-                                    err_msg = node.get("message") or (node.text or "Test execution failed").strip()
+                                    outcome = "FAILED"
+                                    error_msg = node.get("message") or (node.text or "Test execution failed").strip()
                                 elif skipped_node is not None:
-                                    status = "SKIPPED"
+                                    outcome = "SKIPPED"
                                 else:
-                                    status = "PASSED"
-                                    
-                                file_key = os.path.basename(tc_file) if tc_file else ""
-                                parsed_results[file_key] = {"status": status, "error": err_msg}
+                                    outcome = "PASSED"
                         except Exception as parse_err:
-                            print(f"[WARN] JUnit XML parse failed: {parse_err}")
+                            print(f"[WARN] JUnit XML parse failed for {t_id}: {parse_err}")
                         finally:
                             try:
                                 os.remove(xml_report_path)
                             except Exception:
                                 pass
 
-                    for test_info in test_infos:
-                        t_id = test_info.get("testId", "UNKNOWN")
-                        raw_path = test_info.get("path", "")
-                        if raw_path.startswith("backend/") or raw_path.startswith("backend\\"):
-                            raw_path = raw_path[8:]
-                        full_path = raw_path if os.path.isabs(raw_path) else os.path.abspath(os.path.join(self.base_dir, raw_path))
-
-                        if not os.path.exists(full_path):
-                            continue
-
-                        file_name = os.path.basename(full_path)
-                        stem = os.path.splitext(file_name)[0]
-
-                        outcome = None
-                        error_msg = None
-
-                        if file_name in parsed_results:
-                            outcome = parsed_results[file_name]["status"]
-                            error_msg = parsed_results[file_name]["error"]
-                        else:
-                            # Check for pass / fail in pytest output for this specific test file
-                            matching_lines = [l for l in lines if stem in l or file_name in l]
-                            for l in matching_lines:
-                                if "PASSED" in l:
-                                    outcome = "PASSED"
-                                    break
-                                elif "FAILED" in l or "ERROR" in l:
-                                    outcome = "FAILED"
-                                    break
-                                elif "SKIPPED" in l:
-                                    outcome = "SKIPPED"
-                                    break
-
-                        if not outcome:
-                            outcome = "PASSED" if proc.returncode == 0 else "FAILED"
-
-                        if outcome in ["PASSED", "SKIPPED"]:
-                            passed_count += 1
-                        else:
-                            failed_count += 1
-
-                        tool_entry = {
+                    if outcome in ["PASSED", "SKIPPED"]:
+                        passed_count += 1
+                        tool_logs.append({
                             "step": len(tool_logs) + 1,
                             "tool": "playwright_mcp_test_end",
                             "testId": t_id,
                             "status": outcome,
                             "script": file_name
-                        }
-                        if error_msg:
-                            tool_entry["error"] = error_msg[:500]
-                        tool_logs.append(tool_entry)
-
-                    if stderr_text.strip():
+                        })
+                    else:
+                        failed_count += 1
                         tool_logs.append({
                             "step": len(tool_logs) + 1,
-                            "tool": "playwright_mcp_stderr_log",
-                            "status": "INFO",
-                            "stderr": stderr_text[:1000]
+                            "tool": "playwright_mcp_test_end",
+                            "testId": t_id,
+                            "status": "FAILED",
+                            "script": file_name,
+                            "error": (error_msg or stderr_text)[:500]
                         })
 
+                        # ⚡ [TRIGGER INLINE LIVE HEAL]
+                        tool_logs.append({
+                            "step": len(tool_logs) + 1,
+                            "tool": "playwright_mcp_trigger_inline_live_heal",
+                            "testId": t_id,
+                            "status": "HEALING_STARTED",
+                            "action": "Running test inline repair via Playwright MCP Agent (Live Heal)"
+                        })
+
+                        script_content = ""
+                        try:
+                            with open(full_path, "r", encoding="utf-8", errors="ignore") as f:
+                                script_content = f.read()
+                        except Exception:
+                            script_content = ""
+
+                        if healer_agent and script_content:
+                            err_context = error_msg or stderr_text or stdout_text
+                            heal_res = healer_agent.heal_script(
+                                failed_script=script_content,
+                                error_message=err_context
+                            )
+                            is_healed = heal_res.get("isHealed", False)
+                            summary = heal_res.get("healingSummary", "Attempted inline live healing")
+                            repaired_locators = heal_res.get("repairedLocators", [])
+
+                            tool_logs.append({
+                                "step": len(tool_logs) + 1,
+                                "tool": "playwright_mcp_inline_live_heal",
+                                "testId": t_id,
+                                "status": "HEALED" if is_healed else "HEAL_ATTEMPTED",
+                                "healingSummary": summary,
+                                "repairedLocators": repaired_locators
+                            })
+
+                            healed_cases.append({
+                                "testId": t_id,
+                                "script": file_name,
+                                "healingSummary": summary,
+                                "repairedLocators": repaired_locators,
+                                "healedScript": heal_res.get("pythonScript", script_content)
+                            })
+
                 except Exception as exec_err:
-                    failed_count += len(valid_paths)
+                    failed_count += 1
                     tool_logs.append({
                         "step": len(tool_logs) + 1,
-                        "tool": "playwright_mcp_suite_end",
+                        "tool": "playwright_mcp_test_end",
+                        "testId": t_id,
                         "status": "FAILED",
                         "error": str(exec_err)
+                    })
+
+                # Increment Progress Bar (100% * Completed / Total)
+                completed_tests += 1
+                pct = int((completed_tests / total_tests) * 100) if total_tests > 0 else 0
+
+                if executions_store is not None and execution_id and execution_id in executions_store:
+                    executions_store[execution_id].update({
+                        "completed_tests": completed_tests,
+                        "current_test": current_test,
+                        "current_test_index": current_test_index,
+                        "progress_percent": pct,
+                        "stdout": "".join(all_stdout)
                     })
 
         finally:

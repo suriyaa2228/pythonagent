@@ -60,57 +60,65 @@
                 </div>
             </header>
 
+            <!-- Toast Notification for Environment Changes -->
+            <div id="env-change-toast" class="toast-notification" style="display: none;">
+                <div class="toast-content">
+                    <i class="fa-solid fa-circle-check text-success"></i>
+                    <span id="env-change-toast-text">*** environment changed successfully</span>
+                </div>
+            </div>
+
             <!-- 1. AI Test Generator View -->
             <section id="generator-view" class="view active">
-                <div class="grid-2col">
-                    <!-- User Story Form Card -->
-                    <div class="card glass">
-                        <div class="card-header">
-                            <h3><i class="fa-solid fa-book-bookmark"></i> Requirement Input</h3>
-                            <span class="badge-pill">RAG Grounded</span>
+                <!-- User Story Form Card (Top Full-Width) -->
+                <div class="card glass mb-4">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-book-bookmark"></i> Requirement Input</h3>
+                        <span class="badge-pill">RAG Grounded</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="user-story-input">User Story</label>
+                            <textarea id="user-story-input" rows="4" class="form-textarea" placeholder="As a user, I should be able to log in using valid credentials so that I can access my account.">As a user, I should be able to log in using valid credentials so that I can access my account.</textarea>
                         </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="user-story-input">User Story</label>
-                                <textarea id="user-story-input" rows="4" class="form-textarea" placeholder="As a user, I should be able to log in using valid credentials so that I can access my account.">As a user, I should be able to log in using valid credentials so that I can access my account.</textarea>
-                            </div>
 
-                            <div class="form-group">
-                                <label for="ac-input">Acceptance Criteria (one per line)</label>
-                                <textarea id="ac-input" rows="5" class="form-textarea" placeholder="1. Navigate to the login page&#10;2. Enter valid username and password&#10;3. Click login button&#10;4. Verify user account icon&#10;5. Log out successfully">1. Navigate to the login page
+                        <div class="form-group">
+                            <label for="ac-input">Acceptance Criteria (one per line)</label>
+                            <textarea id="ac-input" rows="4" class="form-textarea" placeholder="1. Navigate to the login page&#10;2. Enter valid username and password&#10;3. Click login button&#10;4. Verify user account icon&#10;5. Log out successfully">1. Navigate to the login page
 2. Enter valid username and password
 3. Click login button
 4. Verify user account icon is visible
 5. Log out successfully</textarea>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-half">
-                                    <label>Project</label>
-                                    <input type="text" class="form-input" id="project-input" value="playwright" readonly>
-                                </div>
-                                <div class="form-group col-half">
-                                    <label>Environment</label>
-                                    <select id="env-select" class="form-select">
-                                        <option value="stage" selected>Stage</option>
-                                        <option value="dev">Dev</option>
-                                        <option value="prod">Prod</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <button id="generate-btn" class="btn primary-btn btn-block">
-                                <i class="fa-solid fa-sparkles"></i> Generate Python Playwright Script
-                            </button>
                         </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-half">
+                                <label>Project</label>
+                                <input type="text" class="form-input" id="project-input" value="playwright" readonly>
+                            </div>
+                            <div class="form-group col-half">
+                                <label>Environment</label>
+                                <select id="env-select" class="form-select">
+                                    <option value="stage" selected>Stage</option>
+                                    <option value="dev">Dev</option>
+                                    <option value="prod">Prod</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button id="generate-btn" class="btn primary-btn btn-block">
+                            <i class="fa-solid fa-sparkles"></i> Generate Python Playwright Script
+                        </button>
                     </div>
+                </div>
 
-                    <!-- Generation Meta / Overview Card -->
-                    <div class="card glass">
-                        <div class="card-header">
-                            <h3><i class="fa-solid fa-shield-halved"></i> Guardrails & Framework Context</h3>
-                        </div>
-                        <div class="card-body">
+                <!-- Guardrails & Framework Context Card (Bottom 4-Column Layout) -->
+                <div class="card glass">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-shield-halved"></i> Guardrails & Framework Context</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="grid-4col">
                             <div class="feature-item">
                                 <div class="feature-icon"><i class="fa-solid fa-shield-virus"></i></div>
                                 <div>
@@ -239,7 +247,11 @@
                     <div class="card glass">
                         <div class="card-header flex-between">
                             <h3><i class="fa-solid fa-terminal"></i> Execution Console</h3>
-                            <span id="runner-status-badge" class="badge badge-idle">IDLE</span>
+                            <div class="header-actions">
+                                <button id="pause-execution-btn" class="btn warning-btn btn-sm" disabled><i class="fa-solid fa-pause"></i> Pause</button>
+                                <button id="terminate-execution-btn" class="btn danger-btn btn-sm" disabled><i class="fa-solid fa-stop"></i> Terminate</button>
+                                <span id="runner-status-badge" class="badge badge-idle">IDLE</span>
+                            </div>
                         </div>
                         <div class="card-body">
                             <!-- Execution Progress Bar Component -->
@@ -262,6 +274,35 @@
                             <div id="execution-logs" class="console-box">
                                 <div class="console-line text-muted">Ready to launch tests. Logs and Extent Report updates will stream here.</div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Failure & Error Diagnostics Section -->
+                <div id="failure-logs-card" class="card glass mt-4" style="display: none;">
+                    <div class="card-header flex-between alert-danger-header">
+                        <h3><i class="fa-solid fa-triangle-exclamation text-danger"></i> Failure Error Logs & Diagnostics</h3>
+                        <div class="header-actions">
+                            <button id="copy-error-logs-btn" class="btn outline-btn btn-sm"><i class="fa-solid fa-copy"></i> Copy Error Trace</button>
+                            <button id="close-error-logs-btn" class="btn outline-btn btn-sm"><i class="fa-solid fa-xmark"></i> Hide</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="error-summary-box mb-3">
+                            <div class="error-title"><i class="fa-solid fa-bug text-danger"></i> Failure Summary:</div>
+                            <div id="failure-summary-text" class="error-summary-text">Assertion error or test step execution failure detected.</div>
+                        </div>
+                        <div class="error-tabs">
+                            <button class="error-tab-btn active" data-tab="parsed-errors-tab"><i class="fa-solid fa-list-ol"></i> Extracted Failure Steps</button>
+                            <button class="error-tab-btn" data-tab="stderr-raw-tab"><i class="fa-solid fa-code"></i> Standard Error (stderr)</button>
+                        </div>
+                        <div id="parsed-errors-tab" class="error-tab-content active">
+                            <div id="parsed-error-list" class="error-parsed-container">
+                                <!-- Parsed failure trace lines -->
+                            </div>
+                        </div>
+                        <div id="stderr-raw-tab" class="error-tab-content" style="display: none;">
+                            <pre id="raw-stderr-box" class="console-box console-error"></pre>
                         </div>
                     </div>
                 </div>

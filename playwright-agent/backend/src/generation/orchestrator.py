@@ -27,6 +27,9 @@ class GenerationOrchestrator:
         self,
         rag_pipeline: RAGIngestionPipeline,
         symbol_registry: Optional[Dict[str, Any]] = None,
+        provider: Optional[str] = None,
+        gemini_api_key: Optional[str] = None,
+        gemini_model: Optional[str] = None,
         groq_api_key: Optional[str] = None,
         groq_model: Optional[str] = None,
         max_retries: int = 2
@@ -34,9 +37,13 @@ class GenerationOrchestrator:
         self.rag_pipeline = rag_pipeline
         self.symbol_registry = symbol_registry or {}
         self.validator = FrameworkValidator(self.symbol_registry)
+        self.provider = (provider or os.environ.get("LLM_PROVIDER", "auto")).strip().lower()
+        self.gemini_api_key = gemini_api_key or os.environ.get("GEMINI_API_KEY", "") or os.environ.get("GOOGLE_API_KEY", "")
+        self.gemini_model = gemini_model or os.environ.get("GEMINI_MODEL", "gemini-3.8-flash")
         self.groq_api_key = groq_api_key or os.environ.get("GROQ_API_KEY", "")
-        self.groq_model = groq_model or os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
+        self.groq_model = groq_model or os.environ.get("GROQ_MODEL", "qwen/qwen3.8-27b")
         self.max_retries = int(os.environ.get("LLM_MAX_RETRIES", max_retries))
+        self.gemini_api_url = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
         self.groq_api_url = "https://api.groq.com/openai/v1/chat/completions"
 
     def generate_test_script(
@@ -51,7 +58,7 @@ class GenerationOrchestrator:
         """
         # 1. RAG Retrieval
         search_query = f"{user_story} {' '.join(acceptance_criteria)}"
-        rag_chunks = self.rag_pipeline.retrieve_context(search_query, top_k=6)
+        rag_chunks = self.rag_pipeline.retrieve_context(search_query, top_k=4)
         context_prompt = build_context_prompt(rag_chunks, self.symbol_registry)
         user_prompt = build_user_story_prompt(user_story, acceptance_criteria, project, environment)
 
@@ -131,33 +138,131 @@ class GenerationOrchestrator:
         parsed_output["validation"] = val_res.to_dict()
         return parsed_output
 
-    def _call_llm(self, messages: List[Dict[str, str]]) -> str:
-        """Invokes Groq API or falls back to smart offline synthesizer."""
-        if self.groq_api_key:
-            try:
-                headers = {
-                    "Content-Type": "application/json",
-                    "Authorization": f"Bearer {self.groq_api_key}"
-                }
-                payload = {
-                    "model": self.groq_model,
-                    "messages": messages,
-                    "temperature": 0.0,
-                    "response_format": {"type": "json_object"}
-                }
-                req = urllib.request.Request(
-                    self.groq_api_url,
-                    data=json.dumps(payload).encode("utf-8"),
-                    headers=headers,
-                    method="POST"
-                )
-                with urllib.request.urlopen(req, timeout=30) as response:
-                    res_data = json.loads(response.read().decode("utf-8"))
-                    return res_data["choices"][0]["message"]["content"]
-            except Exception as e:
-                print(f"[WARN] Groq API call failed: {e}. Falling back to smart generator.")
+    def _call_gemini(self, messages: List[Dict[str, str]]) -> str:
+        """Invokes Google Gemini API with structured JSON output."""
+        if not self.gemini_api_key:
+            raise ValueError("GEMINI_API_KEY is not configured.")
 
-        # Deterministic offline generation based on framework templates & symbols
+        # Method 1: Google's official OpenAI-compatible endpoint
+        try:
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self.gemini_api_key}",
+                "User-Agent": "PlaywrightAgent/1.0"
+            }
+            payload = {
+                "model": self.gemini_model,
+                "messages": messages,
+                "temperature": 0.1,
+                "response_format": {"type": "json_object"}
+            }
+            req = urllib.request.Request(
+                self.gemini_api_url,
+                data=json.dumps(payload).encode("utf-8"),
+                headers=headers,
+                method="POST"
+            )
+            with urllib.request.urlopen(req, timeout=45) as response:
+                res_data = json.loads(response.read().decode("utf-8"))
+                return res_data["choices"][0]["message"]["content"]
+        except Exception as e:
+            # Method 2: Google native generateContent endpoint fallback
+            native_url = f"https://generativelanguage.googleapis.com/v1beta/models/{self.gemini_model}:generateContent?key={self.gemini_api_key}"
+            contents = []
+            system_instruction = None
+            for m in messages:
+                if m["role"] == "system":
+                    system_instruction = {"parts": [{"text": m["content"]}]}
+                else:
+                    role = "user" if m["role"] == "user" else "model"
+                    contents.append({"role": role, "parts": [{"text": m["content"]}]})
+
+            body = {
+                "contents": contents,
+                "generationConfig": {
+                    "temperature": 0.1,
+                    "responseMimeType": "application/json"
+                }
+            }
+            if system_instruction:
+                body["systemInstruction"] = system_instruction
+
+            req = urllib.request.Request(
+                native_url,
+                data=json.dumps(body).encode("utf-8"),
+                headers={"Content-Type": "application/json"},
+                method="POST"
+            )
+            with urllib.request.urlopen(req, timeout=45) as response:
+                res_data = json.loads(response.read().decode("utf-8"))
+                candidate = res_data.get("candidates", [{}])[0]
+                part = candidate.get("content", {}).get("parts", [{}])[0]
+                return part.get("text", "")
+
+    def _call_groq(self, messages: List[Dict[str, str]]) -> str:
+        """Invokes Groq API with structured JSON output."""
+        if not self.groq_api_key:
+            raise ValueError("GROQ_API_KEY is not configured.")
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.groq_api_key}",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+        payload = {
+            "model": self.groq_model,
+            "messages": messages,
+            "temperature": 0.1,
+            "max_tokens": 4096,
+            "response_format": {"type": "json_object"}
+        }
+        req = urllib.request.Request(
+            self.groq_api_url,
+            data=json.dumps(payload).encode("utf-8"),
+            headers=headers,
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=45) as response:
+            res_data = json.loads(response.read().decode("utf-8"))
+            return res_data["choices"][0]["message"]["content"]
+
+    def _call_llm(self, messages: List[Dict[str, str]]) -> str:
+        """Invokes Gemini or Groq depending on provider config, with graceful failover."""
+        providers_to_try = []
+        if self.provider == "gemini":
+            providers_to_try = ["gemini", "groq"]
+        elif self.provider == "groq":
+            providers_to_try = ["groq", "gemini"]
+        else:  # auto
+            if self.gemini_api_key:
+                providers_to_try = ["gemini", "groq"]
+            else:
+                providers_to_try = ["groq", "gemini"]
+
+        for prov in providers_to_try:
+            if prov == "gemini" and self.gemini_api_key:
+                try:
+                    return self._call_gemini(messages)
+                except Exception as e:
+                    err_detail = ""
+                    if hasattr(e, "read"):
+                        try:
+                            err_detail = f" - {e.read().decode('utf-8')}"
+                        except Exception:
+                            pass
+                    print(f"[WARN] Gemini API call failed: {e}{err_detail}. Attempting alternative provider.")
+            elif prov == "groq" and self.groq_api_key:
+                try:
+                    return self._call_groq(messages)
+                except Exception as e:
+                    err_detail = ""
+                    if hasattr(e, "read"):
+                        try:
+                            err_detail = f" - {e.read().decode('utf-8')}"
+                        except Exception:
+                            pass
+                    print(f"[WARN] Groq API call failed: {e}{err_detail}. Attempting alternative provider.")
+
+        # Fallback to offline generator
         return self._generate_offline_template(messages)
 
     def _generate_offline_template(self, messages: List[Dict[str, str]]) -> str:
@@ -181,12 +286,12 @@ class GenerationOrchestrator:
 
         # 2. Extract Acceptance Criteria
         acceptance_criteria = []
-        ac_match = re.search(r"ACCEPTANCE CRITERIA:\s*([\s\S]*?)(?=\n---|\nTARGET PROJECT:|$)", combined, re.IGNORECASE)
+        ac_match = re.search(r"ACCEPTANCE CRITERIA:\s*([\s\S]*?)(?=\nGenerate the complete|\n---|\nTARGET PROJECT:|$)", combined, re.IGNORECASE)
         if ac_match:
             raw_ac = ac_match.group(1).strip()
             for line in raw_ac.splitlines():
                 cleaned = re.sub(r"^\s*(\d+[\.\)]|-|\*)\s*", "", line).strip()
-                if cleaned:
+                if cleaned and not cleaned.lower().startswith("generate the complete") and "adhering strictly" not in cleaned.lower():
                     acceptance_criteria.append(cleaned)
 
         if not acceptance_criteria:
@@ -413,12 +518,19 @@ class GenerationOrchestrator:
                     f"        Reporter.report_step(auth_page_{tc_id.lower()}, \"Step {idx}: {ac}\", \"PASS\")\n"
                     f"        home.click_username().log_out()"
                 )
-            else:
-                mapped = f"expect(auth_page_{tc_id.lower()}.locator('body')).to_be_visible()"
+            elif "pdp" in ac_low or "product page" in ac_low or "verify style" in ac_low or "product detail" in ac_low:
+                mapped = f"pdp_page.verify_search_product('{prod_id}')"
                 code = (
                     f"        # Step {idx}: {ac}\n"
                     f"        Reporter.report_step(auth_page_{tc_id.lower()}, \"Step {idx}: {ac}\", \"PASS\")\n"
-                    f"        expect(auth_page_{tc_id.lower()}.locator(\"body\")).to_be_visible(timeout=10000)"
+                    f"        pdp_page.verify_search_product('{prod_id}')"
+                )
+            else:
+                mapped = f"expect(auth_page_{tc_id.lower()}.locator('.product-title, .product_name, h1, #Header_GlobalLogin_signOutQuickLinkUser').first).to_be_visible()"
+                code = (
+                    f"        # Step {idx}: {ac}\n"
+                    f"        Reporter.report_step(auth_page_{tc_id.lower()}, \"Step {idx}: {ac}\", \"PASS\")\n"
+                    f"        expect(auth_page_{tc_id.lower()}.locator(\".product-title, .product_name, h1, #Header_GlobalLogin_signOutQuickLinkUser\").first).to_be_visible(timeout=10000)"
                 )
 
             ac_mappings.append({"criterion": ac, "mappedStep": mapped})
@@ -480,15 +592,26 @@ class GenerationOrchestrator:
     def _parse_json_response(self, raw_response: str, fallback_title: str) -> Dict[str, Any]:
         """Extracts JSON object safely from LLM output."""
         try:
-            return json.loads(raw_response)
+            return json.loads(raw_response.strip())
         except Exception:
-            # Attempt to locate JSON inside markdown code blocks
-            match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", raw_response)
-            if match:
-                try:
-                    return json.loads(match.group(1))
-                except Exception:
-                    pass
+            pass
+
+        # Attempt to locate JSON inside markdown code blocks
+        match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", raw_response)
+        if match:
+            try:
+                return json.loads(match.group(1).strip())
+            except Exception:
+                pass
+
+        # Attempt to find outermost { and }
+        first_brace = raw_response.find("{")
+        last_brace = raw_response.rfind("}")
+        if first_brace != -1 and last_brace != -1 and last_brace > first_brace:
+            try:
+                return json.loads(raw_response[first_brace:last_brace + 1].strip())
+            except Exception:
+                pass
 
         return {
             "testCaseId": "TC_CUSTOM",

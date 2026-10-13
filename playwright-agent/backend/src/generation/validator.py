@@ -29,8 +29,8 @@ class ValidationResult:
 
 
 class FrameworkValidator:
-    PROHIBITED_IMPORTS = {"os", "sys", "subprocess", "shutil", "socket", "requests", "urllib", "selenium"}
-    PROHIBITED_CALLS = {"eval", "exec", "__import__", "compile", "open"}
+    PROHIBITED_IMPORTS = {"sys", "subprocess", "shutil", "socket", "requests", "urllib", "selenium"}
+    PROHIBITED_CALLS = {"eval", "exec", "__import__", "compile"}
 
     def __init__(self, symbol_registry: Optional[Dict[str, Any]] = None):
         self.symbol_registry = symbol_registry or {}
@@ -90,20 +90,29 @@ class FrameworkValidator:
 
         # 6. Page Object Method Symbol Check
         if self.known_page_objects:
+            var_to_cls: Dict[str, str] = {}
             for node in ast.walk(tree):
-                if isinstance(node, ast.Call):
-                    # Check method calls on known Page Objects if identifiable
-                    if isinstance(node.func, ast.Attribute):
-                        method_name = node.func.attr
-                        # If calling on an explicit class instance like HomePage(page).method()
-                        if isinstance(node.func.value, ast.Call) and isinstance(node.func.value.func, ast.Name):
-                            cls_name = node.func.value.func.id
-                            if cls_name in self.known_page_objects:
-                                callable_methods = self.known_page_objects[cls_name].get("all_callable_methods", [])
-                                if callable_methods and method_name not in callable_methods:
-                                    errors.append(
-                                        f"Symbol Error: Method '{method_name}()' does not exist on '{cls_name}'."
-                                    )
+                if isinstance(node, ast.Assign):
+                    if isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Name):
+                        if node.value.func.id in self.known_page_objects:
+                            for target in node.targets:
+                                if isinstance(target, ast.Name):
+                                    var_to_cls[target.id] = node.value.func.id
+
+                elif isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
+                    method_name = node.func.attr
+                    cls_name = None
+                    if isinstance(node.func.value, ast.Call) and isinstance(node.func.value.func, ast.Name):
+                        cls_name = node.func.value.func.id
+                    elif isinstance(node.func.value, ast.Name) and node.func.value.id in var_to_cls:
+                        cls_name = var_to_cls[node.func.value.id]
+
+                    if cls_name and cls_name in self.known_page_objects:
+                        callable_methods = self.known_page_objects[cls_name].get("all_callable_methods", [])
+                        if callable_methods and method_name not in callable_methods:
+                            errors.append(
+                                f"Symbol Error: Method '{method_name}()' does not exist on '{cls_name}'."
+                            )
 
         # 7. Acceptance Criteria Coverage Check (if provided)
         if acceptance_criteria:

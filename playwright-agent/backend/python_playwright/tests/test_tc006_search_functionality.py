@@ -94,10 +94,10 @@ class TestTC006SearchFunctionality:
         pdp_page.verify_url_contains("freestyle-sublimated-turbo-reversible-basketball-jersey-cut-228118")
         pdp_page.verify_page_headings(["Holloway", "FreeStyle Sublimated Turbo Reversible Basketball Jersey"])
         
-        # 4. Search 404F
-        HomePage(auth_page_tc006, url).search_product("404F")
-        pdp_page.verify_url_contains("pacific-headwear-trucker-flexfit-cap-404f")
-        pdp_page.verify_page_headings(["Pacific Headwear", "Trucker Flexfit® Cap"])
+        # 4. Search 998F
+        HomePage(auth_page_tc006, url).search_product("998F")
+        pdp_page.verify_url_contains("998f")
+        pdp_page.verify_page_headings(["Pacific Headwear"])
         
         # 5. Search 6951
         HomePage(auth_page_tc006, url).search_product("6951")

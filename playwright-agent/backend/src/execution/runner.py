@@ -9,6 +9,7 @@ import datetime
 import os
 import shutil
 import subprocess
+import sys
 import uuid
 from typing import Any, Dict, Optional
 
@@ -67,6 +68,11 @@ class TestRunner:
         workspace = os.path.join(self.executions_dir, exec_id)
         os.makedirs(workspace, exist_ok=True)
 
+        if not test_name.endswith(".py"):
+            test_name = f"{test_name}.py"
+        if not test_name.startswith("test_"):
+            test_name = f"test_{test_name}"
+
         test_file_path = os.path.join(self.playwright_dir, "tests", test_name)
         
         # Write test file into python_playwright/tests
@@ -76,16 +82,28 @@ class TestRunner:
         # Copy a backup into the execution workspace
         shutil.copy2(test_file_path, os.path.join(workspace, test_name))
 
+        # Prefer project virtual environment Python executable over bare pytest
+        venv_python = os.path.join(os.path.dirname(self.agent_root), "venv", "Scripts", "python.exe")
+        python_bin = venv_python if os.path.exists(venv_python) else sys.executable
+
         # Build controlled pytest argument array (NEVER shell string)
         cmd = [
-            "pytest",
+            python_bin,
+            "-m", "pytest",
             f"tests/{test_name}",
-            f"--env={env_name}"
+            f"--env={env_name}",
+            "-s"
         ]
         if headless:
             cmd.append("--headless")
 
         start_time = datetime.datetime.now()
+
+        env_vars = {
+            **os.environ,
+            "PYTHONPATH": f"{self.agent_root}{os.pathsep}{self.playwright_dir}",
+            "PYTHONUNBUFFERED": "1"
+        }
 
         try:
             process = subprocess.Popen(
@@ -94,9 +112,10 @@ class TestRunner:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
-                env={**os.environ, "PYTHONPATH": self.agent_root}
+                env=env_vars
             )
-            stdout, stderr = process.communicate(timeout=180)
+            test_timeout = int(os.environ.get("TEST_RUNNER_TIMEOUT", "480"))
+            stdout, stderr = process.communicate(timeout=test_timeout)
             exit_code = process.returncode
             status = "PASSED" if exit_code == 0 else "FAILED"
         except subprocess.TimeoutExpired:

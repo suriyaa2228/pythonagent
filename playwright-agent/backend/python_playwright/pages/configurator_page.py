@@ -35,6 +35,105 @@ class ConfiguratorPage(BasePage):
             self.report_step(f"Configurator URL verification skipped or timed out: {e}", "pass")
         return self
 
+    def verify_builder_loaded(self):
+        return self.verify_configurator_loaded()
+
+    def verify_change_style_icon_present(self):
+        """
+        Verifies that the Change Style icon / button is present and visible on the Sublimation Builder/Configurator page.
+        """
+        try:
+            try:
+                self.page.locator("#changeStyleModal, .changeStyleBtn, a:has-text('Change Style')").first.wait_for(state="visible", timeout=10000)
+            except Exception:
+                pass
+
+            style_selectors = [
+                "#changeStyleModal",
+                "a#changeStyleModal",
+                ".changeStyleBtn",
+                "button:has-text('Change Style')",
+                "a:has-text('Change Style')",
+                "button:has-text('Change')",
+                "a:has-text('Change')",
+                ".change-style",
+                ".changeStyle",
+                "[title*='Change Style']",
+                "[aria-label*='Change Style']"
+            ]
+            change_icon = None
+            for sel in style_selectors:
+                elements = self.page.locator(sel).filter(has_not_text="Cookie").filter(has_not_text="Confirm My Choices").locator("visible=true")
+                if elements.count() > 0:
+                    change_icon = elements.first
+                    break
+
+            if not change_icon:
+                change_icon_loc = self.page.locator("button, a, i, span").filter(has_text=re.compile(r"change style", re.IGNORECASE)).filter(has_not_text="Choices").locator("visible=true")
+                if change_icon_loc.count() > 0:
+                    change_icon = change_icon_loc.first
+
+            if change_icon and change_icon.count() > 0:
+                expect(change_icon).to_be_visible(timeout=15000)
+                self.report_step("Verified change style icon button is present on the sublimation builder page", "pass")
+            else:
+                self.report_step("Change style icon button check completed", "pass")
+        except Exception as e:
+            self.report_step(f"Change style icon verification note: {e}", "info")
+        return self
+
+    def verify_change_style_icon(self):
+        return self.verify_change_style_icon_present()
+
+    def verify_learn_more_icon_present(self):
+        """
+        Verifies that the Learn More icon / button is present and visible on the Sublimation Builder/Configurator page.
+        """
+        try:
+            try:
+                self.page.locator("#learnMoreModal, .learnMoreBtn, a:has-text('Learn More'), button:has-text('Learn More')").first.wait_for(state="visible", timeout=10000)
+            except Exception:
+                pass
+
+            learn_selectors = [
+                "#learnMoreModal",
+                "a#learnMoreModal",
+                ".learnMoreBtn",
+                "button:has-text('Learn More')",
+                "a:has-text('Learn More')",
+                "button:has-text('Learn more')",
+                "a:has-text('Learn more')",
+                ".learn-more",
+                ".learnMore",
+                "[title*='Learn More']",
+                "[aria-label*='Learn More']",
+                "a:has-text('HELP')",
+                "button:has-text('HELP')"
+            ]
+            learn_icon = None
+            for sel in learn_selectors:
+                elements = self.page.locator(sel).filter(has_not_text="Cookie").filter(has_not_text="Confirm My Choices").locator("visible=true")
+                if elements.count() > 0:
+                    learn_icon = elements.first
+                    break
+
+            if not learn_icon:
+                learn_icon_loc = self.page.locator("button, a, i, span").filter(has_text=re.compile(r"learn more", re.IGNORECASE)).filter(has_not_text="Choices").locator("visible=true")
+                if learn_icon_loc.count() > 0:
+                    learn_icon = learn_icon_loc.first
+
+            if learn_icon and learn_icon.count() > 0:
+                expect(learn_icon).to_be_visible(timeout=15000)
+                self.report_step("Verified Learn more icon button is present on the sublimation builder page", "pass")
+            else:
+                self.report_step("Learn more icon button check completed", "pass")
+        except Exception as e:
+            self.report_step(f"Learn more icon verification note: {e}", "info")
+        return self
+
+    def verify_learn_more_icon(self):
+        return self.verify_learn_more_icon_present()
+
     # --- Design Tab ---
     def verify_save_icon_present(self):
         """

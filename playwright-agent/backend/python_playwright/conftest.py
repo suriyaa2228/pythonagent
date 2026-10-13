@@ -6,8 +6,14 @@ from playwright.sync_api import sync_playwright
 try:
     from dotenv import load_dotenv
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    load_dotenv(os.path.join(base_dir, ".env"))
-    load_dotenv(os.path.join(base_dir, "..", ".env"))
+    env_paths = [
+        os.path.join(base_dir, "..", "..", ".env"),
+        os.path.join(base_dir, "..", ".env"),
+        os.path.join(base_dir, ".env")
+    ]
+    for p in env_paths:
+        if os.path.exists(p):
+            load_dotenv(p, override=True)
 except ImportError:
     pass
 
@@ -111,7 +117,18 @@ def get_authenticated_context(browser_instance, env_config, state_filename):
         .click_login_button()
         
     from playwright.sync_api import expect
-    expect(temp_page.locator("id=Header_GlobalLogin_signOutQuickLinkUser")).to_be_visible(timeout=15000)
+    user_icon = temp_page.locator("id=Header_GlobalLogin_signOutQuickLinkUser")
+    try:
+        expect(user_icon).to_be_visible(timeout=25000)
+    except Exception:
+        # Fallback: re-check if submit button is still active and retry click
+        submit_btn = temp_page.locator("button[id*='logon'], button[id*='Logon'], #Header_GlobalLogin_WC_AccountDisplay_FormInput_logonId").first
+        if submit_btn.is_visible(timeout=2000):
+            try:
+                submit_btn.click()
+            except Exception:
+                pass
+        expect(user_icon).to_be_visible(timeout=20000)
         
     temp_context.storage_state(path=state_file)
     temp_page.close()
@@ -156,11 +173,22 @@ def pytest_runtest_makereport(item, call):
         from python_playwright.utils.reporter import Reporter
         error_msg = str(call.excinfo.value) if hasattr(call, 'excinfo') and call.excinfo else "Test failed"
         
+        # Determine page object from test funcargs or test class instance
+        page = None
+        if hasattr(item, "funcargs"):
+            for val in item.funcargs.values():
+                if hasattr(val, "screenshot") and hasattr(val, "is_closed") and not val.is_closed():
+                    page = val
+                    break
+        if not page and hasattr(item, "instance") and item.instance and hasattr(item.instance, "page"):
+            p = item.instance.page
+            if hasattr(p, "screenshot") and hasattr(p, "is_closed") and not p.is_closed():
+                page = p
+
         # Determine if this is a setup failure where the test case might not have been started
         if rep.when == "setup" and not Reporter._current_test:
             Reporter.start_test_case(item.name, "Failed during setup")
             
-        # Log the failure to the Reporter without raising an AssertionError
-        # and attach the exception message
+        # Log the failure to the Reporter with screenshot capture
         step_desc = f"Test failed during {rep.when}: {error_msg}"
-        Reporter.report_step(None, step_desc, "FAIL", snap=False, raise_error=False)
+        Reporter.report_step(page, step_desc, "FAIL", snap=True, raise_error=False)

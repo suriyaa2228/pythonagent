@@ -12,12 +12,25 @@ The existing framework is authoritative and MUST be followed strictly.
 MANDATORY FRAMEWORK ARCHITECTURE RULES:
 1. Use Python Playwright Synchronous API (`Page`, `BrowserContext`, `expect`).
 2. Use `pytest` test runner structure with `@pytest.mark.usefixtures("auth_page_tcXXX")` class scoping.
-3. MANDATORY Session Storage State Reuse Pattern:
-   - Define `@pytest.fixture(scope="class") def auth_context_tcXXX(request, env_config, browser_instance)`
-   - Create and load storage state file at `os.path.join(os.path.dirname(__file__), "..", "config", "tcXXX_state.json")`.
-   - Authenticate UI via `HomePage` and `LoginPage` if state file does not exist, then call `temp_context.storage_state(path=state_file)`.
-   - Hydrate new context with `browser_instance.new_context(storage_state=state_file, ignore_https_errors=True, no_viewport=True)`.
-   - Define `@pytest.fixture(scope="class") def auth_page_tcXXX(auth_context_tcXXX)` yielding `auth_context_tcXXX.new_page()`.
+3. MANDATORY Session Authentication Fixture Pattern:
+   - ALWAYS import and use `get_authenticated_context` from `conftest`:
+     `from python_playwright.conftest import get_authenticated_context`
+   - Define class fixtures:
+     @pytest.fixture(scope="class")
+     def auth_context_tcXXX(request, env_config, browser_instance):
+         context = get_authenticated_context(browser_instance, env_config, "tc026_state.json")
+         yield context
+         context.close()
+
+     @pytest.fixture(scope="class")
+     def auth_page_tcXXX(auth_context_tcXXX):
+         page = auth_context_tcXXX.new_page()
+         yield page
+         page.close()
+   - Inside the test method, ALWAYS start by navigating to the URL and handling cookies:
+     auth_page.goto(env_config["url"], wait_until="domcontentloaded", timeout=30000)
+     home_page = HomePage(auth_page, env_config["url"])
+     home_page.handle_onetrust_cookie()
 4. Page Object Model Imports:
    - `from python_playwright.pages.home_page import HomePage`
    - `from python_playwright.pages.login_page import LoginPage`
@@ -53,6 +66,21 @@ Always return your response as a valid JSON object with the following structure:
 }
 """
 
+def condense_chunk_content(content: str, max_chars: int = 1200) -> str:
+    """Condenses code chunk to class/method signatures to adhere strictly to LLM token budgets."""
+    if len(content) <= max_chars:
+        return content
+    lines = content.splitlines()
+    sig_lines = []
+    for line in lines:
+        s = line.strip()
+        if s.startswith(("class ", "def ", "@")):
+            sig_lines.append(line)
+    if sig_lines:
+        return "\n".join(sig_lines[:35]) + "\n    # ... [Implementation details omitted]"
+    return content[:max_chars] + "\n# ... [Truncated]"
+
+
 def build_context_prompt(rag_chunks: list, symbol_registry: dict) -> str:
     """Formats RAG retrieved context chunks and available symbols."""
     context_lines = ["--- AVAILABLE FRAMEWORK CONTEXT ---"]
@@ -62,14 +90,15 @@ def build_context_prompt(rag_chunks: list, symbol_registry: dict) -> str:
         doc_type = meta.get("documentType", "unknown")
         file_path = meta.get("filePath", "unknown")
         context_lines.append(f"\n[Artifact {i}: {symbol} ({doc_type}) from {file_path}]")
-        context_lines.append(chunk.get("content", "").strip())
+        context_lines.append(condense_chunk_content(chunk.get("content", "").strip()))
 
     if symbol_registry and "page_objects" in symbol_registry:
         context_lines.append("\n--- KNOWN PAGE OBJECT METHODS SUMMARY ---")
         for p_name, p_data in symbol_registry.get("page_objects", {}).items():
             if p_name in ("HomePage", "LoginPage", "MyAccountPage", "BasePage", "CartPage", "PDPPage", "PLPPage"):
                 methods = list(p_data.get("methods", {}).keys())
-                context_lines.append(f"{p_name} methods: {', '.join(methods)}")
+                methods_str = ", ".join(methods[:20])
+                context_lines.append(f"{p_name} methods: {methods_str}")
 
     return "\n".join(context_lines)
 

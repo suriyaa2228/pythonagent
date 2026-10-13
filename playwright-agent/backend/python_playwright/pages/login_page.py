@@ -1,21 +1,33 @@
 from python_playwright.pages.base_page import BasePage, Locators
-from python_playwright.pages.home_page import HomePage
 
 class LoginPage(BasePage):
     def enter_username(self, data):
-        username_field = self.locate_element(Locators.ID, "username")
-        self.clear_and_type(username_field, data)
-        self.report_step(f"{data} entered successfully", "pass")
+        try:
+            user_input = self.page.locator("//input[@id='Header_GlobalLogin_WC_AccountDisplay_FormInput_logonId_In_Logon_1'], #Header_GlobalLogin_WC_AccountDisplay_FormInput_logonId_In_Logon_1, input[name='logonId'], #username").first
+            user_input.fill(data)
+            self.report_step(f"{data} Username is entered successfully", "pass")
+        except Exception as e:
+            self.report_step(f"Enter username failed: {e}", "fail")
         return self
 
     def enter_password(self, data):
-        password_field = self.locate_element(Locators.ID, "password")
-        self.clear_and_type(password_field, data)
-        self.report_step(f"{data} entered successfully", "pass")
+        try:
+            pass_input = self.page.locator("//input[@name='logonPassword'], input[name='logonPassword'], #password").first
+            pass_input.fill(data)
+            self.report_step("Password is entered successfully", "pass")
+        except Exception as e:
+            self.report_step(f"Enter password failed: {e}", "fail")
         return self
 
     def click_login(self):
-        login_btn = self.locate_element(Locators.CLASS_NAME, "decorativeSubmit")
-        self.click(login_btn)
-        self.report_step("Login button clicked successfully", "pass")
+        return self.click_login_button()
+
+    def click_login_button(self):
+        try:
+            login_btn = self.page.locator("//a[contains(text(),'LOGIN')], a:has-text('LOGIN'), button[id*='logon'], button:has-text('Sign In'), .decorativeSubmit").first
+            login_btn.click()
+            self.report_step("Login button clicked successfully", "pass")
+        except Exception as e:
+            self.report_step(f"Click login button failed: {e}", "fail")
+        from python_playwright.pages.home_page import HomePage
         return HomePage(self.page)

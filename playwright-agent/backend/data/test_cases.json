@@ -38,5 +38,66 @@
       "environment": "stage",
       "execution_mode": "PYTEST"
     }
+  },
+  "TC026_CRITICAL_PATH_ADD_TO_CART": {
+    "id": "TC026_CRITICAL_PATH_ADD_TO_CART",
+    "number": "TC026",
+    "name": "Critical Path Blank Order Till Add To Cart",
+    "status": "SAVED",
+    "scripts": {
+      "python": "c:\\Users\\SuriyaaP\\OneDrive - Royal Cyber Inc\\Desktop\\AGUSTA\\MOMENTEC\\agentplaywrightpython\\playwright-agent\\backend\\python_playwright\\tests\\test_tc026_critical_path_add_to_cart.py"
+    },
+    "metadata": {
+      "author": "AI_Agent",
+      "created_at": "2026-10-13T10:35:00.000000+00:00",
+      "updated_at": "2026-10-13T10:35:00.000000+00:00",
+      "tags": [
+        "AI_Generated",
+        "Saved_Workspace",
+        "JMeter_Converted"
+      ],
+      "environment": "stage",
+      "execution_mode": "PYTEST"
+    }
+  },
+  "TC027_VERIFY_CHANGESTYLE": {
+    "id": "TC027_VERIFY_CHANGESTYLE",
+    "number": "TC027",
+    "name": "Verify_Changestyle",
+    "status": "SAVED",
+    "scripts": {
+      "python": "C:\\Users\\SuriyaaP\\OneDrive - Royal Cyber Inc\\Desktop\\AGUSTA\\MOMENTEC\\agentplaywrightpython\\playwright-agent\\backend\\python_playwright\\tests\\test_tc027_verify_changestyle.py"
+    },
+    "metadata": {
+      "author": "AI_Agent",
+      "created_at": "2026-10-13T14:05:59.666487+00:00",
+      "updated_at": "2026-10-13T14:05:59.666487+00:00",
+      "tags": [
+        "AI_Generated",
+        "Saved_Workspace"
+      ],
+      "environment": "stage",
+      "execution_mode": "PYTEST"
+    }
+  },
+  "TC028_VERIFY_LEARNMOREICON_SUBLIMATION": {
+    "id": "TC028_VERIFY_LEARNMOREICON_SUBLIMATION",
+    "number": "TC028",
+    "name": "Verify_LearnmoreIcon_sublimation",
+    "status": "SAVED",
+    "scripts": {
+      "python": "C:\\Users\\SuriyaaP\\OneDrive - Royal Cyber Inc\\Desktop\\AGUSTA\\MOMENTEC\\agentplaywrightpython\\playwright-agent\\backend\\python_playwright\\tests\\test_tc028_verify_learnmoreicon_sublimation.py"
+    },
+    "metadata": {
+      "author": "AI_Agent",
+      "created_at": "2026-10-13T15:55:45.968949+00:00",
+      "updated_at": "2026-10-13T15:55:45.968949+00:00",
+      "tags": [
+        "AI_Generated",
+        "Saved_Workspace"
+      ],
+      "environment": "stage",
+      "execution_mode": "PYTEST"
+    }
   }
 }

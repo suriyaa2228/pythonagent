@@ -11,10 +11,15 @@ if src_dir not in sys.path:
 
 try:
     from dotenv import load_dotenv
-    # Attempt loading .env from backend directory, playwright-agent root, and workspace root
-    load_dotenv(os.path.join(base_dir, ".env"))
-    load_dotenv(os.path.join(base_dir, "..", ".env"))
-    load_dotenv(os.path.join(base_dir, "..", "..", ".env"))
+    # Single Source of Truth lookup with override=True to ensure valid keys populate reliably
+    env_paths = [
+        os.path.join(base_dir, "..", "..", ".env"),
+        os.path.join(base_dir, "..", ".env"),
+        os.path.join(base_dir, ".env")
+    ]
+    for p in env_paths:
+        if os.path.exists(p):
+            load_dotenv(p, override=True)
 except ImportError:
     pass
 

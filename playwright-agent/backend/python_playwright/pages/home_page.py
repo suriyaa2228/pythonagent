@@ -142,8 +142,29 @@ class HomePage(BasePage):
                 if attempts >= 2:
                     self.report_step(f"Search failed: {e}", "fail")
                     
+        # Self-healing handling for SearchDisplayView (search results page)
+        try:
+            self.page.wait_for_load_state("domcontentloaded", timeout=10000)
+            self.page.wait_for_timeout(1000)
+            if "SearchDisplayView" in self.page.url:
+                target_link = self.page.locator(f"xpath=//a[contains(@href, '{style_no.lower()}') or contains(@href, '{style_no.upper()}')]").first
+                if not target_link.is_visible(timeout=3000):
+                    target_link = self.page.locator(".product_name a, .product-item-link, a.product-title, .productName a").first
+                
+                href = target_link.get_attribute("href")
+                if href:
+                    self.page.goto(href)
+                    self.page.wait_for_load_state("domcontentloaded")
+                else:
+                    target_link.evaluate("node => node.click()")
+                    self.page.wait_for_load_state("domcontentloaded")
+                self.report_step(f"Navigated to PDP from search results page for '{style_no}'", "pass")
+        except Exception as e:
+            print(f"[WARNING] Search results page handling for '{style_no}': {e}")
+
         from python_playwright.pages.pdp_page import PDPPage
         return PDPPage(self.page)
+
 
     def click_brand_logo(self):
         logo = self.locate_element(Locators.ID, "augustaLogo")
@@ -164,6 +185,8 @@ class HomePage(BasePage):
         return self
     def ensure_resources_dropdown_open(self):
         self.switch_to_main_tab()
+        if not self.page.url or self.page.url == "about:blank" or self.url.rstrip("/") not in self.page.url:
+            self.page.goto(self.url)
         dropdown = self.page.locator("xpath=//ul[contains(@class,'dropDown')]").first
         if not dropdown.is_visible():
             self.click_info_and_resources()
@@ -183,9 +206,7 @@ class HomePage(BasePage):
         faq_link = self.locate_element(Locators.LINK_TEXT, "FAQ")
         self.verify_displayed(faq_link)
         self.click(faq_link)
-        if len(self.page.context.pages) > 1:
-            self.page = self.page.context.pages[-1]
-            self.page.bring_to_front()
+        self.switch_to_tab("FAQ")
         from python_playwright.pages.faq_page import FAQPage
         return FAQPage(self.page)
 

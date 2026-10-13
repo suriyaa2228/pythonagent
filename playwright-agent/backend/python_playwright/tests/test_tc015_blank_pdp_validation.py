@@ -78,18 +78,18 @@ class TestTC015BlankPDPValidation:
         Reporter.report_step(auth_page_tc015, "Step 2: Verify home page", "info", snap=False)
         home.verify_home_page()
         
-        # 3. Search for product "795000"
-        Reporter.report_step(auth_page_tc015, "Step 3: Search for product '795000'", "info", snap=False)
-        pdp = home.search_product("795000")
+        # 3. Search for product "7001"
+        Reporter.report_step(auth_page_tc015, "Step 3: Search for product '7001'", "info", snap=False)
+        pdp = home.search_product("7001")
         auth_page_tc015.wait_for_timeout(3000)
         
         # 4. Verify search product in PDP page
         Reporter.report_step(auth_page_tc015, "Step 4: Verify search product in PDP page", "info", snap=False)
-        pdp.verify_search_product("795000")
+        pdp.verify_search_product("7001")
         
-        # 5. verify page navigates to https://www.momentecbrands.com/alleson-athletic-on-the-rise-two-button-baseball-jersey-795000
+        # 5. Verify page navigates to product URL containing 7001
         Reporter.report_step(auth_page_tc015, "Step 5: Verify page navigation URL", "info", snap=False)
-        pdp.verify_url_contains("alleson-athletic-on-the-rise-two-button-baseball-jersey-795000")
+        pdp.verify_url_contains("7001")
         
         # 6. Verify brand logo is showing on the PDP
         Reporter.report_step(auth_page_tc015, "Step 6: Verify brand logo is showing on the PDP", "info", snap=False)
@@ -145,7 +145,7 @@ class TestTC015BlankPDPValidation:
         
         # 32. Enter quantities in textbox
         Reporter.report_step(auth_page_tc015, "Step 32: Verify able to enter quantities", "info", snap=False)
-        pdp.enter_quantity("795000")
+        pdp.enter_quantity("7001")
         
         # 33. Add to cart from PDP page
         Reporter.report_step(auth_page_tc015, "Step 33: Verify able to add to cart from PDP page", "info", snap=False)

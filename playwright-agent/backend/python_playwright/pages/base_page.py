@@ -248,18 +248,24 @@ class BasePage:
             self.page.bring_to_front()
             return self.page
         else:
-            # Poll context.pages for page with matching title
+            # Poll context.pages for page with matching title or url
             for _ in range(20):
                 for p in context.pages:
                     try:
                         title = p.title()
-                        if title_or_index.lower() in title.lower():
+                        url = p.url
+                        if title_or_index.lower() in title.lower() or title_or_index.lower() in url.lower():
                             self.page = p
                             self.page.bring_to_front()
                             return self.page
                     except Exception:
                         pass
                 self.page.wait_for_timeout(500)
+            # Fallback: if a new tab was opened (more than 1 page), switch to the latest page
+            if len(context.pages) > 1:
+                self.page = context.pages[-1]
+                self.page.bring_to_front()
+                return self.page
             raise Exception(f"Tab containing title '{title_or_index}' was not found.")
 
     def switch_to_main_tab(self):

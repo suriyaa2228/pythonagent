@@ -35,45 +35,45 @@ from python_playwright.utils.reporter import Reporter
 from python_playwright.conftest import get_authenticated_context
 
 @pytest.fixture(scope="class")
-def auth_context_tc012(request, env_config, browser_instance):
-    context = get_authenticated_context(browser_instance, env_config, "tc012_state.json")
+def auth_context_tc021(request, env_config, browser_instance):
+    context = get_authenticated_context(browser_instance, env_config, "tc021_state.json")
     yield context
     context.close()
 
 @pytest.fixture(scope="class")
-def auth_page_tc012(auth_context_tc012):
+def auth_page_tc021(auth_context_tc021):
     """
     Yields a single page within the authenticated context for the entire class execution.
     """
-    page = auth_context_tc012.new_page()
+    page = auth_context_tc021.new_page()
     yield page
     page.close()
 
-@pytest.mark.usefixtures("auth_page_tc012")
-class TestTC012SublimationOrderPlacing:
-    def test_sublimation_order_placing_flow(self, auth_page_tc012, env_config):
-        Reporter.start_test_case("TC012_SublimationOrderPlacing", "Verify Sublimation Order Placing flow", "E2E", "QA")
+@pytest.mark.usefixtures("auth_page_tc021")
+class TestTC021SublimationOrderPlacing:
+    def test_sublimation_order_placing_flow(self, auth_page_tc021, env_config):
+        Reporter.start_test_case("TC021_SublimationOrderPlacing", "Verify Sublimation Order Placing flow", "E2E", "QA")
         
         base_url = env_config["url"].rstrip('/')
         sublimation_url = f"{base_url}/custom-sublimation"
         
         # Clear cart first
         from python_playwright.pages.cart_page import CartPage
-        CartPage(auth_page_tc012).clear_cart()
+        CartPage(auth_page_tc021).clear_cart()
         
         try:
-            auth_page_tc012.goto(sublimation_url, wait_until="commit", timeout=120000)
+            auth_page_tc021.goto(sublimation_url, wait_until="commit", timeout=120000)
         except Exception as e:
             print(f"[WARNING] Navigation timed out: {e}. Retrying navigation with domcontentloaded...")
-            auth_page_tc012.goto(sublimation_url, wait_until="domcontentloaded", timeout=120000)
+            auth_page_tc021.goto(sublimation_url, wait_until="domcontentloaded", timeout=120000)
             
         try:
-            auth_page_tc012.wait_for_load_state("domcontentloaded", timeout=30000)
+            auth_page_tc021.wait_for_load_state("domcontentloaded", timeout=30000)
         except Exception:
             pass
         
         # 1. Custom Sublimation Page
-        custom_sublimation_page = CustomSublimationPage(auth_page_tc012)
+        custom_sublimation_page = CustomSublimationPage(auth_page_tc021)
         custom_sublimation_page.verify_custom_sublimation_page_title()
         
         custom_sublimation_page.verify_products_listed()
@@ -132,7 +132,7 @@ class TestTC012SublimationOrderPlacing:
         shipping_billing_page = cart_page.click_checkout()
         
         # Assert navigation to shipping page was successful by checking for a specific element or URL
-        expect(auth_page_tc012).to_have_url(re.compile(".*(checkout|shipping|OrderShipping).*", re.IGNORECASE), timeout=15000)
+        expect(auth_page_tc021).to_have_url(re.compile(".*(checkout|shipping|OrderShipping).*", re.IGNORECASE), timeout=15000)
         
         shipping_billing_page.verify_shipping_billing_page()
         # Ensure we pick a shipping method just in case
@@ -147,7 +147,7 @@ class TestTC012SublimationOrderPlacing:
         
         # Assert order was placed successfully by checking for a specific element or URL
         try:
-            expect(auth_page_tc012).to_have_url(re.compile(".*(OrderOKView|ThankYou|Confirmation|OrderShippingBillingConfirmationView|checkout|order).*", re.IGNORECASE), timeout=15000)
+            expect(auth_page_tc021).to_have_url(re.compile(".*(OrderOKView|ThankYou|Confirmation|OrderShippingBillingConfirmationView|checkout|order).*", re.IGNORECASE), timeout=15000)
         except Exception:
             pass
         

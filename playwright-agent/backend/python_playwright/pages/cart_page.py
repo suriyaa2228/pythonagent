@@ -1,3 +1,4 @@
+import re
 from python_playwright.pages.base_page import BasePage, Locators
 
 class CartPage(BasePage):

@@ -35,19 +35,23 @@ class Reporter:
         status_upper = status.upper()
         
         screenshot_path = None
-        if snap and status_upper != "INFO" and status_upper != "SKIPPED":
-            if page:
+        if snap and status_upper != "SKIPPED":
+            if page and hasattr(page, "screenshot"):
                 try:
-                    utils_dir = os.path.dirname(os.path.abspath(__file__))
-                    reports_dir = os.path.join(os.path.dirname(utils_dir), "reports")
-                    os.makedirs(os.path.join(reports_dir, "images"), exist_ok=True)
-                    
-                    snap_id = int(time.time() * 1000)
-                    filename = f"snap_{snap_id}.png"
-                    abs_screenshot = os.path.join(reports_dir, "images", filename)
-                    
-                    page.screenshot(path=abs_screenshot)
-                    screenshot_path = f"images/{filename}"
+                    is_closed = getattr(page, "is_closed", lambda: False)()
+                    if not is_closed:
+                        utils_dir = os.path.dirname(os.path.abspath(__file__))
+                        reports_dir = os.path.join(os.path.dirname(utils_dir), "reports")
+                        images_dir = os.path.join(reports_dir, "images")
+                        os.makedirs(images_dir, exist_ok=True)
+                        
+                        snap_id = int(time.time() * 1000)
+                        filename = f"snap_{snap_id}.png"
+                        abs_screenshot = os.path.join(images_dir, filename)
+                        
+                        page.screenshot(path=abs_screenshot, full_page=False, timeout=5000)
+                        if os.path.exists(abs_screenshot) and os.path.getsize(abs_screenshot) > 0:
+                            screenshot_path = f"images/{filename}"
                 except Exception as e:
                     print(f"[REPORTER ERROR] Failed to save screenshot: {e}")
                     
@@ -371,14 +375,18 @@ class Reporter:
             font-size: 12px;
         }}
         .screenshot-thumbnail {{
-            max-width: 120px;
-            border-radius: 4px;
+            width: 100px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 6px;
             cursor: pointer;
             border: 1px solid #cbd5e1;
-            transition: transform 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }}
         .screenshot-thumbnail:hover {{
-            transform: scale(1.05);
+            transform: scale(1.08);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }}
         
         /* Fullscreen Modal */
